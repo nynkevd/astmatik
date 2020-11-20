@@ -1,21 +1,140 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react';
+import { Button, Text, View, StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { FontAwesome } from '@expo/vector-icons';
+
+//constants
+import { COLORS } from './src/constants/Colors';
+
+//screens
+import HomeScreen from './src/screens/homeflow/HomeScreen';
+import StatisticsScreen from './src/screens/statisticsflow/StatisticsScreen';
+import ActionPlanScreen from './src/screens/actionplanflow/ActionPlanScreen';
+import ExercisesScreen from './src/screens/exercisesflow/ExercisesScreen';
+import ProfileScreen from './src/screens/userflow/ProfileScreen';
+
+//home
+const HomeStack = createStackNavigator();
+
+function HomeStackScreen() {
+  return (
+    <HomeStack.Navigator>
+      <HomeStack.Screen name="Overzicht" component={HomeScreen} />
+    </HomeStack.Navigator>
+  );
+}
+
+// statistics
+const StatisticsStack = createStackNavigator();
+
+function StatisticsStackScreen() {
+  return (
+    <StatisticsStack.Navigator>
+      <StatisticsStack.Screen name="Grafieken" component={StatisticsScreen} />
+    </StatisticsStack.Navigator>
+  );
+}
+
+//actionplan
+const ActionPlanStack = createStackNavigator();
+
+function ActionPlanStackScreen() {
+  return (
+    <ActionPlanStack.Navigator>
+      <ActionPlanStack.Screen name="Actieplan" component={ActionPlanScreen} />
+    </ActionPlanStack.Navigator>
+  );
+}
+
+//exercises
+const ExercisesStack = createStackNavigator();
+
+function ExercisesStackScreen() {
+  return (
+    <ExercisesStack.Navigator>
+      <ExercisesStack.Screen name="Oefeningen" component={ExercisesScreen} />
+    </ExercisesStack.Navigator>
+  );
+}
+
+//profile
+const ProfileStack = createStackNavigator();
+
+function ProfileStackScreen() {
+  return (
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen name="Profiel" component={ProfileScreen} />
+    </ProfileStack.Navigator>
+  );
+}
+
+const Tab = createBottomTabNavigator();
+
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+            size = 24;
+
+            if (route.name === 'Overzicht') {
+              iconName = "home";
+            } else if (route.name === 'Grafieken') {
+              iconName = "bar-chart";
+            } else if(route.name === 'Actieplan'){
+              iconName = "exclamation-circle";
+            } else if(route.name === 'Oefeningen'){
+              iconName = "leaf";
+            } else if(route.name === 'Profiel'){
+              iconName = "user";
+            }
+
+            // You can return any component that you like here!
+            return(
+              <View style={styles.container}>
+                <FontAwesome name={iconName} size={size} color={color} />
+                { focused
+                ? <Text style={styles.activeDot}> . </Text>
+                : <Text style={styles.inactiveDot}> . </Text>
+              }
+              </View>
+            );
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: 'black',
+          inactiveTintColor: '#C2C2C2',
+          showLabel: false,
+        }}>
+        <Tab.Screen name="Overzicht" component={HomeStackScreen}  />
+        <Tab.Screen name="Grafieken" component={StatisticsStackScreen} />
+        <Tab.Screen name="Actieplan" component={ActionPlanStackScreen} />
+        <Tab.Screen name="Oefeningen" component={ExercisesStackScreen} />
+        <Tab.Screen name="Profiel" component={ProfileStackScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+  container:{
     justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 10,
   },
+  activeDot: {
+    fontSize: 40,
+    color: COLORS.cyan,
+    marginTop: -35,
+  },
+  inactiveDot: {
+    fontSize: 40,
+    color: COLORS.white,
+    marginTop: -35,
+  }
 });
