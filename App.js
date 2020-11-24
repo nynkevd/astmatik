@@ -15,6 +15,7 @@ import ActionPlanScreen from './src/screens/actionplanflow/ActionPlanScreen';
 import ExercisesScreen from './src/screens/exercisesflow/ExercisesScreen';
 import ProfileScreen from './src/screens/userflow/ProfileScreen';
 import LoginScreen from './src/screens/userflow/LoginScreen';
+import SignUpScreen from "./src/screens/userflow/SignUpScreen";
 
 //home
 const HomeStack = createStackNavigator();
@@ -66,7 +67,7 @@ const ProfileStack = createStackNavigator();
 function ProfileStackScreen() {
   return (
     <ProfileStack.Navigator>
-      <ProfileStack.Screen name="Profiel" component={LoginScreen} />
+      <ProfileStack.Screen name="Profiel" component={SignUpScreen}/>
     </ProfileStack.Navigator>
   );
 }

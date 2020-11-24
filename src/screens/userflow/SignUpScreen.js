@@ -1,28 +1,29 @@
 import React from 'react';
 import {
-    Button,
     View,
     Text,
     TextInput,
-    StyleSheet,
+    StyleSheet, Button,
 } from 'react-native';
 
 import GlobalStyles from '../../constants/GlobalStyles';
 import {Share} from "react-native-web";
 
-const LoginScreen = () => {
+const SignUpScreen = () => {
 
     const [email, onChangeEmail] = React.useState('');
     const [password, onChangePassword] = React.useState('');
+    const [repeatPassword, onChangeRepeatPassword] = React.useState('');
+    const [asthmaType, onChangeAsthmaType] = React.useState('');
 
-    const loginHandler = async () => {
-        console.log("Logging");
+    const signupHandler = async () => {
+        console.log("Signing up");
     };
 
     return (
         <View style={styles.container}>
             <Text style={GlobalStyles.titleText}>Welkom bij</Text>
-            <Text style={GlobalStyles.appName}> Astmatik</Text>
+            <Text style={GlobalStyles.appName}>Astmatik</Text>
 
             <View style={GlobalStyles.inputWrapper}>
                 <Text style={GlobalStyles.label}> Email </Text>
@@ -42,10 +43,28 @@ const LoginScreen = () => {
                 />
             </View>
 
+            <View style={GlobalStyles.inputWrapper}>
+                <Text style={GlobalStyles.label}> Wachtwoord herhalen </Text>
+                <TextInput
+                    style={GlobalStyles.input}
+                    onChangeText={text => onChangeRepeatPassword(text)}
+                    value={repeatPassword}
+                />
+            </View>
+
+            <View style={GlobalStyles.inputWrapper}>
+                <Text style={GlobalStyles.label}> Type astma </Text>
+                <TextInput
+                    style={GlobalStyles.input}
+                    onChangeText={text => onChangeAsthmaType(text)}
+                    value={asthmaType}
+                />
+            </View>
+
             <Button
-                onPress={loginHandler}
-                title="inloggen"
-                accessibilityLabel="Login"
+                onPress={signupHandler}
+                title="registreren"
+                accessibilityLabel="Registreren"
             />
 
         </View>
@@ -60,4 +79,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default LoginScreen;
+export default SignUpScreen;
