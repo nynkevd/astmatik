@@ -1,11 +1,13 @@
 import React from 'react';
 import {
-    Button,
     View,
     Text,
     TextInput,
     StyleSheet,
 } from 'react-native';
+
+import AppButton from "../../components/AppButton";
+import InputField from "../../components/InputField";
 
 import GlobalStyles from '../../constants/GlobalStyles';
 
@@ -28,27 +30,21 @@ const LoginScreen = () => {
             <Text style={GlobalStyles.titleText}>Welkom bij</Text>
             <Text style={GlobalStyles.appName}> Astmatik</Text>
 
-            <View style={GlobalStyles.inputWrapper}>
-                <Text style={GlobalStyles.label}> Email </Text>
-                <TextInput
-                    style={GlobalStyles.input}
-                    onChangeText={text => onChangeEmail(text)}
-                    value={email}
-                />
-            </View>
+            <InputField
+                label="Email"
+                value={email}
+                onChange={onChangeEmail}
+            />
 
-            <View style={GlobalStyles.inputWrapper}>
-                <Text style={GlobalStyles.label}> Wachtwoord </Text>
-                <TextInput
-                    style={GlobalStyles.input}
-                    onChangeText={text => onChangePassword(text)}
-                    value={password}
-                />
-            </View>
+            <InputField
+                label="Wachtwoord"
+                value={password}
+                onChange={onChangePassword}
+            />
 
-            <Button
+            <AppButton
                 onPress={loginHandler}
-                title="inloggen"
+                text="inloggen"
                 accessibilityLabel="Login"
             />
 

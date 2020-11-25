@@ -1,14 +1,16 @@
 import * as React from 'react';
-import { Button, Text, View, StyleSheet } from 'react-native';
-import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { FontAwesome } from '@expo/vector-icons';
+import {Button, Text, View, StyleSheet} from 'react-native';
+import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {FontAwesome} from '@expo/vector-icons';
 
 //constants
-import { COLORS } from './src/constants/Colors';
+import {COLORS} from './src/constants/Colors';
 
 //screens
+import LoginScreen from './src/screens/authenticationflow/LoginScreen';
+import SignUpScreen from './src/screens/authenticationflow/SignUpScreen';
 import HomeScreen from './src/screens/homeflow/HomeScreen';
 import StatisticsScreen from './src/screens/statisticsflow/StatisticsScreen';
 //actionplanflow
@@ -19,8 +21,6 @@ import ActionPlanFeelingBad from './src/screens/actionplanflow/ActionPlanFeeling
 import ActionPlanAsthmaAttack from './src/screens/actionplanflow/ActionPlanAsthmaAttack';
 import ExercisesScreen from './src/screens/exercisesflow/ExercisesScreen';
 import ProfileScreen from './src/screens/userflow/ProfileScreen';
-import LoginScreen from './src/screens/userflow/LoginScreen';
-import SignUpScreen from "./src/screens/userflow/SignUpScreen";
 
 //home
 const HomeStack = createStackNavigator();
