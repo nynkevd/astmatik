@@ -1,9 +1,6 @@
 import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
-    text: {
-        color: 'blue'
-    },
     titleText: {
         fontFamily: 'Roboto',
         fontSize: 28,
@@ -22,7 +19,6 @@ export default StyleSheet.create({
     inputWrapper: {
         margin: 15,
         alignSelf: 'stretch',
-        // marginBottom: 15
     },
     label: {
         fontFamily: 'Roboto',

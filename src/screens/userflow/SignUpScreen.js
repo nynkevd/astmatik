@@ -7,7 +7,6 @@ import {
 } from 'react-native';
 
 import GlobalStyles from '../../constants/GlobalStyles';
-import {Share} from "react-native-web";
 
 const SignUpScreen = () => {
 
@@ -17,7 +16,14 @@ const SignUpScreen = () => {
     const [asthmaType, onChangeAsthmaType] = React.useState('');
 
     const signupHandler = async () => {
-        console.log("Signing up");
+        let body = {
+            email,
+            password,
+            repeatPassword,
+            asthmaType
+        }
+
+        console.log(body);
     };
 
     return (

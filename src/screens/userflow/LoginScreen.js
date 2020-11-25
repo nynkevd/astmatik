@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 
 import GlobalStyles from '../../constants/GlobalStyles';
-import {Share} from "react-native-web";
 
 const LoginScreen = () => {
 
@@ -16,7 +15,12 @@ const LoginScreen = () => {
     const [password, onChangePassword] = React.useState('');
 
     const loginHandler = async () => {
-        console.log("Logging");
+        let body = {
+            email,
+            password,
+        }
+
+        console.log(body);
     };
 
     return (

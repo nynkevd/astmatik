@@ -67,7 +67,7 @@ const ProfileStack = createStackNavigator();
 function ProfileStackScreen() {
   return (
     <ProfileStack.Navigator>
-      <ProfileStack.Screen name="Profiel" component={SignUpScreen}/>
+      <ProfileStack.Screen name="Profiel" component={ProfileScreen}/>
     </ProfileStack.Navigator>
   );
 }
