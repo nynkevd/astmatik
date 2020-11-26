@@ -11,7 +11,7 @@ import {COLORS} from '../constants/Colors';
 const InputField = (props) => {
     return (
         <View style={styles.inputWrapper}>
-            <Text style={styles.label}> {props.label} </Text>
+            {props.label ? <Text style={styles.label}> {props.label} </Text> : null}
             <TextInput
                 style={styles.input}
                 onChangeText={text => props.onChange(text)}
@@ -23,25 +23,26 @@ const InputField = (props) => {
 
 const styles = StyleSheet.create({
     inputWrapper: {
-        margin: 15,
+        marginHorizontal: 0,
         alignSelf: 'stretch',
     },
     label: {
         fontFamily: 'Roboto',
-        fontSize: 18,
-        marginBottom: 8,
+        fontSize: 14,
+        marginVertical: 5,
         color: COLORS.darkBlue,
     },
     input: {
         height: 40,
         color: COLORS.darkBlue,
+        backgroundColor: COLORS.white,
         borderColor: COLORS.darkBlue,
         borderWidth: 1,
-        marginLeft: 0,
+        marginBottom: 5,
         borderRadius: 10,
         fontSize: 16,
         padding: 8,
-        paddingLeft: 12,
+        paddingHorizontal: 12,
     },
 });
 

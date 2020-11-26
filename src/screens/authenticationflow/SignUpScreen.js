@@ -7,6 +7,8 @@ import {
 } from 'react-native';
 
 import GlobalStyles from '../../constants/GlobalStyles';
+import InputField from "../../components/InputField";
+import AppButton from "../../components/AppButton";
 
 const SignUpScreen = () => {
 
@@ -31,45 +33,34 @@ const SignUpScreen = () => {
             <Text style={GlobalStyles.titleText}>Welkom bij</Text>
             <Text style={GlobalStyles.appName}>Astmatik</Text>
 
-            <View style={GlobalStyles.inputWrapper}>
-                <Text style={GlobalStyles.label}> Email </Text>
-                <TextInput
-                    style={GlobalStyles.input}
-                    onChangeText={text => onChangeEmail(text)}
-                    value={email}
-                />
-            </View>
+            <InputField
+                label="Email"
+                value={email}
+                onChange={onChangeEmail}
+            />
 
-            <View style={GlobalStyles.inputWrapper}>
-                <Text style={GlobalStyles.label}> Wachtwoord </Text>
-                <TextInput
-                    style={GlobalStyles.input}
-                    onChangeText={text => onChangePassword(text)}
-                    value={password}
-                />
-            </View>
+            <InputField
+                label="Wachtwoord"
+                value={password}
+                onChange={onChangePassword}
+            />
 
-            <View style={GlobalStyles.inputWrapper}>
-                <Text style={GlobalStyles.label}> Wachtwoord herhalen </Text>
-                <TextInput
-                    style={GlobalStyles.input}
-                    onChangeText={text => onChangeRepeatPassword(text)}
-                    value={repeatPassword}
-                />
-            </View>
+            <InputField
+                label="Wachtwoord herhalen"
+                value={repeatPassword}
+                onChange={onChangeRepeatPassword}
+            />
 
-            <View style={GlobalStyles.inputWrapper}>
-                <Text style={GlobalStyles.label}> Type astma </Text>
-                <TextInput
-                    style={GlobalStyles.input}
-                    onChangeText={text => onChangeAsthmaType(text)}
-                    value={asthmaType}
-                />
-            </View>
+            {/*TODO: Willen we hier een dropdown van maken?*/}
+            <InputField
+                label="Type astma"
+                value={asthmaType}
+                onChange={onChangeAsthmaType}
+            />
 
-            <Button
+            <AppButton
                 onPress={signupHandler}
-                title="registreren"
+                text="registreren"
                 accessibilityLabel="Registreren"
             />
 
@@ -81,7 +72,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingHorizontal: 15
     },
 })
 

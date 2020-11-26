@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {COLORS} from "./Colors";
 
 export default StyleSheet.create({
     titleText: {
@@ -15,5 +16,11 @@ export default StyleSheet.create({
         textAlign: 'center',
         color: '#012D53',
         fontWeight: 'bold'
+    },
+    headline: {
+        color: COLORS.darkBlue,
+        fontSize: 16,
+        marginTop: 25,
+        fontWeight: "bold"
     },
 });
