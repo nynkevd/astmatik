@@ -51,8 +51,8 @@ function ActionPlanStackScreen() {
   return (
     <ActionPlanStack.Navigator>
       <ActionPlanStack.Screen name="Actieplan" component={ActionPlanScreen}/>
-      <ActionPlanStack.Screen name="Goed" component={LoginScreen}/>
-      <ActionPlanStack.Screen name="Minder" component={SignUpScreen}/>
+      <ActionPlanStack.Screen name="Goed" component={ActionPlanFeelingGood}/>
+      <ActionPlanStack.Screen name="Minder" component={ActionPlanFeelingLess}/>
       <ActionPlanStack.Screen name="Geen verbetering" component={ActionPlanFeelingBad}/>
       <ActionPlanStack.Screen name="Aanval" component={ActionPlanAsthmaAttack}/>
     </ActionPlanStack.Navigator>
