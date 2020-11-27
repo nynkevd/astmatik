@@ -65,7 +65,7 @@ const ExercisesStack = createStackNavigator();
 function ExercisesStackScreen() {
   return (
     <ExercisesStack.Navigator>
-      <ExercisesStack.Screen name="Oefeningen" component={ExercisesScreen} />
+      <ExercisesStack.Screen name="Oefeningen" component={SignUpScreen}/>
     </ExercisesStack.Navigator>
   );
 }
@@ -76,7 +76,7 @@ const ProfileStack = createStackNavigator();
 function ProfileStackScreen() {
   return (
     <ProfileStack.Navigator>
-      <ProfileStack.Screen name="Profiel" component={ProfileScreen}/>
+      <ProfileStack.Screen name="Profiel" component={LoginScreen}/>
     </ProfileStack.Navigator>
   );
 }

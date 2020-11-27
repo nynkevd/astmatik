@@ -23,4 +23,8 @@ export default StyleSheet.create({
         marginTop: 25,
         fontWeight: "bold"
     },
+    errorText: {
+        color: 'red',
+        marginVertical: 10,
+    }
 });
