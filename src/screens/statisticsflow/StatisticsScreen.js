@@ -2,18 +2,14 @@ import React, {useState} from 'react';
 import {
     SafeAreaView,
     ScrollView,
-    View,
     Text,
     StyleSheet,
-    TextInput,
-    CheckBox,
 } from 'react-native';
 
 import MainLayout from '../../components/MainLayout';
 import ScreenTitle from '../../components/ScreenTitle';
 import {COLORS} from '../../constants/Colors';
 import InputField from "../../components/InputField";
-import TextInputField from "../../components/TextInputField";
 import GlobalStyles from "../../constants/GlobalStyles";
 import AppButton from "../../components/AppButton";
 
@@ -32,7 +28,6 @@ const StatisticsScreen = () => {
                 />
 
                 <Text style={GlobalStyles.bodyText}>Blaas 3 keer en noteer daarvan de hoogste Waarde</Text>
-                // button
 
                 <InputField
                     label={"Waarde vóór medicatie"}
@@ -46,15 +41,16 @@ const StatisticsScreen = () => {
                     onChange={setPeakflowAfterMed}
                 />
 
-                <TextInputField
+                <InputField
                     label={"Logboek"}
                     value={logboek}
                     onChange={setLogboek}
+                    multiline
                 />
 
                 <AppButton
-                    label={"opslaan"}
-                    onClick={console.log("test")}
+                    text={"opslaan"}
+                    onPress={console.log("test")}
                 />
             </ScrollView>
         </SafeAreaView>

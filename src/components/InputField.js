@@ -12,11 +12,19 @@ const InputField = (props) => {
     return (
         <View style={styles.inputWrapper}>
             {props.label ? <Text style={styles.label}> {props.label} </Text> : null}
-            <TextInput
-                style={styles.input}
-                onChangeText={text => props.onChange(text)}
-                value={props.value}
-            />
+            {props.multiline ? 
+                <TextInput
+                    style={[styles.input, styles.multiline]}
+                    onChangeText={text => props.onChange(text)}
+                    value={props.value}
+                /> :
+                <TextInput
+                    style={styles.input}
+                    onChangeText={text => props.onChange(text)}
+                    value={props.value}
+                />
+            }
+            
         </View>
     )
 };
@@ -44,6 +52,9 @@ const styles = StyleSheet.create({
         padding: 8,
         paddingHorizontal: 12,
     },
+    multiline: {
+        height: 160,
+    }
 });
 
 export default InputField;
