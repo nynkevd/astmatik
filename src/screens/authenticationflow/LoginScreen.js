@@ -4,7 +4,7 @@ import {
     Text,
     StyleSheet,
 } from 'react-native';
-
+import Constants from 'expo-constants';
 import axios from 'axios';
 
 import AppButton from "../../components/AppButton";
@@ -13,14 +13,11 @@ import InputField from "../../components/InputField";
 import GlobalStyles from '../../constants/GlobalStyles';
 
 const LoginScreen = () => {
-    const API_URL = "https://astmatik-api.herokuapp.com/api";
-
     const [email, onChangeEmail] = React.useState('');
     const [password, onChangePassword] = React.useState('');
     const [error, setError] = React.useState('');
 
     const loginHandler = async () => {
-        setError("nog geen error");
         let body = {
             email,
             password,
@@ -28,12 +25,13 @@ const LoginScreen = () => {
 
         await axios({
             method: 'POST',
-            url: `${API_URL}/user/login`,
+            url: `${Constants.manifest.extra.API_URL}/user/login`,
             header: {
                 'content-type': 'application/json'
             },
             data: body
         }).then((res) => {
+            // TODO: Koppelen aan context/reducer of iets dergelijks van storage
             console.log(res.data.userId);
         }).catch((error) => {
             console.log(error.response.data);

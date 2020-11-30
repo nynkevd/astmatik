@@ -2,6 +2,9 @@ import {StyleSheet} from 'react-native';
 import {COLORS} from "./Colors";
 
 export default StyleSheet.create({
+    bold: {
+        fontWeight: 'bold'
+    },
     titleText: {
         fontFamily: 'Roboto',
         fontSize: 28,

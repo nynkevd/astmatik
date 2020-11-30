@@ -27,6 +27,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "API_URL": "https://astmatik-api.herokuapp.com/api"
     }
   }
 }

@@ -5,15 +5,15 @@ import {
     TextInput,
     StyleSheet, Button,
 } from 'react-native';
+import Constant from "expo-constants";
+import axios from "axios";
 
 import GlobalStyles from '../../constants/GlobalStyles';
 import InputField from "../../components/InputField";
 import AppButton from "../../components/AppButton";
-import axios from "axios";
+
 
 const SignUpScreen = () => {
-    const API_URL = "https://astmatik-api.herokuapp.com/api";
-
     const [firstname, onChangeFirstname] = React.useState('');
     const [lastname, onChangeLastname] = React.useState('');
     const [email, onChangeEmail] = React.useState('');
@@ -34,12 +34,13 @@ const SignUpScreen = () => {
 
         await axios({
             method: 'POST',
-            url: `${API_URL}/user/signup`,
+            url: `${Constants.manifest.extra.API_URL}/user/signup`,
             header: {
                 'content-type': 'application/json'
             },
             data: body
         }).then((res) => {
+            // TODO: Koppelen aan context/reducer of iets dergelijks van storage
             console.log(res.data.userId);
         }).catch((error) => {
             console.log(error.response.data);
