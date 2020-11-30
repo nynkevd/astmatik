@@ -19,6 +19,7 @@ import ActionPlanFeelingGood from './src/screens/actionplanflow/ActionPlanFeelin
 import ActionPlanFeelingLess from './src/screens/actionplanflow/ActionPlanFeelingLess';
 import ActionPlanFeelingBad from './src/screens/actionplanflow/ActionPlanFeelingBad';
 import ActionPlanAsthmaAttack from './src/screens/actionplanflow/ActionPlanAsthmaAttack';
+import LogAsthmaAttack from './src/screens/actionplanflow/LogAsthmaAttack';
 import ExercisesScreen from './src/screens/exercisesflow/ExercisesScreen';
 import ProfileScreen from './src/screens/userflow/ProfileScreen';
 
@@ -55,6 +56,7 @@ function ActionPlanStackScreen() {
       <ActionPlanStack.Screen name="Minder" component={ActionPlanFeelingLess}/>
       <ActionPlanStack.Screen name="Geen verbetering" component={ActionPlanFeelingBad}/>
       <ActionPlanStack.Screen name="Aanval" component={ActionPlanAsthmaAttack}/>
+      <ActionPlanStack.Screen name="Aanval logboek" component={LogAsthmaAttack}/>
     </ActionPlanStack.Navigator>
   );
 }

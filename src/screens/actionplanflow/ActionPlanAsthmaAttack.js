@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Linking
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import MainLayout from '../../components/MainLayout';
 import ActionCard from '../../components/ActionCard';
@@ -16,6 +17,11 @@ import { COLORS } from '../../constants/Colors';
 import { FontAwesome } from '@expo/vector-icons';
 
 const ActionPlanAsthmaAttack = () => {
+  const navigation = useNavigation();
+
+  const handleNavigate = () => {
+    navigation.navigate('Aanval logboek');
+  }
   //should be changed
   const phoneNumberMedic = '+31612345678';
   const phoneNumberLungMedic = '+31623456789';
@@ -55,6 +61,7 @@ const ActionPlanAsthmaAttack = () => {
           </View>
           <View style={{marginVertical: 10}}></View>
           <AppButton
+            onPress={handleNavigate}
             text="ik heb een aanval (gehad)"
             />
       </ScrollView>

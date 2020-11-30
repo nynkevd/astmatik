@@ -23,4 +23,10 @@ export default StyleSheet.create({
         marginTop: 25,
         fontWeight: "bold"
     },
+    label: {
+        fontFamily: 'Roboto',
+        fontSize: 14,
+        marginVertical: 5,
+        color: COLORS.darkBlue,
+    },
 });
