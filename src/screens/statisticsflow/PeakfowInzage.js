@@ -70,12 +70,12 @@ const PeakflowInzage = () => {
                     </TouchableOpacity>
                 </View>
 
-                <PeakflowSchema 
+                <PeakflowSchema
                     title={"Peakflow"}
                     subTitle={"vóór medicatie"}
                 />
 
-                <PeakflowSchema 
+                <PeakflowSchema
                     title={"Peakflow"}
                     subTitle={"na medicatie"}
                 />
@@ -120,7 +120,6 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
         padding: 5,
         width: 100,
-        shadowOffset: 5,
         borderTopLeftRadius: 25,
         borderBottomLeftRadius: 25,
     },

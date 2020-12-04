@@ -64,7 +64,7 @@ const StatisticsScreen = () => {
 
                 <AppButton
                     text={"opslaan"}
-                    onPress={navigation.navigate("SchemaWeergave")}
+                    onPress={() => navigation.navigate("SchemaWeergave")}
                 />
             </ScrollView>
         </SafeAreaView>
@@ -112,7 +112,6 @@ const styles = StyleSheet.create({
         width: 150,
         borderTopRightRadius: 25,
         borderBottomRightRadius: 25,
-        shadowOffset: 5,
     },
     activeButtonText: {
         fontFamily: "Roboto",
