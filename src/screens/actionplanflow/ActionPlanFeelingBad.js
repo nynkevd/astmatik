@@ -12,6 +12,8 @@ import MainLayout from '../../components/MainLayout';
 import ActionCard from '../../components/ActionCard';
 import ContactCard from '../../components/ContactCard';
 import ScreenTitle from '../../components/ScreenTitle';
+import AppButton from '../../components/AppButton';
+
 import { COLORS } from '../../constants/Colors';
 
 const ActionPlanFeelingBad = () => {
@@ -43,6 +45,11 @@ const ActionPlanFeelingBad = () => {
         name="K. van den Berge"
         phoneNumber="06 10293847"
         location="Rotterdam"/>
+      <View style={{marginVertical: 10}}></View>
+      <AppButton
+        text="opslaan"
+      />
+
     </ScrollView>
     </View>
   )

@@ -23,10 +23,10 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.darkBlue,
     },
     buttonText: {
+        textAlign: 'center',
         fontFamily: 'Roboto',
         fontSize: 16,
         color: COLORS.white,
-        textTransform: 'uppercase',
         fontWeight: 'bold',
         textAlign: 'center'
     }

@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
   contentContainer:{
     paddingHorizontal: 18,
     paddingBottom: 70,
+    minHeight: '100%'
   },
 });
 

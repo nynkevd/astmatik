@@ -7,6 +7,7 @@ import {
   ScrollView,
 } from 'react-native';
 
+import AppButton from '../../components/AppButton';
 import MainLayout from '../../components/MainLayout';
 import ActionCard from '../../components/ActionCard';
 import ScreenTitle from '../../components/ScreenTitle';
@@ -67,6 +68,12 @@ const ActionPlanFeelingLess = () => {
             <Text style={styles.checkLabel}>Ik gebruik mijn luchtwegverwijderaar meer dan 2x per dag (extra).</Text>
           </View>
         </View>
+
+        <View style={{marginVertical: 10}}></View>
+        <AppButton
+          text="opslaan"
+        />
+
       </ScrollView>
     </View>
   )

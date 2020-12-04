@@ -4,14 +4,29 @@ import {
   Text,
   ScrollView,
   StyleSheet,
+  TouchableOpacity,
+  Linking
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import MainLayout from '../../components/MainLayout';
 import ActionCard from '../../components/ActionCard';
 import ScreenTitle from '../../components/ScreenTitle';
+
+import AppButton from '../../components/AppButton';
 import { COLORS } from '../../constants/Colors';
+import { FontAwesome } from '@expo/vector-icons';
 
 const ActionPlanAsthmaAttack = () => {
+  const navigation = useNavigation();
+
+  const handleNavigate = () => {
+    navigation.navigate('Aanval logboek');
+  }
+  //should be changed
+  const phoneNumberMedic = '+31612345678';
+  const phoneNumberLungMedic = '+31623456789';
+
   return(
     <View style={styles.container}>
     <MainLayout />
@@ -32,6 +47,27 @@ const ActionPlanAsthmaAttack = () => {
             <Text style={styles.stepsText}>4. Neem direct contact op met longarts of huisarts</Text>
             <Text style={styles.stepsExtra}>* Als u geen arts kunt bereiken: ga naar de spoedeisende hulp of bel 112</Text>
           </View>
+
+          <View style={styles.phoneContainer}>
+            <View style={{marginHorizontal: 50}}>
+              <Text style={{color: COLORS.darkBlue}}>Longarts</Text>
+              <TouchableOpacity  onPress={() => {Linking.openURL('tel:' + phoneNumberLungMedic)}} style={styles.phoneButton}>
+                <FontAwesome name="phone" size={24} color={COLORS.white} />
+              </TouchableOpacity>
+            </View>
+            <View style={{marginHorizontal: 50}}>
+              <Text style={{color: COLORS.darkBlue}}>Huisarts</Text>
+              <TouchableOpacity onPress={() => {Linking.openURL('tel:' + phoneNumberMedic)}} style={styles.phoneButton}>
+                <FontAwesome name="phone" size={24} color={COLORS.white} />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{marginVertical: 10}}></View>
+          <AppButton
+            onPress={handleNavigate}
+            text="ik heb een aanval (gehad)"
+            />
+
       </ScrollView>
     </View>
   )
@@ -66,6 +102,21 @@ const styles = StyleSheet.create({
   stepsExtra: {
     color: COLORS.darkBlue,
     marginTop: 20
+  },
+  phoneContainer:{
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  phoneButton:{
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: COLORS.darkBlue,
+    width: 60,
+    height: 60,
+    borderRadius: 50,
+    elevation: 3,
+    marginVertical: 5,
+    transform: [{rotate: '270deg' }],
   }
 });
 

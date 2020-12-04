@@ -24,7 +24,6 @@ const InputField = (props) => {
                     value={props.value}
                 />
             }
-            
         </View>
     )
 };

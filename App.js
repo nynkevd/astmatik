@@ -9,22 +9,22 @@ import {FontAwesome} from '@expo/vector-icons';
 import {COLORS} from './src/constants/Colors';
 
 //screens
-//import LoginScreen from './src/screens/authenticationflow/LoginScreen';
-//import SignUpScreen from './src/screens/authenticationflow/SignUpScreen';
+import LoginScreen from './src/screens/authenticationflow/LoginScreen';
+import SignUpScreen from './src/screens/authenticationflow/SignUpScreen';
 import HomeScreen from './src/screens/homeflow/HomeScreen';
-
 //peakflow-flow
 import StatisticsScreen from './src/screens/statisticsflow/StatisticsScreen';
 import PeakflowInzage from './src/screens/statisticsflow/PeakfowInzage';
-
 //actionplanflow
 import ActionPlanScreen from './src/screens/actionplanflow/ActionPlanScreen';
 import ActionPlanFeelingGood from './src/screens/actionplanflow/ActionPlanFeelingGood';
 import ActionPlanFeelingLess from './src/screens/actionplanflow/ActionPlanFeelingLess';
 import ActionPlanFeelingBad from './src/screens/actionplanflow/ActionPlanFeelingBad';
 import ActionPlanAsthmaAttack from './src/screens/actionplanflow/ActionPlanAsthmaAttack';
+import LogAsthmaAttack from './src/screens/actionplanflow/LogAsthmaAttack';
 import ExercisesScreen from './src/screens/exercisesflow/ExercisesScreen';
 import ProfileScreen from './src/screens/userflow/ProfileScreen';
+import EditUserScreen from './src/screens/userflow/EditUserScreen';
 
 //home
 const HomeStack = createStackNavigator();
@@ -60,6 +60,7 @@ function ActionPlanStackScreen() {
       <ActionPlanStack.Screen name="Minder" component={ActionPlanFeelingLess}/>
       <ActionPlanStack.Screen name="Geen verbetering" component={ActionPlanFeelingBad}/>
       <ActionPlanStack.Screen name="Aanval" component={ActionPlanAsthmaAttack}/>
+      <ActionPlanStack.Screen name="Aanval logboek" component={LogAsthmaAttack}/>
     </ActionPlanStack.Navigator>
   );
 }
@@ -70,7 +71,7 @@ const ExercisesStack = createStackNavigator();
 function ExercisesStackScreen() {
   return (
     <ExercisesStack.Navigator>
-      <ExercisesStack.Screen name="Oefeningen" component={ExercisesScreen} />
+      <ExercisesStack.Screen name="Oefeningen" component={ExercisesScreen}/>
     </ExercisesStack.Navigator>
   );
 }
@@ -82,6 +83,7 @@ function ProfileStackScreen() {
   return (
     <ProfileStack.Navigator>
       <ProfileStack.Screen name="Profiel" component={ProfileScreen}/>
+      <ProfileStack.Screen name="Instellingen" component={EditUserScreen}/>
     </ProfileStack.Navigator>
   );
 }
