@@ -22,6 +22,7 @@ import ActionPlanAsthmaAttack from './src/screens/actionplanflow/ActionPlanAsthm
 import LogAsthmaAttack from './src/screens/actionplanflow/LogAsthmaAttack';
 import ExercisesScreen from './src/screens/exercisesflow/ExercisesScreen';
 import ProfileScreen from './src/screens/userflow/ProfileScreen';
+import EditUserScreen from './src/screens/userflow/EditUserScreen';
 
 //home
 const HomeStack = createStackNavigator();
@@ -67,7 +68,7 @@ const ExercisesStack = createStackNavigator();
 function ExercisesStackScreen() {
   return (
     <ExercisesStack.Navigator>
-      <ExercisesStack.Screen name="Oefeningen" component={ExercisesScreen} />
+      <ExercisesStack.Screen name="Oefeningen" component={ExercisesScreen}/>
     </ExercisesStack.Navigator>
   );
 }
@@ -79,6 +80,7 @@ function ProfileStackScreen() {
   return (
     <ProfileStack.Navigator>
       <ProfileStack.Screen name="Profiel" component={ProfileScreen}/>
+      <ProfileStack.Screen name="Instellingen" component={EditUserScreen}/>
     </ProfileStack.Navigator>
   );
 }

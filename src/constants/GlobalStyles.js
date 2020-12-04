@@ -2,11 +2,25 @@ import {StyleSheet} from 'react-native';
 import {COLORS} from "./Colors";
 
 export default StyleSheet.create({
+    bold: {
+        fontWeight: 'bold'
+    },
     titleText: {
         fontFamily: 'Roboto',
         fontSize: 28,
         textAlign: 'center',
         color: '#012D53'
+    },
+    container:{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    contentContainer:{
+        minWidth: '100%',
+        paddingHorizontal: 18,
+        paddingBottom: 70,
+        minHeight: '100%'
     },
     appName: {
         fontFamily: 'Roboto',
@@ -29,4 +43,8 @@ export default StyleSheet.create({
         marginVertical: 5,
         color: COLORS.darkBlue,
     },
+    errorText: {
+        color: 'red',
+        marginVertical: 10,
+    }
 });
