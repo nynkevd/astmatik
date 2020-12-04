@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import MainLayout from '../../components/MainLayout';
 import ActionCard from '../../components/ActionCard';
 import ScreenTitle from '../../components/ScreenTitle';
+
 import AppButton from '../../components/AppButton';
 import { COLORS } from '../../constants/Colors';
 import { FontAwesome } from '@expo/vector-icons';
@@ -25,6 +26,7 @@ const ActionPlanAsthmaAttack = () => {
   //should be changed
   const phoneNumberMedic = '+31612345678';
   const phoneNumberLungMedic = '+31623456789';
+
   return(
     <View style={styles.container}>
     <MainLayout />
@@ -45,6 +47,7 @@ const ActionPlanAsthmaAttack = () => {
             <Text style={styles.stepsText}>4. Neem direct contact op met longarts of huisarts</Text>
             <Text style={styles.stepsExtra}>* Als u geen arts kunt bereiken: ga naar de spoedeisende hulp of bel 112</Text>
           </View>
+
           <View style={styles.phoneContainer}>
             <View style={{marginHorizontal: 50}}>
               <Text style={{color: COLORS.darkBlue}}>Longarts</Text>
@@ -64,6 +67,7 @@ const ActionPlanAsthmaAttack = () => {
             onPress={handleNavigate}
             text="ik heb een aanval (gehad)"
             />
+
       </ScrollView>
     </View>
   )

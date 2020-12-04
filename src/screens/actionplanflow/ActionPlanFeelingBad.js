@@ -13,6 +13,7 @@ import ActionCard from '../../components/ActionCard';
 import ContactCard from '../../components/ContactCard';
 import ScreenTitle from '../../components/ScreenTitle';
 import AppButton from '../../components/AppButton';
+
 import { COLORS } from '../../constants/Colors';
 
 const ActionPlanFeelingBad = () => {
@@ -48,6 +49,7 @@ const ActionPlanFeelingBad = () => {
       <AppButton
         text="opslaan"
       />
+
     </ScrollView>
     </View>
   )

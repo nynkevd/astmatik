@@ -9,3 +9,4 @@ export const COLORS = {
   orange: '#FF6600',
   red: '#FF0000'
 }
+

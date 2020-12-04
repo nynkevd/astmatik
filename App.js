@@ -12,7 +12,9 @@ import {COLORS} from './src/constants/Colors';
 import LoginScreen from './src/screens/authenticationflow/LoginScreen';
 import SignUpScreen from './src/screens/authenticationflow/SignUpScreen';
 import HomeScreen from './src/screens/homeflow/HomeScreen';
+//peakflow-flow
 import StatisticsScreen from './src/screens/statisticsflow/StatisticsScreen';
+import PeakflowInzage from './src/screens/statisticsflow/PeakfowInzage';
 //actionplanflow
 import ActionPlanScreen from './src/screens/actionplanflow/ActionPlanScreen';
 import ActionPlanFeelingGood from './src/screens/actionplanflow/ActionPlanFeelingGood';
@@ -42,6 +44,7 @@ function StatisticsStackScreen() {
   return (
     <StatisticsStack.Navigator>
       <StatisticsStack.Screen name="Grafieken" component={StatisticsScreen} />
+      <StatisticsStack.Screen name="SchemaWeergave" component={PeakflowInzage} />
     </StatisticsStack.Navigator>
   );
 }
