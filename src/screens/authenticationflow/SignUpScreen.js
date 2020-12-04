@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     View,
     Text,
@@ -21,6 +21,7 @@ const SignUpScreen = () => {
     const [repeatPassword, onChangeRepeatPassword] = React.useState('');
     const [asthmaType, onChangeAsthmaType] = React.useState('');
     const [error, setError] = React.useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const signupHandler = async () => {
         setError("bezig");
@@ -30,7 +31,9 @@ const SignUpScreen = () => {
             email,
             password,
             asthmaType
-        }
+        };
+
+        setIsLoading(true);
 
         await axios({
             method: 'POST',
@@ -47,7 +50,7 @@ const SignUpScreen = () => {
             setError(error.response.data.message);
         })
 
-        console.log(body);
+        setIsLoading(false);
     };
 
     return (
@@ -100,6 +103,8 @@ const SignUpScreen = () => {
                 accessibilityLabel="Registreren"
             />
 
+            {isLoading ? <ActivityIndicator color={COLORS.darkBlue}/> : null}
+
         </View>
     )
 };
@@ -109,7 +114,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingHorizontal: 15
+        paddingHorizontal: 18
     },
 })
 

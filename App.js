@@ -21,6 +21,7 @@ import ActionPlanFeelingBad from './src/screens/actionplanflow/ActionPlanFeeling
 import ActionPlanAsthmaAttack from './src/screens/actionplanflow/ActionPlanAsthmaAttack';
 import ExercisesScreen from './src/screens/exercisesflow/ExercisesScreen';
 import ProfileScreen from './src/screens/userflow/ProfileScreen';
+import EditUserScreen from './src/screens/userflow/EditUserScreen';
 
 //home
 const HomeStack = createStackNavigator();
@@ -77,6 +78,7 @@ function ProfileStackScreen() {
   return (
     <ProfileStack.Navigator>
       <ProfileStack.Screen name="Profiel" component={ProfileScreen}/>
+      <ProfileStack.Screen name="Instellingen" component={EditUserScreen}/>
     </ProfileStack.Navigator>
   );
 }

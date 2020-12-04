@@ -11,6 +11,17 @@ export default StyleSheet.create({
         textAlign: 'center',
         color: '#012D53'
     },
+    container:{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    contentContainer:{
+        minWidth: '100%',
+        paddingHorizontal: 18,
+        paddingBottom: 70,
+        minHeight: '100%'
+    },
     appName: {
         fontFamily: 'Roboto',
         fontSize: 28,

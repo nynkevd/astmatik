@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     View,
     Text,
     StyleSheet,
+    ActivityIndicator,
 } from 'react-native';
 import Constants from 'expo-constants';
 import axios from 'axios';
 
 import AppButton from "../../components/AppButton";
 import InputField from "../../components/InputField";
-
+import {COLORS} from '../../constants/Colors';
 import GlobalStyles from '../../constants/GlobalStyles';
 
 const LoginScreen = () => {
+    const [isLoading, setIsLoading] = useState('false');
     const [email, onChangeEmail] = React.useState('');
     const [password, onChangePassword] = React.useState('');
     const [error, setError] = React.useState('');
@@ -22,7 +24,7 @@ const LoginScreen = () => {
             email,
             password,
         };
-
+        setIsLoading(true);
         await axios({
             method: 'POST',
             url: `${Constants.manifest.extra.API_URL}/user/login`,
@@ -37,35 +39,38 @@ const LoginScreen = () => {
             console.log(error.response.data);
             setError(error.response.data.message);
         })
-
-        console.log(body);
+        setIsLoading(false);
     };
 
     return (
         <View style={styles.container}>
-            <Text style={GlobalStyles.titleText}>Welkom bij</Text>
-            <Text style={GlobalStyles.appName}> Astmatik</Text>
+            <MainLayout />
+            <ScrollView contentContainerStyle={styles.contentContainer}>
+                <Text style={GlobalStyles.titleText}>Welkom bij</Text>
+                <Text style={GlobalStyles.appName}> Astmatik</Text>
 
-            <InputField
-                label="Email"
-                value={email}
-                onChange={onChangeEmail}
-            />
+                <InputField
+                    label="Email"
+                    value={email}
+                    onChange={onChangeEmail}
+                />
 
-            <InputField
-                label="Wachtwoord"
-                value={password}
-                onChange={onChangePassword}
-            />
+                <InputField
+                    label="Wachtwoord"
+                    value={password}
+                    onChange={onChangePassword}
+                />
 
-            {error ? <Text style={GlobalStyles.errorText}> {error} </Text> : null}
+                {error ? <Text style={GlobalStyles.errorText}> {error} </Text> : null}
 
-            <AppButton
-                onPress={loginHandler}
-                text="inloggen"
-                accessibilityLabel="Login"
-            />
+                <AppButton
+                    onPress={loginHandler}
+                    text="inloggen"
+                    accessibilityLabel="Login"
+                />
 
+                {isLoading ? <ActivityIndicator color={COLORS.darkBlue}/> : null}
+            </ScrollView>
         </View>
     )
 };
@@ -75,7 +80,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingHorizontal: 15
+        paddingHorizontal: 18
     },
     error: {
         color: 'red',
