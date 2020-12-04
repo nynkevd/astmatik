@@ -15,6 +15,7 @@ import ScreenTitle from '../../components/ScreenTitle';
 import {COLORS} from '../../constants/Colors';
 import InputField from "../../components/InputField";
 import GlobalStyles from "../../constants/GlobalStyles";
+import AppButton from '../../components/AppButton';
 
 const ActionPlanFeelingGood = () => {
     const [medicationSelected, setMedicationSelection] = useState(false);
@@ -84,6 +85,10 @@ const ActionPlanFeelingGood = () => {
                     />
                     <Text style={styles.checkLabel}>Ik gebruik mijn voorzetkamer</Text>
                 </View>
+                <View style={{marginVertical: 10}}></View>
+                <AppButton
+                  text="opslaan"
+                />
             </ScrollView>
         </SafeAreaView>
     )

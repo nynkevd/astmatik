@@ -1,8 +1,10 @@
 import React from 'react';
 import {
+  Linking,
   View,
   Text,
   StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -17,7 +19,9 @@ const ContactCard = (props) => {
         <Text style={styles.text}>{props.phoneNumber}</Text>
         <Text style={styles.text}>{props.location}</Text>
       </View>
-      <FontAwesome style={styles.phone} name="phone" />
+      <TouchableOpacity  style={styles.phone}  onPress={() => Linking.openURL(`tel:${props.phoneNumber}`)}>
+        <FontAwesome color={COLORS.orange} size={32} name="phone" />
+      </TouchableOpacity>
     </View>
     </View>
   )
@@ -41,10 +45,9 @@ const styles = StyleSheet.create({
   },
   phone:{
     position: 'absolute',
-    right: 50,
-    fontSize: 32,
+    right: 30,
     transform: [{rotate: '270deg' }],
-    color: COLORS.orange
+    padding: 25,
   }
 });
 
