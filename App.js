@@ -1,19 +1,30 @@
 import * as React from 'react';
-import { Button, Text, View, StyleSheet } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { FontAwesome } from '@expo/vector-icons';
+import {Button, Text, View, StyleSheet} from 'react-native';
+import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {FontAwesome} from '@expo/vector-icons';
 
 //constants
-import { COLORS } from './src/constants/Colors';
+import {COLORS} from './src/constants/Colors';
 
 //screens
+import LoginScreen from './src/screens/authenticationflow/LoginScreen';
+import SignUpScreen from './src/screens/authenticationflow/SignUpScreen';
 import HomeScreen from './src/screens/homeflow/HomeScreen';
+//peakflow-flow
 import StatisticsScreen from './src/screens/statisticsflow/StatisticsScreen';
+import PeakflowInzage from './src/screens/statisticsflow/PeakfowInzage';
+//actionplanflow
 import ActionPlanScreen from './src/screens/actionplanflow/ActionPlanScreen';
+import ActionPlanFeelingGood from './src/screens/actionplanflow/ActionPlanFeelingGood';
+import ActionPlanFeelingLess from './src/screens/actionplanflow/ActionPlanFeelingLess';
+import ActionPlanFeelingBad from './src/screens/actionplanflow/ActionPlanFeelingBad';
+import ActionPlanAsthmaAttack from './src/screens/actionplanflow/ActionPlanAsthmaAttack';
+import LogAsthmaAttack from './src/screens/actionplanflow/LogAsthmaAttack';
 import ExercisesScreen from './src/screens/exercisesflow/ExercisesScreen';
 import ProfileScreen from './src/screens/userflow/ProfileScreen';
+import EditUserScreen from './src/screens/userflow/EditUserScreen';
 
 //home
 const HomeStack = createStackNavigator();
@@ -32,7 +43,8 @@ const StatisticsStack = createStackNavigator();
 function StatisticsStackScreen() {
   return (
     <StatisticsStack.Navigator>
-      <StatisticsStack.Screen name="Grafieken" component={StatisticsScreen} />
+      <StatisticsStack.Screen name="Grafieken" component={PeakflowInzage} />
+      <StatisticsStack.Screen name="SchemaWeergave" component={StatisticsScreen} />
     </StatisticsStack.Navigator>
   );
 }
@@ -43,7 +55,12 @@ const ActionPlanStack = createStackNavigator();
 function ActionPlanStackScreen() {
   return (
     <ActionPlanStack.Navigator>
-      <ActionPlanStack.Screen name="Actieplan" component={ActionPlanScreen} />
+      <ActionPlanStack.Screen name="Actieplan" component={ActionPlanScreen}/>
+      <ActionPlanStack.Screen name="Goed" component={ActionPlanFeelingGood}/>
+      <ActionPlanStack.Screen name="Minder" component={ActionPlanFeelingLess}/>
+      <ActionPlanStack.Screen name="Geen verbetering" component={ActionPlanFeelingBad}/>
+      <ActionPlanStack.Screen name="Aanval" component={ActionPlanAsthmaAttack}/>
+      <ActionPlanStack.Screen name="Aanval logboek" component={LogAsthmaAttack}/>
     </ActionPlanStack.Navigator>
   );
 }
@@ -54,7 +71,7 @@ const ExercisesStack = createStackNavigator();
 function ExercisesStackScreen() {
   return (
     <ExercisesStack.Navigator>
-      <ExercisesStack.Screen name="Oefeningen" component={ExercisesScreen} />
+      <ExercisesStack.Screen name="Oefeningen" component={ExercisesScreen}/>
     </ExercisesStack.Navigator>
   );
 }
@@ -65,7 +82,8 @@ const ProfileStack = createStackNavigator();
 function ProfileStackScreen() {
   return (
     <ProfileStack.Navigator>
-      <ProfileStack.Screen name="Profiel" component={ProfileScreen} />
+      <ProfileStack.Screen name="Profiel" component={ProfileScreen}/>
+      <ProfileStack.Screen name="Instellingen" component={EditUserScreen}/>
     </ProfileStack.Navigator>
   );
 }
@@ -74,6 +92,8 @@ const Tab = createBottomTabNavigator();
 
 
 export default function App() {
+  const navTheme = DefaultTheme;
+  navTheme.colors.background = '#fff';
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -110,7 +130,10 @@ export default function App() {
           activeTintColor: 'black',
           inactiveTintColor: '#C2C2C2',
           showLabel: false,
-        }}>
+          keyboardHidesTabBar: true,
+          style: { position: 'absolute' }
+        }}
+        >
         <Tab.Screen name="Overzicht" component={HomeStackScreen}  />
         <Tab.Screen name="Grafieken" component={StatisticsStackScreen} />
         <Tab.Screen name="Actieplan" component={ActionPlanStackScreen} />
