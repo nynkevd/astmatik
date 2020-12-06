@@ -112,7 +112,6 @@ const styles = StyleSheet.create({
         width: 150,
         borderTopRightRadius: 25,
         borderBottomRightRadius: 25,
-        shadowOffset: 5,
     },
     activeButtonText: {
         fontFamily: "Roboto",
