@@ -7,6 +7,7 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import {
     LineChart,
     BarChart,
@@ -28,6 +29,8 @@ const PeakflowInzage = () => {
     const [peakflowBeforeMed, setPeakflowBeforeMed] = useState("");
     const [peakflowAfterMed, setPeakflowAfterMed] = useState("");
     const [logboek, setLogboek] = useState("");
+
+    const navigation = useNavigation();
 
     const chartConfig = {
         backgroundGradientFrom: "#1E2923",
@@ -82,7 +85,7 @@ const PeakflowInzage = () => {
 
                 <AppButton
                     text={"opslaan"}
-                    onPress={console.log("test")}
+                    onPress={() => navigation.navigate("SchemaWeergave")}
                 />
             </ScrollView>
         </SafeAreaView>

@@ -64,7 +64,7 @@ const StatisticsScreen = () => {
 
                 <AppButton
                     text={"opslaan"}
-                    onPress={navigation.navigate("SchemaWeergave")}
+                    onPress={() => navigation.navigate("Grafieken")}
                 />
             </ScrollView>
         </SafeAreaView>

@@ -43,8 +43,8 @@ const StatisticsStack = createStackNavigator();
 function StatisticsStackScreen() {
   return (
     <StatisticsStack.Navigator>
-      <StatisticsStack.Screen name="Grafieken" component={StatisticsScreen} />
-      <StatisticsStack.Screen name="SchemaWeergave" component={PeakflowInzage} />
+      <StatisticsStack.Screen name="Grafieken" component={PeakflowInzage} />
+      <StatisticsStack.Screen name="SchemaWeergave" component={StatisticsScreen} />
     </StatisticsStack.Navigator>
   );
 }
