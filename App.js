@@ -14,7 +14,7 @@ import SignUpScreen from './src/screens/authenticationflow/SignUpScreen';
 import HomeScreen from './src/screens/homeflow/HomeScreen';
 //peakflow-flow
 import StatisticsScreen from './src/screens/statisticsflow/StatisticsScreen';
-import PeakflowInzage from './src/screens/statisticsflow/PeakfowInzage';
+import MeasurePeakflowScreen from './src/screens/statisticsflow/MeasurePeakflowScreen';
 //actionplanflow
 import ActionPlanScreen from './src/screens/actionplanflow/ActionPlanScreen';
 import ActionPlanFeelingGood from './src/screens/actionplanflow/ActionPlanFeelingGood';
@@ -43,8 +43,8 @@ const StatisticsStack = createStackNavigator();
 function StatisticsStackScreen() {
   return (
     <StatisticsStack.Navigator>
-      <StatisticsStack.Screen name="Grafieken" component={PeakflowInzage} />
-      <StatisticsStack.Screen name="SchemaWeergave" component={StatisticsScreen} />
+      <StatisticsStack.Screen name="Overzicht" component={StatisticsScreen} />
+      <StatisticsStack.Screen name="Peakflow invullen" component={MeasurePeakflowScreen} />
     </StatisticsStack.Navigator>
   );
 }
