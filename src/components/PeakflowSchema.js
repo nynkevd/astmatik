@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -7,43 +7,85 @@ import {
 import {
   LineChart,
 } from "react-native-chart-kit";
+import moment from 'moment';
 
 import { COLORS } from '../constants/Colors';
 import GlobalStyles from '../constants/GlobalStyles';
 
 const PeakflowSchema = (props) => {
-    const chartConfig = {
-        backgroundGradientFrom: "#1E2923",
-        backgroundGradientFromOpacity: 0,
-        backgroundGradientTo: "#08130D",
-        backgroundGradientToOpacity: 0.5,
-        color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-        strokeWidth: 2, // optional, default 3
-        barPercentage: 0.5,
-        useShadowColorFromDataset: false // optional
-      };
+    const [labels, setLabels] = useState();
+
+    const [morningData, setMorningData] = useState([0]);
+    const [eveningData, setEveningData] = useState([0]);
 
       useEffect(() => {
-        // console.log("data changed!");
+        setMorningData([0]);
+        setEveningData([0]);
+        if (props.labels == "week") {
+          setLabels(["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"]);
+          // setMorningData([0, 0, 0, 0, 0, 0, 0]);
+          // setEveningData([0, 0, 0, 0, 0, 0, 0]);
+        } else if (props.labels == "month") {
+          let tempLabels = [];
+          for (let i = 0; i < moment().endOf("month").format("DD"); i++) {
+            if ((i + 1)%5 == 0 || i == 0) {
+              tempLabels[i] = (i + 1).toString();
+            }
+          }
+          setLabels(tempLabels);
+        }
+
+        console.log("morning");
+        console.log(morningData);
+
+        let counter = 0;
+          for (const peakflow of props.data) {
+            // console.log("counter: " + counter);
+            // console.log(peakflow)
+              if (peakflow.morning) {
+                let morningDataCopy = morningData;
+                morningDataCopy[counter] = peakflow.value;
+                setMorningData(morningDataCopy);
+              } else if (!peakflow.morning) {
+                let eveningDataCopy = eveningData;
+                eveningDataCopy[counter] = peakflow.value;
+                setEveningData(eveningDataCopy);
+              } else {
+                let morningDataCopy = morningData;
+                morningDataCopy[counter] = 0;
+                setMorningData(morningDataCopy);
+                let eveningDataCopy = eveningData;
+                eveningDataCopy[counter] = 0;
+                setEveningData(eveningDataCopy);
+              }
+            counter++;
+          }
+
+          // console.log(morningData);
+          // console.log("evening");
+          // console.log(eveningData);
+          // console.log(Array.from(eveningData, item => item || 0));
+    
       }, [props.data]);
+
   return(
     <View style={[styles.cardContainer, GlobalStyles.shadowed]}>
       <Text style={styles.cardTitle}>{props.title}</Text>
       <Text style={styles.text}>{props.subTitle}</Text>
       <LineChart
         data={{
-          labels: ["M", "D", "W", "D", "V", "Z", "Z"],
+          labels,
           datasets: [{
-            data: [
-              Math.random() * 100,
-              Math.random() * 100,
-              Math.random() * 100,
-              Math.random() * 100,
-              Math.random() * 100,
-              Math.random() * 100,
-              Math.random() * 100,
-            ]
-          }]
+            data: morningData,
+            strokeWidth: 2,
+            color: (opacity = 1) => `rgba(0, 212, 255, ${opacity})`,
+          },
+          {
+            data: eveningData,
+            strokeWidth: 2,
+            color: (opacity = 1) => `rgba(255, 0, 255, ${opacity})`,
+          }],
+          legend: ["Ochtend", "Avond"]
         }}
         width={350}
         height={220}
@@ -59,9 +101,8 @@ const PeakflowSchema = (props) => {
             borderRadius: 16
           },
           propsForDots: {
-            r: "6",
+            r: "3",
             strokeWidth: "2",
-            stroke: "#00D4FF"
           }
           }}
         bezier

@@ -18,8 +18,6 @@ import InputField from '../../components/InputField';
 import AppButton from '../../components/AppButton';
 
 const EditUserScreen = ({route}) => {
-  const userId = "5fbfb5630c36fb00173a13d4";
-
   const [isLoading, setIsLoading] = useState(false);
 
   const [firstName, setFirstName] = useState(route.params.firstName);
@@ -42,7 +40,7 @@ const EditUserScreen = ({route}) => {
     setIsLoading(true);
     await axios({
       method: 'PATCH',
-      url: `${Constants.manifest.extra.API_URL}/user/edit/${userId}`,
+      url: `${Constants.manifest.extra.API_URL}/user/edit/${Constants.manifest.extra.USER_ID}`,
       data: body
     }).then((res) => {
       console.log("success");

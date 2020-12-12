@@ -17,8 +17,6 @@ import { COLORS } from '../../constants/Colors';
 import GlobalStyles from '../../constants/GlobalStyles'
 
 const ProfileScreen = ({route}) => {
-  const userId = "5fbfb5630c36fb00173a13d4";
-
   const size = 18;
   const color = COLORS.darkBlue;
 
@@ -54,12 +52,13 @@ const ProfileScreen = ({route}) => {
         setIsLoading(true);
         await axios({
             method: 'GET',
-            url: `${Constants.manifest.extra.API_URL}/user/profile/${userId}`,
+            url: `${Constants.manifest.extra.API_URL}/user/profile/${Constants.manifest.extra.USER_ID}`,
         }).then((res) => {
             setFirstName(res.data.firstname);
             setLastName(res.data.lastname);
             setEmail(res.data.email);
             setAsthmaType(res.data.asthmaType);
+            // TODO : Change to user info
             setMedication(["budesonide", "salbutamol", "vilanterol"]);
             setExcersises(["huffen", "diep inademen"]);
         }).catch((error) => {

@@ -7,12 +7,15 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Button
+  Button,
+  ActivityIndicator
 } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { FontAwesome } from '@expo/vector-icons';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation } from '@react-navigation/native';
+import moment from 'moment';
+import axios from 'axios';
+import Constants from "expo-constants";
 
 import Dropdown from '../../components/Dropdown';
 import ScreenTitle from '../../components/ScreenTitle';
@@ -23,15 +26,12 @@ import MainLayout from '../../components/MainLayout';
 
 const LogAsthmaAttack = () =>{
   const navigation = useNavigation();
-  const d = new Date();
-  let today = new Date().toISOString().slice(0, 10);
-  const currentTime = d.getHours() + ":" + (d.getMinutes()<10?'0':'') + d.getMinutes();
-  const [time, setTime] = useState(currentTime);
-  const [date, setDate] = useState(today);
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-  const [duration, setDuration] = useState('');
-  const [trigger, setTrigger] = useState('');
+  const [timestamp, setTimestamp] = useState(moment());
+  const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
+
+  const [duration, setDuration] = useState('5 minuten');
+  const [trigger, setTrigger] = useState('Geen');
   const [usedMedication, setUsedMedication] = useState('');
   const [medsUsed, setMedsUsed] = useState(false);
   const [medsHelped, setMedsHelped] = useState(false);
@@ -40,40 +40,49 @@ const LogAsthmaAttack = () =>{
   "1,5 uur", "2 uur", "2,5 uur", "3 uur", "langer dan 3 uur", "langer dan 6 uur",
   "langer dan 9 uur","langer dan 12 uur", "langer dan een dag", "langer dan twee dagen"];
 
+  const [isLoading, setIsLoading] = useState(false);
+
   //should be changed to user info
   const triggers = ['Geen', 'Mist', 'Koude lucht', 'Pollen'];
   const medication = ['Salbutamol', 'Budesonide'];
 
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
 
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-//TO DO: save information to database
+  //TODO: Change userId to loggedIn user
   const asthmaAttackHandler = async () => {
       let body = {
-        date,
-        time,
+        timestamp,
         duration,
         trigger,
-        usedMedication,
-        medsUsed,
-        medsHelped,
-      }
-      alert('De informatie is opgeslagen');
-      navigation.navigate('Actieplan');
+        takenMedication: medsUsed,
+        medicationTaken: usedMedication,
+        medicationHelped: medsHelped,
+        userId: Constants.manifest.extra.USER_ID,
+      };
+
+      setIsLoading(true);
+
+      await axios({
+        method: 'POST',
+        url: `${Constants.manifest.extra.API_URL}/attack/add`,
+        header: {
+          'content-type': 'application/json'
+        },
+        data: body
+      }).then((res) => {
+        // alert('De informatie is opgeslagen');
+        navigation.navigate('Actieplan');
+      }).catch((error) => {
+        console.log(error.response.data);
+      })
+
+      setIsLoading(false);
+      
   };
 
 //set time and date
   const handleConfirm = (date) => {
-    date.setHours(date.getHours() + 1);
-    let dateTimeString = JSON.stringify(date);
-    setDate(dateTimeString.substring(1,11));
-    setTime(dateTimeString.substring(12,17));
-    hideDatePicker();
+    setTimestamp(date);
+    setIsDatePickerVisible(false);
   };
 
   return(
@@ -85,17 +94,17 @@ const LogAsthmaAttack = () =>{
           subTitle="Ik heb een aanval (gehad)"
           />
         <Text style={GlobalStyles.label}>Datum en Tijd</Text>
-        <TouchableOpacity style={styles.dropdown} onPress={showDatePicker}>
+        <TouchableOpacity style={styles.dropdown} onPress={() => {setIsDatePickerVisible(true)}}>
           <View style={{flexDirection: 'row'}}>
-            <Text style={{fontSize: 16, paddingLeft: 8}}>{date + "   " + time}</Text>
-            <FontAwesome style={{position: 'absolute', right: 20}} name="caret-down" size={16} color="#808080" />
+            <Text style={{fontSize: 16, paddingLeft: 8}}>{moment(timestamp).format("YYYY-MM-DD") + "  " + moment(timestamp).format("HH:mm")}</Text>
+            <FontAwesome style={{position: 'absolute', right: 10}} name="caret-down" size={16} color="#808080" />
           </View>
         </TouchableOpacity>
         <DateTimePickerModal
            isVisible={isDatePickerVisible}
            mode="datetime"
            onConfirm={handleConfirm}
-           onCancel={hideDatePicker}
+           onCancel={() => {setIsDatePickerVisible(false)}}
          />
         <Text style={GlobalStyles.label}>Duur van de aanval</Text>
         <Dropdown
@@ -143,6 +152,8 @@ const LogAsthmaAttack = () =>{
         <AppButton
           onPress={asthmaAttackHandler}
           text="opslaan"/>
+        
+        {isLoading ? <ActivityIndicator color={COLORS.darkBlue}/> : null}
       </ScrollView>
     </View>
   )
