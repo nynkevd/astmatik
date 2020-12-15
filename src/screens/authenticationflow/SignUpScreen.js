@@ -3,9 +3,10 @@ import {
     View,
     Text,
     TextInput,
-    StyleSheet, Button,
+    StyleSheet, 
+    Button,
 } from 'react-native';
-import Constant from "expo-constants";
+import Constants from "expo-constants";
 import axios from "axios";
 
 import GlobalStyles from '../../constants/GlobalStyles';
@@ -24,7 +25,7 @@ const SignUpScreen = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const signupHandler = async () => {
-        setError("bezig");
+        
         let body = {
             firstname,
             lastname: lastname || null,
