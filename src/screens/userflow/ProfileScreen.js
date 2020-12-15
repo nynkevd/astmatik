@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
+  AsyncStorage,
   View,
   ScrollView,
   StyleSheet,
@@ -11,17 +12,19 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import Constants from 'expo-constants';
 import {FontAwesome5, Entypo, Feather, MaterialCommunityIcons} from '@expo/vector-icons';
+import {AuthContext} from '../../context/context';
 
 import ProfileLayout from '../../components/ProfileLayout';
 import { COLORS } from '../../constants/Colors';
 import GlobalStyles from '../../constants/GlobalStyles'
 
 const ProfileScreen = ({route}) => {
-  const userId = "5fbfb5630c36fb00173a13d4";
+  const {retrieveToken} = React.useContext(AuthContext);
 
   const size = 18;
   const color = COLORS.darkBlue;
 
+// TODO: MAKE DYNAMIC
   let time = "10:10";
   let date = "26 november 2020";
 
@@ -50,30 +53,24 @@ const ProfileScreen = ({route}) => {
   }
 
   useEffect(() => {
-    (async function loadData() {
-        setIsLoading(true);
-        await axios({
-            method: 'GET',
-            url: `${Constants.manifest.extra.API_URL}/user/profile/${userId}`,
-        }).then((res) => {
-            setFirstName(res.data.firstname);
-            setLastName(res.data.lastname);
-            setEmail(res.data.email);
-            setAsthmaType(res.data.asthmaType);
-            setMedication(["budesonide", "salbutamol", "vilanterol"]);
-            setExcersises(["huffen", "diep inademen"]);
-        }).catch((error) => {
-            console.log(error);
-        });
-        setIsLoading(false);
+      (async function loadData() {
+      let firstN = await AsyncStorage.getItem('userFirstName');
+      let lastN = await AsyncStorage.getItem('userLastName');
+      let mail = await AsyncStorage.getItem('userEmail');
+      let type = await AsyncStorage.getItem('userAsthmaType');
+      let triggers = await AsyncStorage.getItem('userTriggers');
+      let meds = JSON.parse(await AsyncStorage.getItem('userMedication'));
+      setFirstName(firstN);
+      setLastName(lastN);
+      setEmail(mail);
+      setAsthmaType(type);
+      setMedication(meds);
     })();
-  }, [update]); 
-
+  }, [update]);
 
   const navigation = useNavigation();
   const settingsPress = () => {
     navigation.navigate("Instellingen", {firstName, lastName, email, asthmaType});
-    // navigation.navigate("Instellingen", {firstName, lastName, email, asthmaType, update, forceUpdate: forceUpdate});
   }
 
   return(
@@ -88,13 +85,13 @@ const ProfileScreen = ({route}) => {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.iconText}> 
+        <View style={styles.iconText}>
           <FontAwesome5 name="clock" size={size} color={color} style={styles.icon}/>
-          <Text style={styles.iconText__text}> {time} &nbsp; | &nbsp; {date}</Text> 
+          <Text style={styles.iconText__text}> {time} &nbsp; | &nbsp; {date}</Text>
         </View>
 
         <View>
-          <View style={styles.iconText}> 
+          <View style={styles.iconText}>
             <Entypo name="mail" size={size} color={color} style={styles.icon}/>
             <Text style={styles.iconText__text}> {email} </Text>
           </View>
@@ -113,7 +110,7 @@ const ProfileScreen = ({route}) => {
               <FontAwesome5 name="notes-medical" size={size} color={color} style={styles.icon}/>
               <Text style={[styles.iconText__text, GlobalStyles.bold]}>Medicatie </Text>
           </View>
-          {medication && medication.length > 0 ? medication.map(medicationItem => 
+          {medication && medication.length > 0 ? medication.map(medicationItem =>
             <Text key={medicationItem} style={styles.iconText__text}> {medicationItem} </Text>) : null}
         </View>
 
@@ -122,10 +119,10 @@ const ProfileScreen = ({route}) => {
               <MaterialCommunityIcons name="doctor" size={size} color={color} style={styles.icon}/>
               <Text style={[styles.iconText__text, GlobalStyles.bold]}>Oefeningen</Text>
           </View>
-          {excersises && excersises.length > 0 ? excersises.map(excersise=> 
+          {excersises && excersises.length > 0 ? excersises.map(excersise=>
           <Text key={excersise} style={styles.iconText__text}> {excersise} </Text>) : null}
         </View>
-      
+
       </ScrollView>
     </View>
   )

@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import {
+    AsyncStorage,
     View,
     Text,
-    TextInput,
-    StyleSheet, Button,
+    ScrollView,
+    StyleSheet,
+    ActivityIndicator,
 } from 'react-native';
-import Constant from "expo-constants";
+import Constants from "expo-constants";
 import axios from "axios";
+import { useNavigation } from '@react-navigation/native';
 
+import {COLORS} from '../../constants/Colors';
+import MainLayout from '../../components/MainLayout';
 import GlobalStyles from '../../constants/GlobalStyles';
 import InputField from "../../components/InputField";
 import AppButton from "../../components/AppButton";
-
+import {AuthContext} from '../../context/context';
 
 const SignUpScreen = () => {
     const [firstname, onChangeFirstname] = React.useState('');
@@ -19,42 +24,29 @@ const SignUpScreen = () => {
     const [email, onChangeEmail] = React.useState('');
     const [password, onChangePassword] = React.useState('');
     const [repeatPassword, onChangeRepeatPassword] = React.useState('');
-    const [asthmaType, onChangeAsthmaType] = React.useState('');
     const [error, setError] = React.useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const navigation = useNavigation();
+    const {signUp} = React.useContext(AuthContext);
 
-    const signupHandler = async () => {
-        setError("bezig");
-        let body = {
-            firstname,
-            lastname: lastname || null,
-            email,
-            password,
-            asthmaType
-        };
-
-        setIsLoading(true);
-
-        await axios({
-            method: 'POST',
-            url: `${Constants.manifest.extra.API_URL}/user/signup`,
-            header: {
-                'content-type': 'application/json'
-            },
-            data: body
-        }).then((res) => {
-            // TODO: Koppelen aan context/reducer of iets dergelijks van storage
-            console.log(res.data.userId);
-        }).catch((error) => {
-            console.log(error.response.data);
-            setError(error.response.data.message);
-        })
-
-        setIsLoading(false);
+    const signupHandler = async (firstname, lastname, email, password) => {
+      try{
+        await AsyncStorage.setItem('userFirstName', firstname);
+        await AsyncStorage.setItem('userLastName', lastname);
+        await AsyncStorage.setItem('userEmail', email);
+      } catch(error){
+        console.log(error);
+      } finally {
+        setTimeout(() => {
+            navigation.navigate('Astma gegevens', {email, password});
+        }, 200);
+      }
     };
 
     return (
-        <View style={styles.container}>
+        <View style={GlobalStyles.container}>
+          <MainLayout />
+            <ScrollView contentContainerStyle={GlobalStyles.contentContainer} >
             <Text style={GlobalStyles.titleText}>Welkom bij</Text>
             <Text style={GlobalStyles.appName}>Astmatik</Text>
 
@@ -88,23 +80,16 @@ const SignUpScreen = () => {
                 onChange={onChangeRepeatPassword}
             />
 
-            {/*TODO: Willen we hier een dropdown van maken?*/}
-            <InputField
-                label="Type astma *"
-                value={asthmaType}
-                onChange={onChangeAsthmaType}
-            />
-
-            {error ? <Text style={GlobalStyles.errorText}> {error} </Text> : null}
+            {/* {error ? <Text style={GlobalStyles.errorText}> {error} </Text> : null} */}
 
             <AppButton
-                onPress={signupHandler}
+                onPress={() => signupHandler(firstname,lastname,email,password)}
                 text="registreren"
                 accessibilityLabel="Registreren"
             />
 
             {isLoading ? <ActivityIndicator color={COLORS.darkBlue}/> : null}
-
+          </ScrollView>
         </View>
     )
 };

@@ -1,14 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
+  AsyncStorage,
   View,
   ScrollView,
   StyleSheet,
+  TouchableOpacity
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import Constants from 'expo-constants';
-// import {FontAwesome5, Entypo, Feather, MaterialCommunityIcons} from '@expo/vector-icons';
+import {FontAwesome5} from '@expo/vector-icons';
 
 import MainLayout from '../../components/MainLayout';
 import ScreenTitle from '../../components/ScreenTitle';
@@ -17,40 +19,24 @@ import GlobalStyles from '../../constants/GlobalStyles'
 import InputField from '../../components/InputField';
 import AppButton from '../../components/AppButton';
 
+import {AuthContext} from '../../context/context';
+
 const EditUserScreen = ({route}) => {
-  const userId = "5fbfb5630c36fb00173a13d4";
-
   const [isLoading, setIsLoading] = useState(false);
-
   const [firstName, setFirstName] = useState(route.params.firstName);
   const [lastName, setLastName] = useState(route.params.lastName);
   const [email, setEmail] = useState(route.params.email);
   const [password, setPassword] = useState('');
   const [asthmaType, setAsthmaType] = useState(route.params.asthmaType);
-
+  const {signOut, updateProfile,} = React.useContext(AuthContext);
   const navigation = useNavigation();
 
-  const handleSave = async (req, res) => {
-    let body = {
-      firstname: firstName,
-      lastname: lastName || '',
-      email,
-      password: password || '',
-      asthmaType
-    }
-
+  const handleSave = async (firstName, lastName, email, password, asthmaType) => {
     setIsLoading(true);
-    await axios({
-      method: 'PATCH',
-      url: `${Constants.manifest.extra.API_URL}/user/edit/${userId}`,
-      data: body
-    }).then((res) => {
-      console.log("success");
-      navigation.navigate('Profiel', {update: true, timestamp: Date.now()});
-    }).catch((error) => {
-      console.log(error);
-    });
-    setIsLoading(false);
+    updateProfile(firstName, lastName, email, password, asthmaType);
+    setTimeout(() => {
+        navigation.navigate('Profiel', {update: true, timestamp: Date.now()});
+    }, 1000);
   }
 
   return(
@@ -61,40 +47,42 @@ const EditUserScreen = ({route}) => {
         <ScreenTitle
           title="Instellingen"
         />
-
-        <InputField 
+        <TouchableOpacity onPress={signOut}>
+          <FontAwesome5 name="sign-out-alt" size={22} color={COLORS.darkBlue}/>
+        </TouchableOpacity>
+        <InputField
           label="Voornaam"
           value={firstName}
           onChange={setFirstName}
         />
 
-        <InputField 
+        <InputField
           label="Achternaam"
           value={lastName}
           onChange={setLastName}
         />
 
-        <InputField 
+        <InputField
           label="Email"
           value={email}
           onChange={setEmail}
         />
 
-        <InputField 
+        <InputField
           label="Nieuw wachtwoord"
           value={password}
           onChange={setPassword}
         />
 
-        <InputField 
+        <InputField
           label="Astma Type"
           value={asthmaType}
           onChange={setAsthmaType}
         />
 
-        <AppButton 
+        <AppButton
           text={'opslaan'}
-          onPress={handleSave}        
+          onPress={() => handleSave(firstName, lastName, email, password, asthmaType)}
         />
 
         {isLoading ? <ActivityIndicator color={COLORS.darkBlue}/> : null}
@@ -110,7 +98,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  
+
 })
 
 export default EditUserScreen;
