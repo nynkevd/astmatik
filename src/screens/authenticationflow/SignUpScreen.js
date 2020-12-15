@@ -6,6 +6,9 @@ import {
     ScrollView,
     StyleSheet,
     ActivityIndicator,
+    TextInput,
+    StyleSheet, 
+    Button,
 } from 'react-native';
 import Constants from "expo-constants";
 import axios from "axios";
@@ -26,6 +29,7 @@ const SignUpScreen = () => {
     const [repeatPassword, onChangeRepeatPassword] = React.useState('');
     const [error, setError] = React.useState('');
     const [isLoading, setIsLoading] = useState(false);
+
     const navigation = useNavigation();
     const {signUp} = React.useContext(AuthContext);
 
