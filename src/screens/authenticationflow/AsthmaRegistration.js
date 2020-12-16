@@ -23,21 +23,22 @@ const AsthmaRegistration= ({route}) => {
   const navigation = useNavigation();
   const [asthmaType, setAsthmaType] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  const [ showTriggerList, setShowTriggerList] = useState(false);
-  const [ showMedicationList, setShowMedicationList] = useState(false);
+  const [showTriggerList, setShowTriggerList] = useState(false);
+  const [showMedicationList, setShowMedicationList] = useState(false);
   const {signUp} = React.useContext(AuthContext);
-  let allMedications;
-  let allTriggers;
+  let myMedication;
+  let myTriggers;
 
   let password = route.params && route.params.password;
 
-  const signupHandler = async ( asthmaType, allMedications, triggers) => {
+  const signupHandler = async () => {
     let firstname = await AsyncStorage.getItem('userFirstName');
     let lastname = await AsyncStorage.getItem('userLastName');
     let email = await AsyncStorage.getItem('userEmail');
-    allMedications = JSON.parse(await AsyncStorage.getItem('userMedication'));
-    allTriggers = JSON.parse(await AsyncStorage.getItem('userTriggers'));
-    signUp(firstname, lastname, email, password, asthmaType, allMedications, triggers);
+    myMedication = JSON.parse(await AsyncStorage.getItem('userMedication'));
+    myTriggers = JSON.parse(await AsyncStorage.getItem('userTriggers'));
+    console.log(asthmaType);
+    signUp(firstname, lastname, email, password, asthmaType, myMedication, myTriggers);
   };
 
     return (
@@ -68,11 +69,12 @@ const AsthmaRegistration= ({route}) => {
 
                 <AppButton
                   text="opslaan"
-                  onPress={() => signupHandler(asthmaType, allMedications, triggers )}
+                  onPress={() => signupHandler()}
                 />
 
                 {showTriggerList
                   ?<Dropdown
+                    title={"Mogelijke triggers"}
                     modalVisible
                     listOverview
                     changeValue={() => setShowTriggerList(!showTriggerList)}
@@ -82,6 +84,7 @@ const AsthmaRegistration= ({route}) => {
                 }
                 {showMedicationList
                 ?  <Dropdown
+                    title={"Mogelijke medicijnen"}
                     modalVisible
                     listOverview
                     changeValue={() => setShowMedicationList(!showMedicationList)}

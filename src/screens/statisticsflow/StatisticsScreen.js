@@ -17,11 +17,14 @@ import ScreenTitle from '../../components/ScreenTitle';
 import PeakflowSchema from "../../components/PeakflowSchema";
 import FloatingActionButton from "../../components/FloatingActionButton";
 import AppButton from '../../components/AppButton';
+import {AuthContext} from '../../context/context';
 
 import {COLORS} from '../../constants/Colors';
 import GlobalStyles from '../../constants/GlobalStyles';
 
 const StatisticsScreen = ({route}) => {
+    const {retrieveToken} = React.useContext(AuthContext);
+    const {userToken} = retrieveToken();
     const navigation = useNavigation();
 
     const [activeFilter, setActiveFilter] = useState(0); // 0 = Vandaag, 1 = deze week, 2 = deze maand
@@ -49,9 +52,15 @@ const StatisticsScreen = ({route}) => {
     useEffect(() => {
         (async function loadData() {
             setIsLoading(true);
+
+            //TODO: FIX, same issue as attack
+            console.log(userToken);
             await axios({
                 method: 'GET',
-                url: `${Constants.manifest.extra.API_URL}/peakflow/overview/${Constants.manifest.extra.USER_ID}`,
+                url: `${Constants.manifest.extra.API_URL}/peakflow/overview`,
+                headers: {
+                    'X-Auth-Token': userToken
+                }
             }).then((res) => {
                 setTodaysData(res.data.today);
                 setThisWeeksData(res.data.thisWeek);

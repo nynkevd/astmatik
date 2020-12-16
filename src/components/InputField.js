@@ -21,6 +21,8 @@ const InputField = (props) => {
                     numberOfLines={8}
                     placeholder={props.placeholder || null}
                     placeholderTextColor={COLORS.gray}
+                    secureTextEntry={props.secure && true}
+                    autoCapitalize={props.noCap && "none"}
                 /> :
                 <TextInput
                     style={styles.input}
@@ -28,6 +30,8 @@ const InputField = (props) => {
                     value={props.value}
                     placeholder={props.placeholder || null}
                     placeholderTextColor={COLORS.gray}
+                    secureTextEntry={props.secure && true}
+                    autoCapitalize={props.noCap && "none"}
                 />
             }
         </View>

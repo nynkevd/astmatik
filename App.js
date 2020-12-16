@@ -140,9 +140,12 @@ export default function App() {
         return {
           ...prevState,
           firstname: action.firstname,
-          lastname: action. lastname,
+          lastname: action.lastname,
           userName: action.id,
-          //userToken: action.token,
+          userToken: action.token,
+          asthmaType: action.asthmaType,
+          triggers: action.triggers,
+          medication: action.medication,
           isLoading: false,
         };
       case 'ADD_ASTHMA':
@@ -181,15 +184,21 @@ export default function App() {
   }
 
   const loadData = async (token) => {
+    console.log(token);
       await axios({
           method: 'GET',
-          url: `${Constants.manifest.extra.API_URL}/user/profile/${token}`,
+          url: `${Constants.manifest.extra.API_URL}/user/info`,
+          headers: {
+            'X-Auth-Token': token
+          }
       }).then(async (res) => {
           await AsyncStorage.setItem('userFirstName', res.data.firstname);
           await AsyncStorage.setItem('userLastName', res.data.lastname);
           await AsyncStorage.setItem('userEmail', res.data.email);
           await AsyncStorage.setItem('userAsthmaType', res.data.asthmaType);
           // save new values to AsyncStorage
+          await AsyncStorage.setItem('userTriggers', JSON.stringify(res.data.triggers));
+          await AsyncStorage.setItem('userMedication', JSON.stringify(res.data.medication));
       }).catch((error) => {
           console.log(error);
       })
@@ -211,11 +220,17 @@ export default function App() {
           },
           data: body
       }).then( async (res) => {
-          userToken = res.data.userId;
-          loadData(userToken);
+          userToken = res.data.token;
+          await AsyncStorage.setItem('userFirstName', res.data.firstname);
+          await AsyncStorage.setItem('userLastName', res.data.lastname);
+          // TODO: API return email to set here
+          await AsyncStorage.setItem('userEmail', email);
+          await AsyncStorage.setItem('userAsthmaType', res.data.asthmaType);
+          await AsyncStorage.setItem('userTriggers', JSON.stringify(res.data.triggers));
+          await AsyncStorage.setItem('userMedication', JSON.stringify(res.data.medication));
           await AsyncStorage.setItem('userToken', userToken);
       }).catch((error) => {
-          console.log(error.response.data);
+          console.log(error.response);
           ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT);
       });
       setTimeout(() => {
@@ -226,7 +241,8 @@ export default function App() {
       //TODO: clear async storage
       try{
         await AsyncStorage.removeItem('userToken');
-        await AsyncStorage.removeItem('userName');
+        await AsyncStorage.removeItem('userFirstName');
+        await AsyncStorage.removeItem('userLastName');
         await AsyncStorage.removeItem('userEmail');
         await AsyncStorage.removeItem('userMedication');
         await AsyncStorage.removeItem('userTriggers');
@@ -235,7 +251,7 @@ export default function App() {
       }
       dispatch({type: 'LOGOUT'});
     },
-    signUp: async (firstname, lastname, email, password, asthmaType, medications, triggers) => {
+    signUp: async (firstname, lastname, email, password, asthmaType, medication, triggers) => {
       let userToken = null;
       let body = {
           firstname,
@@ -243,9 +259,11 @@ export default function App() {
           email,
           password,
           asthmaType,
+          medication,
+          triggers,
       };
-      // TODO: save medications and triggers to DB
 
+      // TODO: save medications and triggers to DB
       await axios({
           method: 'POST',
           url: `${Constants.manifest.extra.API_URL}/user/signup`,
@@ -253,15 +271,21 @@ export default function App() {
               'content-type': 'application/json'
           },
           data: body
-      }).then( async (res) => {
-          userToken = res.data.userId;
-          loadData(userToken);
+      }).then(async (res) => {
+          userToken = res.data.token;
+          // loadData(userToken);
           await AsyncStorage.setItem('userToken', userToken);
+          //TODO: Dayella vragen of dit ook hierin kan
+          dispatch({type: 'REGISTER', firstname: firstname, lastname: lastname, id: email, token: userToken});
+
+          setTimeout(() => {
+            dispatch({type: 'LOGIN', id: email, token: userToken});
+          }, 200);
       }).catch((error) => {
           ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT);
           console.log(error);
       });
-      dispatch({type: 'REGISTER', firstname: firstname, lastname: lastname, id: email, token: userToken});
+      
     },
     updateProfile: async (firstname, lastname, email, password, asthmaType) => {
       let body = {
@@ -273,7 +297,10 @@ export default function App() {
       }
       await axios({
         method: 'PATCH',
-        url: `${Constants.manifest.extra.API_URL}/user/edit/${token}`,
+        url: `${Constants.manifest.extra.API_URL}/user/edit`,
+        headers: {
+          'X-Auth-Token': token,
+        },
         data: body
       }).then( (res) => {
         loadData(token);
@@ -295,7 +322,11 @@ export default function App() {
       try{
         userToken = await AsyncStorage.getItem('userToken');
         // TODO: check if user has internet else don't loadData
-        loadData(userToken);
+        if(!!userToken) {
+          console.log("doing this!");
+          // console.log(userToken);  
+          loadData(userToken);
+        }
       } catch(error){
         console.log(error);
       }

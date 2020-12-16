@@ -10,7 +10,7 @@ const Dropdown = (props) =>{
    const [modalVisible, setModalVisible] = useState(props.modalVisible);
    const [state, setState] = useState(props.list);
    const [checked, setChecked] = useState(false);
-   let mytriggers = [];
+   let myTriggers = [];
    let myMedications = [];
 
    const handeListValues = async () =>{
@@ -18,14 +18,20 @@ const Dropdown = (props) =>{
        if(props.list === OPTIONS.triggerOptions){
          for(let i = 0; i < state.length; i++){
            if(state[i]['checked'] === true){
-             mytriggers.push(state[i]['key']);
-           }
-         }
-         await AsyncStorage.setItem('userTriggers', JSON.stringify(mytriggers));
+             myTriggers.push({
+               id: state[i]["db_id"],
+               name: state[i]["key"]
+           })
+          }
+        }
+         await AsyncStorage.setItem('userTriggers', JSON.stringify(myTriggers));
        } else if(props.list === OPTIONS.medicationOptions){
          for(let i = 0; i < state.length; i++){
            if(state[i]['checked'] === true){
-             myMedications.push(state[i]['key']);
+             myMedications.push({
+               id: state[i]["db_id"],
+               name: state[i]["key"]
+           })
            }
          }
          await AsyncStorage.setItem('userMedication', JSON.stringify(myMedications));
@@ -57,7 +63,7 @@ const Dropdown = (props) =>{
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-          <Text style={styles.title} >Mogelijke astma triggers</Text>
+          <Text style={styles.title}>{props.title}</Text>
             {
               state.map((item, index) =>
                 <View style={{flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start',}}

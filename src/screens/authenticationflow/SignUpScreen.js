@@ -7,7 +7,6 @@ import {
     StyleSheet,
     ActivityIndicator,
     TextInput,
-    StyleSheet, 
     Button,
 } from 'react-native';
 import Constants from "expo-constants";
@@ -70,18 +69,23 @@ const SignUpScreen = () => {
                 label="Email *"
                 value={email}
                 onChange={onChangeEmail}
+                noCap
             />
 
             <InputField
                 label="Wachtwoord *"
                 value={password}
                 onChange={onChangePassword}
+                secure
+                noCap
             />
 
             <InputField
                 label="Wachtwoord herhalen *"
                 value={repeatPassword}
                 onChange={onChangeRepeatPassword}
+                secure
+                noCap
             />
 
             {/* {error ? <Text style={GlobalStyles.errorText}> {error} </Text> : null} */}

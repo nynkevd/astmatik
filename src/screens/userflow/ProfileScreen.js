@@ -9,14 +9,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
-import Constants from 'expo-constants';
+import moment from 'moment';
 import {FontAwesome5, Entypo, Feather, MaterialCommunityIcons} from '@expo/vector-icons';
 import {AuthContext} from '../../context/context';
 
 import ProfileLayout from '../../components/ProfileLayout';
 import { COLORS } from '../../constants/Colors';
 import GlobalStyles from '../../constants/GlobalStyles'
+import MainLayout from '../../components/MainLayout';
 
 const ProfileScreen = ({route}) => {
   const {retrieveToken} = React.useContext(AuthContext);
@@ -25,8 +25,8 @@ const ProfileScreen = ({route}) => {
   const color = COLORS.darkBlue;
 
 // TODO: MAKE DYNAMIC
-  let time = "10:10";
-  let date = "26 november 2020";
+  let time = moment().format("HH:mm");
+  let date = moment().format("DD-MM-YYYY");
 
   const [isLoading, setIsLoading] = useState('');
 
@@ -37,6 +37,7 @@ const ProfileScreen = ({route}) => {
 
   const [medication, setMedication] = useState([]);
   const [excersises, setExcersises] = useState([]);
+  const [triggers, setTriggers] = useState([]);
 
   const [update, forceUpdate] = useState(false);
   const [lastUpdate, setLastUpdate] = useState('');
@@ -58,13 +59,15 @@ const ProfileScreen = ({route}) => {
       let lastN = await AsyncStorage.getItem('userLastName');
       let mail = await AsyncStorage.getItem('userEmail');
       let type = await AsyncStorage.getItem('userAsthmaType');
-      let triggers = await AsyncStorage.getItem('userTriggers');
+      let trigs = JSON.parse(await AsyncStorage.getItem('userTriggers'));
       let meds = JSON.parse(await AsyncStorage.getItem('userMedication'));
       setFirstName(firstN);
       setLastName(lastN);
       setEmail(mail);
       setAsthmaType(type);
       setMedication(meds);
+      console.log(trigs);
+      setTriggers(trigs);
     })();
   }, [update]);
 
@@ -73,9 +76,12 @@ const ProfileScreen = ({route}) => {
     navigation.navigate("Instellingen", {firstName, lastName, email, asthmaType});
   }
 
+  console.log("meds");
+  console.log(medication);
+
   return(
     <View style={GlobalStyles.container}>
-      <ProfileLayout />
+      <MainLayout />
       <ScrollView contentContainerStyle={GlobalStyles.contentContainer}>
         {isLoading ? <ActivityIndicator color={COLORS.darkBlue}/> : null}
         <View style={styles.titleContainer}>
@@ -89,7 +95,7 @@ const ProfileScreen = ({route}) => {
           <FontAwesome5 name="clock" size={size} color={color} style={styles.icon}/>
           <Text style={styles.iconText__text}> {time} &nbsp; | &nbsp; {date}</Text>
         </View>
-
+        
         <View>
           <View style={styles.iconText}>
             <Entypo name="mail" size={size} color={color} style={styles.icon}/>
@@ -99,10 +105,6 @@ const ProfileScreen = ({route}) => {
             <Feather name="type" size={size} color={color} style={styles.icon}/>
             <Text style={styles.iconText__text}> {asthmaType} </Text>
           </View>
-          {/* <View style={styles.iconText}>
-            <MaterialCommunityIcons name="doctor" size={size} color={color} style={styles.icon}/>
-            <Text style={styles.iconText__text}> Dr. N. van Dijk </Text>
-          </View> */}
         </View>
 
         <View style={styles.list}>
@@ -111,16 +113,25 @@ const ProfileScreen = ({route}) => {
               <Text style={[styles.iconText__text, GlobalStyles.bold]}>Medicatie </Text>
           </View>
           {medication && medication.length > 0 ? medication.map(medicationItem =>
-            <Text key={medicationItem} style={styles.iconText__text}> {medicationItem} </Text>) : null}
+            <Text key={medicationItem.id} style={styles.iconText__text}> {medicationItem.name} </Text>) : null}
+        </View>
+        
+        <View style={styles.list}>
+          <View style={[styles.iconText, styles.listTitle]}>
+              <MaterialCommunityIcons name="leaf" size={size} color={color} style={styles.icon}/>
+              <Text style={[styles.iconText__text, GlobalStyles.bold]}>Oefeningen</Text>
+          </View>
+          {excersises && excersises.length > 0 ? excersises.map(excersise=>
+          <Text key={excersise} style={styles.iconText__text}> {excersise} </Text>) : null}
         </View>
 
         <View style={styles.list}>
           <View style={[styles.iconText, styles.listTitle]}>
               <MaterialCommunityIcons name="doctor" size={size} color={color} style={styles.icon}/>
-              <Text style={[styles.iconText__text, GlobalStyles.bold]}>Oefeningen</Text>
+              <Text style={[styles.iconText__text, GlobalStyles.bold]}>Triggers</Text>
           </View>
-          {excersises && excersises.length > 0 ? excersises.map(excersise=>
-          <Text key={excersise} style={styles.iconText__text}> {excersise} </Text>) : null}
+          {triggers && triggers.length > 0 ? triggers.map(trigger=>
+          <Text key={trigger.id} style={styles.iconText__text}> {trigger.name} </Text>) : null}
         </View>
 
       </ScrollView>

@@ -15,6 +15,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Constants from 'expo-constants';
 import axios from 'axios';
 import moment from 'moment';
+import {AuthContext} from '../../context/context';
 
 import MainLayout from '../../components/MainLayout';
 import ScreenTitle from '../../components/ScreenTitle';
@@ -24,6 +25,9 @@ import GlobalStyles from "../../constants/GlobalStyles";
 import AppButton from "../../components/AppButton";
 
 const MeasurePeakflowScreen = () => {
+    const {retrieveToken} = React.useContext(AuthContext);
+    const {userToken} = retrieveToken();
+
     const [timestamp, setTimestamp] = useState(moment());
     const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
 
@@ -45,7 +49,6 @@ const MeasurePeakflowScreen = () => {
             beforeMedication: peakflowBeforeMed,
             afterMedication: peakflowAfterMed,
             notes,
-            userId: Constants.manifest.extra.USER_ID
         };
 
         setIsLoading(true);
@@ -53,8 +56,8 @@ const MeasurePeakflowScreen = () => {
       await axios({
         method: 'POST',
         url: `${Constants.manifest.extra.API_URL}/peakflow/add`,
-        header: {
-          'content-type': 'application/json'
+        headers: {
+          'X-Auth-Token': userToken
         },
         data: body
       }).then((res) => {

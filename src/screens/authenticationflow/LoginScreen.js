@@ -30,7 +30,8 @@ const LoginScreen = () => {
 
     const loginHandler = async (email, password) => {
       setIsLoading(true)
-        signIn(email, password);
+      //TODO: Blijft laden ook na een error
+      signIn(email, password);
     };
 
     return (
@@ -44,12 +45,15 @@ const LoginScreen = () => {
                     label="Email"
                     value={email}
                     onChange={onChangeEmail}
+                    noCap
                 />
 
                 <InputField
                     label="Wachtwoord"
                     value={password}
                     onChange={onChangePassword}
+                    secure
+                    noCap
                 />
 
                 {/* {error ? <Text style={GlobalStyles.errorText}> {error} </Text> : null} */}
