@@ -11,6 +11,8 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import axios from 'axios';
+import {FontAwesome5, Entypo, Feather, MaterialCommunityIcons} from '@expo/vector-icons';
+
 
 import MainLayout from '../../components/MainLayout';
 import ScreenTitle from '../../components/ScreenTitle';
@@ -20,7 +22,7 @@ import FloatingActionButton from "../../components/FloatingActionButton";
 import {COLORS} from '../../constants/Colors';
 import GlobalStyles from '../../constants/GlobalStyles';
 
-const StatisticsScreen = () => {
+const MedicationOverview = () => {
     const navigation = useNavigation();
     const userId = "5fbfb5630c36fb00173a13d4";
 
@@ -91,28 +93,39 @@ const StatisticsScreen = () => {
                 </View>
 
                 <View style={{ flexDirection:"row", alignSelf: "center", paddingTop: 20, paddingBottom: 20 }}>
-                    <TouchableOpacity style={styles.peakflowButon}>
+                    <TouchableOpacity onPress = {() => {navigation.navigate("Overzicht")}} style={styles.nonActiveButton}>
                         <Text style={styles.activeFilterText}>peakflow</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress = {() => navigation.navigate("MedicatieOverview")} style={styles.medicationButton}>
+                    <TouchableOpacity style={styles.activeButton}>
                         <Text style={styles.activeFilterText}>medicatie</Text>
                     </TouchableOpacity>
                 </View>
 
+                <View>
+                    <View style={{flexDirection: "row"}}> 
+                        <Feather name="sun" size={24} color={COLORS.darkBlue} />                        
+                        <Text> salbutamol | budesonide </Text>
+                    </View>
+                    <View style={{flexDirection: "row"}}>
+                        <Feather name="moon" size={24} color={COLORS.darkBlue} />                        
+                        <Text> vilanterol </Text>
+                    </View>
+                </View>
+
                 <PeakflowSchema
-                    title={"Peakflow"}
-                    subTitle={"vóór medicatie"}
+                    title={"Medicatie"}
+                    subTitle={"Ochtend"}
                     data={activeData}
                 />
 
                 <PeakflowSchema
-                    title={"Peakflow"}
-                    subTitle={"na medicatie"}
+                    title={"Medicatie"}
+                    subTitle={"Middag"}
                     data={activeData}
                 />
 
             </ScrollView>
-            <FloatingActionButton onPress={() => {navigation.navigate("Peakflow invullen")}}/>
+            <FloatingActionButton onPress={() => {navigation.navigate("MedicatieLogger")}}/>
         </SafeAreaView>
     )
 };
@@ -156,21 +169,21 @@ const styles = StyleSheet.create({
         color: COLORS.darkBlue,
         fontSize: 16,
     },
-    peakflowButon: {
+    nonActiveButton: {
         padding: 5,
         marginRight: 20,
-        width: 120,
-        backgroundColor: COLORS.darkBlue,
-        alignItems: "center",
-        borderRadius: 5,
-    },
-    medicationButton: {
-        padding: 5,
         width: 120,
         backgroundColor: COLORS.lightBlue,
         alignItems: "center",
         borderRadius: 5,
     },
+    activeButton: {
+        padding: 5,
+        width: 120,
+        backgroundColor: COLORS.darkBlue,
+        alignItems: "center",
+        borderRadius: 5,
+    },
 });
 
-export default StatisticsScreen;
+export default MedicationOverview;
