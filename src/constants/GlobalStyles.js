@@ -8,8 +8,13 @@ export default StyleSheet.create({
     titleText: {
         fontFamily: 'Roboto',
         fontSize: 28,
+        marginTop: 40,
         textAlign: 'center',
         color: '#012D53'
+    },
+    text: {
+      color: COLORS.darkBlue,
+      fontFamily: 'Roboto'
     },
     container:{
         flex: 1,
@@ -29,7 +34,8 @@ export default StyleSheet.create({
         textTransform: 'uppercase',
         textAlign: 'center',
         color: '#012D53',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        marginBottom: 15
     },
     headline: {
         color: COLORS.darkBlue,

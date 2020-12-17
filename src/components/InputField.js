@@ -17,11 +17,21 @@ const InputField = (props) => {
                     style={[styles.input, styles.multiline]}
                     onChangeText={text => props.onChange(text)}
                     value={props.value}
+                    multiline={true}
+                    numberOfLines={8}
+                    placeholder={props.placeholder || null}
+                    placeholderTextColor={COLORS.gray}
+                    secureTextEntry={props.secure && true}
+                    autoCapitalize={props.noCap && "none"}
                 /> :
                 <TextInput
                     style={styles.input}
                     onChangeText={text => props.onChange(text)}
                     value={props.value}
+                    placeholder={props.placeholder || null}
+                    placeholderTextColor={COLORS.gray}
+                    secureTextEntry={props.secure && true}
+                    autoCapitalize={props.noCap && "none"}
                 />
             }
         </View>
@@ -52,6 +62,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
     },
     multiline: {
+        textAlignVertical: 'top',
         height: 160,
     }
 });

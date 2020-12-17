@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Astmatik",
-    "slug": "Astmatik",
+    "name": "Astmatik_login",
+    "slug": "Astmatik_login",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -29,6 +29,7 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
+      "API_URL_2": "http://192.168.178.41:5050/api",
       "API_URL": "https://astmatik-api.herokuapp.com/api"
     }
   }
