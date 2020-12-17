@@ -24,41 +24,39 @@ import GlobalStyles from '../../constants/GlobalStyles';
 
 const MedicationOverview = () => {
     const navigation = useNavigation();
-    const userId = "5fbfb5630c36fb00173a13d4";
 
     const [activeFilter, setActiveFilter] = useState(0); // 0 = Vandaag, 1 = deze week, 2 = deze maand
     const [todaysData, setTodaysData] = useState();
     const [thisWeeksData, setThisWeeksData] = useState();
     const [thisMonthsData, setThisMonthsData] = useState();
-    const [activeData, setActiveData] = useState();
+    const [activeData, setActiveData] = useState([700, 800]);
 
     const [isLoading, setIsLoading] = useState(false);
     const [update, forceUpdate] = useState(false);
 
-    useEffect(() => {
-        (async function loadData() {
-            console.log("loading");
-            setIsLoading(true);
-            await axios({
-                method: 'GET',
-                url: `${Constants.manifest.extra.API_URL}/peakflow/overview/${userId}`,
-            }).then((res) => {
-                setTodaysData(res.data.today);
-                setThisWeeksData(res.data.thisWeek);
-                setThisMonthsData(res.data.thisMonth);
-                console.log("finished");
-            }).catch((error) => {
-                console.log(error);
-            });
-            setIsLoading(false);
-        })();
-      }, [update]);
+    // useEffect(() => {
+    //     (async function loadData() {
+    //         console.log("loading");
+    //         setIsLoading(true);
+    //         await axios({
+    //             method: 'GET',
+    //             url: `${Constants.manifest.extra.API_URL}/peakflow/overview/${userId}`,
+    //         }).then((res) => {
+    //             setTodaysData(res.data.today);
+    //             setThisWeeksData(res.data.thisWeek);
+    //             setThisMonthsData(res.data.thisMonth);
+    //             console.log("finished");
+    //         }).catch((error) => {
+    //             console.log(error);
+    //         });
+    //         setIsLoading(false);
+    //     })();
+    //   }, [update]);
       
       useEffect(() => {
         console.log("Active Filter changed");
         if (activeFilter == 0) {
-            // Data is for today:
-            setActiveData(todaysData);
+             setActiveData(todaysData);
             console.log(todaysData);
         } else if (activeFilter == 1) {
             setActiveData(thisWeeksData);
@@ -112,7 +110,7 @@ const MedicationOverview = () => {
                     </View>
                 </View>
 
-                <PeakflowSchema
+                {/* <PeakflowSchema
                     title={"Medicatie"}
                     subTitle={"Ochtend"}
                     data={activeData}
@@ -122,7 +120,7 @@ const MedicationOverview = () => {
                     title={"Medicatie"}
                     subTitle={"Middag"}
                     data={activeData}
-                />
+                /> */}
 
             </ScrollView>
             <FloatingActionButton onPress={() => {navigation.navigate("MedicatieLogger")}}/>
