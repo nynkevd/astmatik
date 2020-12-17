@@ -111,14 +111,14 @@ const StatisticsScreen = ({route}) => {
                     </TouchableOpacity>
                 </View>
 
-                {/* <View style={{ flexDirection:"row", alignSelf: "center", paddingTop: 20, paddingBottom: 20 }}>
+                <View style={{ flexDirection:"row", alignSelf: "center", paddingTop: 20, paddingBottom: 20 }}>
                     <TouchableOpacity style={styles.peakflowButon}>
-                        <Text style={styles.activeButtonText}>peakflow</Text>
+                        <Text style={styles.activeFilterText}>peakflow</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.medicationButton}>
-                        <Text style={styles.activeButtonText}>medicatie</Text>
+                    <TouchableOpacity onPress = {() => navigation.navigate("MedicatieOverview")} style={styles.medicationButton}>
+                        <Text style={styles.activeFilterText}>medicatie</Text>
                     </TouchableOpacity>
-                </View> */}
+                </View>
 
                 <AppButton
                     onPress={() => {forceUpdate(!update)}}
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     medicationButton: {
         padding: 5,
         width: 120,
-        backgroundColor: COLORS.cyan,
+        backgroundColor: COLORS.lightBlue,
         alignItems: "center",
         borderRadius: 5,
     },

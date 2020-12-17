@@ -28,6 +28,10 @@ import LogAsthmaAttack from './src/screens/actionplanflow/LogAsthmaAttack';
 import ExercisesScreen from './src/screens/exercisesflow/ExercisesScreen';
 import ProfileScreen from './src/screens/userflow/ProfileScreen';
 import EditUserScreen from './src/screens/userflow/EditUserScreen';
+//MedicationFlow
+import MedicationLogger from './src/screens/MedicationFlow/MedicationLogger';
+import MedicationOverview from './src/screens/MedicationFlow/MedicationOverview';
+
 import {AuthContext} from './src/context/context';
 
 //home
@@ -49,6 +53,8 @@ function StatisticsStackScreen() {
     <StatisticsStack.Navigator>
       <StatisticsStack.Screen name="Overzicht" component={StatisticsScreen} />
       <StatisticsStack.Screen name="Peakflow invullen" component={MeasurePeakflowScreen} />
+      <StatisticsStack.Screen name="MedicatieLogger" component={MedicationLogger} />
+      <StatisticsStack.Screen name="MedicatieOverview" component={MedicationOverview} />
     </StatisticsStack.Navigator>
   );
 }
