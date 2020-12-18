@@ -13,7 +13,6 @@ import moment from 'moment';
 import {FontAwesome5, Entypo, Feather, MaterialCommunityIcons} from '@expo/vector-icons';
 import {AuthContext} from '../../context/context';
 
-import ProfileLayout from '../../components/ProfileLayout';
 import { COLORS } from '../../constants/Colors';
 import GlobalStyles from '../../constants/GlobalStyles'
 import MainLayout from '../../components/MainLayout';

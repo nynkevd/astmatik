@@ -18,6 +18,7 @@ import PeakflowSchema from "../../components/PeakflowSchema";
 import FloatingActionButton from "../../components/FloatingActionButton";
 import AppButton from '../../components/AppButton';
 import {AuthContext} from '../../context/context';
+import {Entypo} from '@expo/vector-icons';
 
 import {COLORS} from '../../constants/Colors';
 import GlobalStyles from '../../constants/GlobalStyles';
@@ -129,16 +130,18 @@ const StatisticsScreen = ({route}) => {
                    activeFilter == 0 ?
                    
                    todaysData && todaysData.length > 0 ? todaysData.map(peakflow=> 
-                    <View style={styles.peakflow_card} key={peakflow.time}> 
-                        <Text style={styles.card_time}> {peakflow.time} {peakflow.notes ? " -  " + peakflow.notes : null} </Text>
-                        <View style={styles.card_value}>
-                            <Text> voor medicatie: </Text>
-                            <Text> {peakflow.beforeMedication} </Text>
-                        </View>
+                    <View style={styles.peakflow_card} key={peakflow.time}>
+                        <View>
+                            <Text style={styles.card_time}> {peakflow.time} {peakflow.notes ? " -  " + peakflow.notes : null} </Text>
+                            <View style={styles.card_value}>
+                                <Text> voor medicatie: </Text>
+                                <Text> {peakflow.beforeMedication} </Text>
+                            </View>
 
-                        <View style={styles.card_value}>
-                            <Text> na medicatie: </Text>
-                            <Text> {peakflow.afterMedication} </Text>
+                            <View style={styles.card_value}>
+                                <Text> na medicatie: </Text>
+                                <Text> {peakflow.afterMedication} </Text>
+                            </View>
                         </View>
                     </View>
                     ) : <Text> Er is nog geen peakflow vandaag, begin nu met invullen of bekijk de afgelopen week of maand.</Text>
@@ -147,14 +150,14 @@ const StatisticsScreen = ({route}) => {
                         <PeakflowSchema
                             title={"Peakflow"}
                             subTitle={"vóór medicatie"}
-                            data={thisWeeksData.beforeMedication}
+                            data={activeFilter == 1 ? thisWeeksData.beforeMedication : thisMonthsData.beforeMedication}
                             labels={activeFilter == 1 ? "week" : "month"}
                         />
 
                         <PeakflowSchema
                             title={"Peakflow"}
                             subTitle={"na medicatie"}
-                            data={thisWeeksData.afterMedication}
+                            data={activeFilter == 1 ? thisWeeksData.afterMedication : thisMonthsData.afterMedication}
                             labels={activeFilter == 1 ? "week" : "month"}
                         />
                    </React.Fragment>

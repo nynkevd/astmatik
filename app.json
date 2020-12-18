@@ -29,8 +29,8 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "API_URL_2": "http://192.168.178.41:5050/api",
-      "API_URL": "https://astmatik-api.herokuapp.com/api"
+      "API_URL": "http://192.168.178.41:5050/api",
+      "API_URL_2": "https://astmatik-api.herokuapp.com/api"
     }
   }
 }
