@@ -25,8 +25,8 @@ const ActionCard = (props) => {
           <Text style={styles.subtitle}>{props.subtitle}</Text>
           <FontAwesome style={styles.arrow} name="arrow-right" size={24} color={props.color} />
         </TouchableOpacity>
-      : <View style={[styles.specificContainer, {borderColor: props.color}]}>
-          <Text style={props.bold ?styles.bold :{fontSize: 16, color: COLORS.darkBlue,}}>{props.planText}</Text>
+      : <View style={[styles.specificContainer, {borderColor: props.color}, props.center ?{borderWidth: 2} : {borderWidth: 1}]}>
+          <Text style={[props.bold ?styles.bold :{fontSize: 16, color: COLORS.darkBlue,}, props.center ?{textAlign: 'center', fontSize: 20, fontWeight: 'bold', color: props.color} :{textAlign: 'left'}]}>{props.planText}</Text>
         </View>
   }
   </View>
