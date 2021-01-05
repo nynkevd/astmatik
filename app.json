@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Astmatik_login",
-    "slug": "Astmatik_login",
+    "name": "Astmatik_peakflow",
+    "slug": "Astmatik_peakflow",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -29,8 +29,8 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "API_URL": "http://192.168.178.41:5050/api",
-      "API_URL_2": "https://astmatik-api.herokuapp.com/api"
+      "API_URL_2": "http://192.168.178.41:5050/api",
+      "API_URL": "https://astmatik-api.herokuapp.com/api"
     }
   }
 }

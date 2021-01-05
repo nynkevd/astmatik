@@ -48,12 +48,12 @@ const PeakflowSchema = (props) => {
           datasets: [{
             data: morningData,
             strokeWidth: 2,
-            color: (opacity = 1) => `rgba(0, 212, 255, ${opacity})`,
+            color: (opacity = 1) => `rgba(0, 170, 204, ${opacity})`,
           },
           {
             data: eveningData,
             strokeWidth: 2,
-            color: (opacity = 1) => `rgba(255, 0, 255, ${opacity})`,
+            color: (opacity = 1) => `rgba(0, 78, 128, ${opacity})`,
           }],
           legend: ["Ochtend", "Avond"]
         }}
