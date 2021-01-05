@@ -15,9 +15,10 @@ import axios from 'axios';
 import MainLayout from '../../components/MainLayout';
 import ScreenTitle from '../../components/ScreenTitle';
 import PeakflowSchema from "../../components/PeakflowSchema";
-import FloatingActionButton from "../../components/FloatingActionButton";
+import PeakflowCard from "../../components/PeakflowCard";
 import AppButton from '../../components/AppButton';
 import {AuthContext} from '../../context/context';
+import {Feather} from '@expo/vector-icons';
 
 import {COLORS} from '../../constants/Colors';
 import GlobalStyles from '../../constants/GlobalStyles';
@@ -28,11 +29,9 @@ const StatisticsScreen = ({route}) => {
     const navigation = useNavigation();
 
     const [activeFilter, setActiveFilter] = useState(0); // 0 = Vandaag, 1 = deze week, 2 = deze maand
-    const [activeLabels, setActiveLabels] = useState('week');
-    const [todaysData, setTodaysData] = useState();
+    const [todaysData, setTodaysData] = useState({morning: {}, evening: {}});
     const [thisWeeksData, setThisWeeksData] = useState();
     const [thisMonthsData, setThisMonthsData] = useState();
-    const [activeData, setActiveData] = useState();
 
     const [isLoading, setIsLoading] = useState(false);
     const [update, forceUpdate] = useState(false);
@@ -50,9 +49,10 @@ const StatisticsScreen = ({route}) => {
     }
 
     useEffect(() => {
+        console.log("before");
+        console.log(todaysData.morning);
         (async function loadData() {
             setIsLoading(true);
-
             //TODO: FIX, same issue as attack
             console.log(userToken);
             await axios({
@@ -64,29 +64,17 @@ const StatisticsScreen = ({route}) => {
             }).then((res) => {
                 setTodaysData(res.data.today);
                 setThisWeeksData(res.data.thisWeek);
-                console.log(res.data.thisWeek.beforeMedication);
                 setThisMonthsData(res.data.thisMonth);
+                console.log(!!Object.keys(todaysData.evening).length > 0);
             }).catch((error) => {
                 console.log(error);
             });
             setIsLoading(false);
         })();
+
+        console.log("after");
+        console.log(todaysData.morning);
       }, [update]);
-      
-    //   useEffect(() => {
-    //     if (activeFilter == 0) {
-    //         setActiveData(todaysData);
-    //     } else if (activeFilter == 1) {
-    //         setActiveData(thisWeeksData);
-    //         // console.log(thisWeeksData.beforeMedication);
-    //         setActiveLabels('week');
-    //     } else if (activeFilter == 2) {
-    //         setActiveData(thisMonthsData);
-    //         // console.log(thisMonthsData.beforeMedication);
-    //         setActiveLabels('month');
-    //     }
-    //     // console.log(activeData);
-    //   }, [activeFilter]); 
 
     return (
         <SafeAreaView style={GlobalStyles.container}>
@@ -119,72 +107,73 @@ const StatisticsScreen = ({route}) => {
                         <Text style={styles.activeFilterText}>medicatie</Text>
                     </TouchableOpacity>
                 </View>
-
-                <AppButton
-                    onPress={() => {forceUpdate(!update)}}
-                    text={"opnieuw"}
-                /> 
                 
                 {
-                   activeFilter == 0 ?
-                   
-                   todaysData && todaysData.length > 0 ? todaysData.map(peakflow=> 
-                    <View style={styles.peakflow_card} key={peakflow.time}> 
-                        <Text style={styles.card_time}> {peakflow.time} {peakflow.notes ? " -  " + peakflow.notes : null} </Text>
-                        <View style={styles.card_value}>
-                            <Text> voor medicatie: </Text>
-                            <Text> {peakflow.beforeMedication} </Text>
-                        </View>
-
-                        <View style={styles.card_value}>
-                            <Text> na medicatie: </Text>
-                            <Text> {peakflow.afterMedication} </Text>
-                        </View>
+                    activeFilter == 0 ?
+                    <>
+                    <Text style={styles.subTitle}>Ochtend</Text>
+                    {!!todaysData.morning && !!Object.keys(todaysData.morning).length > 0 ? 
+                    <PeakflowCard
+                        morning={true}
+                        data={todaysData.morning}
+                    /> :
+                    <View style={[styles.addPeakflow, GlobalStyles.shadowed]}>
+                        <Text style={{color: COLORS.darkBlue}}> Voeg een ochtend meting toe </Text>
+                        <TouchableOpacity onPress={() => {navigation.navigate("Peakflow invullen", {morning: true, edit: false})}} style={[styles.actionButton, GlobalStyles.shadowed]}>
+                            <Feather name="plus" size={26} color="white"/>
+                        </TouchableOpacity>
                     </View>
-                    ) : <Text> Er is nog geen peakflow vandaag, begin nu met invullen of bekijk de afgelopen week of maand.</Text>
+                    }
+                   
+                    <Text style={styles.subTitle}>Middag/Avond</Text> 
+                    {!!todaysData.evening && !!Object.keys(todaysData.evening).length > 0 ? 
+                    <PeakflowCard
+                        morning={false}
+                        data={todaysData.evening}
+                    /> :
+                    <View style={styles.addPeakflow}>
+                        <Text style={{color: COLORS.darkBlue}}> Voeg een middag/avond meting toe </Text>
+                        <TouchableOpacity onPress={() => {navigation.navigate("Peakflow invullen", {morning: false, edit: false})}} style={[styles.actionButton, GlobalStyles.shadowed]}>
+                            <Feather name="plus" size={26} color="white"/>
+                        </TouchableOpacity>
+                    </View>
+                    
+                    }
+                    </>
                    :
                    <React.Fragment>
                         <PeakflowSchema
                             title={"Peakflow"}
                             subTitle={"vóór medicatie"}
-                            data={thisWeeksData.beforeMedication}
+                            data={activeFilter == 1 ? thisWeeksData.beforeMedication : thisMonthsData.beforeMedication}
                             labels={activeFilter == 1 ? "week" : "month"}
                         />
 
                         <PeakflowSchema
                             title={"Peakflow"}
                             subTitle={"na medicatie"}
-                            data={thisWeeksData.afterMedication}
+                            data={activeFilter == 1 ? thisWeeksData.afterMedication : thisMonthsData.afterMedication}
                             labels={activeFilter == 1 ? "week" : "month"}
                         />
                    </React.Fragment>
                 }
-                
 
+                {/* <AppButton
+                    onPress={() => {forceUpdate(!update)}}
+                    text={"opnieuw"}
+                />  */}
+                
             </ScrollView>
-            <FloatingActionButton onPress={() => {navigation.navigate("Peakflow invullen")}}/>
         </SafeAreaView>
     )
 };
 
 const styles = StyleSheet.create({
-    peakflow_card: {
-        backgroundColor: COLORS.white,
-        borderRadius: 25,
-        marginVertical: 5,
-        padding: 10,
-        borderWidth: 1,
-        borderColor: COLORS.darkBlue
-    },
-    card_time: {
-        color: COLORS.darkBlue,
+    subTitle: {
+        fontSize: 18,
         fontWeight: 'bold',
-        fontSize: 15
-    },
-    card_value : {
-        alignSelf: 'flex-start',
-        flexDirection: 'row',
-        justifyContent: 'space-evenly'
+        color: COLORS.darkBlue,
+        marginTop: 15,
     },
     filterButtons: {
         flexDirection: "row",
@@ -238,6 +227,24 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.lightBlue,
         alignItems: "center",
         borderRadius: 5,
+    },
+    addPeakflow: {
+        borderColor: COLORS.darkBlue,
+        borderRadius: 15,
+        borderWidth: 1,
+        backgroundColor: COLORS.white,
+        marginVertical: 15,
+        alignItems: 'center',
+        padding: 15,
+    },
+    actionButton: {
+        marginTop: 20, 
+        backgroundColor: COLORS.darkBlue,
+        borderRadius: 100,
+        height: 40,
+        width: 40,
+        alignItems: "center",
+        justifyContent: "center"
     },
 });
 

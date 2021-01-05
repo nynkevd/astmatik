@@ -13,9 +13,8 @@ import moment from 'moment';
 import {FontAwesome5, Entypo, Feather, MaterialCommunityIcons} from '@expo/vector-icons';
 import {AuthContext} from '../../context/context';
 
-import ProfileLayout from '../../components/ProfileLayout';
 import { COLORS } from '../../constants/Colors';
-import GlobalStyles from '../../constants/GlobalStyles'
+import GlobalStyles from '../../constants/GlobalStyles';
 import MainLayout from '../../components/MainLayout';
 
 const ProfileScreen = ({route}) => {
@@ -66,7 +65,6 @@ const ProfileScreen = ({route}) => {
       setEmail(mail);
       setAsthmaType(type);
       setMedication(meds);
-      console.log(trigs);
       setTriggers(trigs);
     })();
   }, [update]);
@@ -75,9 +73,6 @@ const ProfileScreen = ({route}) => {
   const settingsPress = () => {
     navigation.navigate("Instellingen", {firstName, lastName, email, asthmaType});
   }
-
-  console.log("meds");
-  console.log(medication);
 
   return(
     <View style={GlobalStyles.container}>
