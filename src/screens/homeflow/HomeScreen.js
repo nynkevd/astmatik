@@ -1,14 +1,19 @@
 import React from 'react';
 import {
   View,
-  Text,
+  ScrollView,
   StyleSheet,
 } from 'react-native';
 
+import GlobalStyles from '../../constants/GlobalStyles';
+import MainLayout from '../../components/MainLayout';
+
 const HomeScreen = () => {
   return(
-    <View style={styles.container}>
-      <Text>HomeScreen</Text>
+    <View style={GlobalStyles.container}>
+      <MainLayout/>
+      <ScrollView contentContainerStyle={GlobalStyles.contentContainer}>
+      </ScrollView>
     </View>
   )
 };
