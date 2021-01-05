@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Astmatik_peakflow",
-    "slug": "Astmatik_peakflow",
+    "name": "Astmatik_exercises",
+    "slug": "Astmatik_exercises",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

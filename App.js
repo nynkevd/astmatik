@@ -25,7 +25,10 @@ import ActionPlanFeelingLess from './src/screens/actionplanflow/ActionPlanFeelin
 import ActionPlanFeelingBad from './src/screens/actionplanflow/ActionPlanFeelingBad';
 import ActionPlanAsthmaAttack from './src/screens/actionplanflow/ActionPlanAsthmaAttack';
 import LogAsthmaAttack from './src/screens/actionplanflow/LogAsthmaAttack';
+//exercises
 import ExercisesScreen from './src/screens/exercisesflow/ExercisesScreen';
+import SpecificExercise from './src/screens/exercisesflow/SpecificExercise';
+//profile flow
 import ProfileScreen from './src/screens/userflow/ProfileScreen';
 import EditUserScreen from './src/screens/userflow/EditUserScreen';
 //MedicationFlow
@@ -82,6 +85,7 @@ function ExercisesStackScreen() {
   return (
     <ExercisesStack.Navigator>
       <ExercisesStack.Screen name="Oefeningen" component={ExercisesScreen}/>
+      <ExercisesStack.Screen name="Oefening" component={SpecificExercise}/>
     </ExercisesStack.Navigator>
   );
 }
@@ -291,7 +295,7 @@ export default function App() {
           ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT);
           console.log(error);
       });
-      
+
     },
     updateProfile: async (firstname, lastname, email, password, asthmaType) => {
       let body = {
@@ -330,7 +334,7 @@ export default function App() {
         // TODO: check if user has internet else don't loadData
         if(!!userToken) {
           console.log("doing this!");
-          // console.log(userToken);  
+          // console.log(userToken);
           loadData(userToken);
         }
       } catch(error){
