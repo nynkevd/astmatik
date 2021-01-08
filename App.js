@@ -56,8 +56,8 @@ function StatisticsStackScreen() {
     <StatisticsStack.Navigator>
       <StatisticsStack.Screen name="Overzicht" component={StatisticsScreen} />
       <StatisticsStack.Screen name="Peakflow invullen" component={MeasurePeakflowScreen} />
-      <StatisticsStack.Screen name="MedicatieLogger" component={MedicationLogger} />
-      <StatisticsStack.Screen name="MedicatieOverview" component={MedicationOverview} />
+      <StatisticsStack.Screen name="Medicatie invullen" component={MedicationLogger} />
+      <StatisticsStack.Screen name="Medicatie" component={MedicationOverview} />
     </StatisticsStack.Navigator>
   );
 }
