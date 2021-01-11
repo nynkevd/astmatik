@@ -99,7 +99,7 @@ const MedicationOverview = () => {
                 
                 <Text style={styles.subTitle}>Ochtend</Text> 
                 <View style={styles.addMedication}>
-                    <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Voeg een ochtend meting toe </Text>
+                    <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Ochtend medicatie </Text>
                     <TouchableOpacity onPress={() => {navigation.navigate("MedicatieLogger")}} style={[styles.actionButton, GlobalStyles.shadowed]}>
                         <Feather name="plus" size={26} color="white"/>
                     </TouchableOpacity>
@@ -107,7 +107,7 @@ const MedicationOverview = () => {
 
                 <Text style={styles.subTitle}>Middag</Text> 
                 <View style={styles.addMedication}>
-                    <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Voeg een middag meting toe </Text>
+                    <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Middag medicatie </Text>
                     <TouchableOpacity onPress={() => {navigation.navigate("MedicatieLogger")}} style={[styles.actionButton, GlobalStyles.shadowed]}>
                         <Feather name="plus" size={26} color="white"/>
                     </TouchableOpacity>
@@ -115,7 +115,7 @@ const MedicationOverview = () => {
 
                 <Text style={styles.subTitle}>Avond</Text> 
                 <View style={styles.addMedication}>
-                    <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Voeg een avond meting toe </Text>
+                    <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Avond medicatie </Text>
                     <TouchableOpacity onPress={() => {navigation.navigate("MedicatieLogger")}} style={[styles.actionButton, GlobalStyles.shadowed]}>
                         <Feather name="plus" size={26} color="white"/>
                     </TouchableOpacity>
