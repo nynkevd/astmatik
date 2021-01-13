@@ -26,12 +26,13 @@ const AsthmaRegistration= ({route}) => {
   const [showTriggerList, setShowTriggerList] = useState(false);
   const [showMedicationList, setShowMedicationList] = useState(false);
   const {signUp} = React.useContext(AuthContext);
-  let myMedication;
-  let myTriggers;
+  let myMedication = [];
+  let myTriggers = [];
 
   let password = route.params && route.params.password;
 
   const signupHandler = async () => {
+    // TODO: Loadingspinner toevoegen!
     let firstname = await AsyncStorage.getItem('userFirstName');
     let lastname = await AsyncStorage.getItem('userLastName');
     let email = await AsyncStorage.getItem('userEmail');

@@ -6,9 +6,8 @@ import {
     Text,
     StyleSheet,
     TextInput,
-    CheckBox,
 } from 'react-native';
-
+import CheckBox from '@react-native-community/checkbox';
 import MainLayout from '../../components/MainLayout';
 import ActionCard from '../../components/ActionCard';
 import ScreenTitle from '../../components/ScreenTitle';

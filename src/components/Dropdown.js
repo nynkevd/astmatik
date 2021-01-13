@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import { AsyncStorage, Alert, CheckBox, TouchableHighlight, TouchableOpacity, Text, View, StyleSheet, ScrollView, Modal } from 'react-native';
+import { AsyncStorage, Alert, TouchableHighlight, TouchableOpacity, Text, View, StyleSheet, ScrollView, Modal } from 'react-native';
+import CheckBox from '@react-native-community/checkbox';
 import {Picker} from '@react-native-picker/picker';
 import { COLORS } from '../constants/Colors';
 import { OPTIONS } from '../constants/Options';
@@ -71,7 +72,7 @@ const Dropdown = (props) =>{
                   <CheckBox
                     tintColors={{true: COLORS.darkBlue}}
                     value={item.checked}
-                    onValueChange={() => {onChecked(item.id)}}  />
+                    onValueChange={() => {onChecked(item.id)}} />
                   <Text>{item.key}</Text>
                 </View>
               )
@@ -80,7 +81,6 @@ const Dropdown = (props) =>{
               text="klaar"
               onPress={() => {
                 handeListValues();
-
               }} />
           </View>
         </View>

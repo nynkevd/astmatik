@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Astmatik_exercises",
-    "slug": "Astmatik_exercises",
+    "name": "Astmatik_userfeatures",
+    "slug": "Astmatik_userfeatures",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -29,8 +29,8 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "API_URL_2": "http://192.168.178.41:5050/api",
-      "API_URL": "https://astmatik-api.herokuapp.com/api"
+      "API_URL": "http://192.168.178.17:5050/api",
+      "API_URL_2": "https://astmatik-api.herokuapp.com/api"
     }
   }
 }

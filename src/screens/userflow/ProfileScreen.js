@@ -53,6 +53,7 @@ const ProfileScreen = ({route}) => {
   }
 
   useEffect(() => {
+      console.log("updating");
       (async function loadData() {
       let firstN = await AsyncStorage.getItem('userFirstName');
       let lastN = await AsyncStorage.getItem('userLastName');
@@ -71,7 +72,7 @@ const ProfileScreen = ({route}) => {
 
   const navigation = useNavigation();
   const settingsPress = () => {
-    navigation.navigate("Instellingen", {firstName, lastName, email, asthmaType});
+    navigation.navigate("Instellingen", {update, firstName, lastName, email, asthmaType, triggers, medication});
   }
 
   return(
@@ -108,17 +109,9 @@ const ProfileScreen = ({route}) => {
               <Text style={[styles.iconText__text, GlobalStyles.bold]}>Medicatie </Text>
           </View>
           {medication && medication.length > 0 ? medication.map(medicationItem =>
-            <Text key={medicationItem.id} style={styles.iconText__text}> {medicationItem.name} </Text>) : null}
+            <Text key={medicationItem.id} style={styles.iconText__text}> {medicationItem.name} </Text>) : <Text> Nog geen medicatie, voeg ze nu snel toe in je instellingen</Text>}
         </View>
         
-        <View style={styles.list}>
-          <View style={[styles.iconText, styles.listTitle]}>
-              <MaterialCommunityIcons name="leaf" size={size} color={color} style={styles.icon}/>
-              <Text style={[styles.iconText__text, GlobalStyles.bold]}>Oefeningen</Text>
-          </View>
-          {excersises && excersises.length > 0 ? excersises.map(excersise=>
-          <Text key={excersise} style={styles.iconText__text}> {excersise} </Text>) : null}
-        </View>
 
         <View style={styles.list}>
           <View style={[styles.iconText, styles.listTitle]}>
@@ -126,9 +119,8 @@ const ProfileScreen = ({route}) => {
               <Text style={[styles.iconText__text, GlobalStyles.bold]}>Triggers</Text>
           </View>
           {triggers && triggers.length > 0 ? triggers.map(trigger=>
-          <Text key={trigger.id} style={styles.iconText__text}> {trigger.name} </Text>) : null}
+          <Text key={trigger.id} style={styles.iconText__text}> {trigger.name} </Text>) : <Text> Nog geen triggers, voeg ze nu snel toe in je instellingen</Text>}
         </View>
-
       </ScrollView>
     </View>
   )

@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {
-  CheckBox,
   View,
   Text,
   SafeAreaView,
@@ -10,6 +9,7 @@ import {
   Button,
   ActivityIndicator
 } from 'react-native';
+import CheckBox from '@react-native-community/checkbox';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
