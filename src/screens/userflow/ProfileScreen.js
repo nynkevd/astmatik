@@ -8,10 +8,12 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
+import InputField from '../../components/InputField';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import {FontAwesome5, Entypo, Feather, MaterialCommunityIcons} from '@expo/vector-icons';
 import {AuthContext} from '../../context/context';
+import AppButton from '../../components/AppButton';
 
 import { COLORS } from '../../constants/Colors';
 import GlobalStyles from '../../constants/GlobalStyles';
@@ -33,6 +35,7 @@ const ProfileScreen = ({route}) => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [asthmaType, setAsthmaType] = useState('');
+  const [medicalEmail, setMedicalEmail] = useState('');
 
   const [medication, setMedication] = useState([]);
   const [excersises, setExcersises] = useState([]);
@@ -72,6 +75,10 @@ const ProfileScreen = ({route}) => {
   const navigation = useNavigation();
   const settingsPress = () => {
     navigation.navigate("Instellingen", {firstName, lastName, email, asthmaType});
+  }
+
+  const EmailPress = () => {
+    navigation.navigate("RapportVersturen");
   }
 
   return(
@@ -128,6 +135,10 @@ const ProfileScreen = ({route}) => {
           {triggers && triggers.length > 0 ? triggers.map(trigger=>
           <Text key={trigger.id} style={styles.iconText__text}> {trigger.name} </Text>) : null}
         </View>
+
+        <TouchableOpacity onPress={EmailPress}>
+          <Text>Verstuur rapportage</Text>
+        </TouchableOpacity>
 
       </ScrollView>
     </View>

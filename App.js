@@ -31,6 +31,7 @@ import SpecificExercise from './src/screens/exercisesflow/SpecificExercise';
 //profile flow
 import ProfileScreen from './src/screens/userflow/ProfileScreen';
 import EditUserScreen from './src/screens/userflow/EditUserScreen';
+import RapportVersturen from './src/screens/userflow/RapportVersturen';
 //MedicationFlow
 import MedicationLogger from './src/screens/MedicationFlow/MedicationLogger';
 import MedicationOverview from './src/screens/MedicationFlow/MedicationOverview';
@@ -97,6 +98,7 @@ function ProfileStackScreen() {
   return (
     <ProfileStack.Navigator>
       <ProfileStack.Screen name="Profiel" component={ProfileScreen}/>
+      <ProfileStack.Screen name="RapportVersturen" component={RapportVersturen} />
       <ProfileStack.Screen name="Instellingen" component={EditUserScreen}/>
     </ProfileStack.Navigator>
   );
