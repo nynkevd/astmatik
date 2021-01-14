@@ -1,49 +1,36 @@
-import emailjs from "emailjs-com";
-import React from 'react';
-import {
-    View,
-    TextInput,
-    Text,
-  } from 'react-native'
-import { TouchableOpacity } from "react-native-gesture-handler";
+import React from 'react'
+import { StyleSheet, Button, View } from 'react-native'
+import email from 'react-native-email'
+import AppButton from './AppButton';
 
-export default function ContactUs() {
-
-    function sendEmail(e) {
-        e.preventDefault();
-
-    emailjs.sendForm('gmail', 'youtube_template', e.target, 'user_JABO21I8Gm6sxByJH17Nu')
-        .then((result) => {
-            console.log(result.text);
-        }, (error) => {
-            console.log(error.text);
-        });
-        e.target.reset()
-    }
-
-    return(
-        <View>
-            <View className="container">
-            <View>
-                    <View className="row pt-5 mx-auto">
-                        <View className="col-8 form-group mx-auto">
-                            <TextInput type="text" className="form-control" placeholder="Name" name="name"/>
-                        </View>
-                        <View className="col-8 form-group pt-2 mx-auto">
-                            <TextInput type="email" className="form-control" placeholder="Email Address" name="email"/>
-                        </View>
-                        <View className="col-8 form-group pt-2 mx-auto">
-                            <TextInput type="text" className="form-control" placeholder="Subject" name="subject" />
-                        </View>
-                        <View className="col-8 form-group pt-2 mx-auto">
-                            <TextInput type="text" className="form-control" placeholder="Message" name="message"/>
-                        </View>
-                        <TouchableOpacity onPress={sendEmail}>
-                            <Text>verstuur</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
-        </View>
-    )
+const handleEmail = () => {
+    const to = ['info@basaltrevalidatie.nl'] // string or array of email addresses
+    email(to, {
+        // Optional additional arguments
+        cc: [], // string or array of email addresses
+        bcc: [], // string or array of email addresses
+        subject: 'Rapportage Peakflow',
+        body: 'Some body right here',
+    }).catch(console.error)
 }
+const ContactForm = (props) => {
+    return (
+        <View>
+            <AppButton 
+                text="Rapportage Versturen"
+                onPress={handleEmail}
+            />
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
+})
+
+export default ContactForm;
