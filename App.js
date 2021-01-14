@@ -294,6 +294,7 @@ export default function App() {
             dispatch({type: 'LOGIN', id: email, token: userToken});
           }, 200);
       }).catch((error) => {
+        console.log(error);
           ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT);
           console.log(error);
       });

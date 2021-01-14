@@ -53,7 +53,25 @@ export const OPTIONS = {
       db_id: "5fd72caf159ec224dcf5bbac",
       key: 'Stuifmeel',
       checked:false,
-    }
+    },
+    {
+      id: 8,
+      db_id: "6000a181928b7a18041b5657",
+      key: 'Vocht',
+      checked:false,
+    },
+    {
+      id: 9,
+      db_id: "6000a181928b7a18041b5658",
+      key: 'Regen',
+      checked:false,
+    },
+    {
+      id: 10,
+      db_id: "6000a181928b7a18041b5659",
+      key: 'Warmte',
+      checked:false,
+    },
   ],
   medicationOptions: [
     {

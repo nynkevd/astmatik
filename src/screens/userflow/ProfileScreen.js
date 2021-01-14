@@ -80,14 +80,14 @@ const ProfileScreen = ({route}) => {
       <MainLayout />
       <ScrollView contentContainerStyle={GlobalStyles.contentContainer}>
         {isLoading ? <ActivityIndicator color={COLORS.darkBlue}/> : null}
-        <View style={styles.titleContainer}>
-          <Text style={styles.screenTitle}>{firstName} {lastName || null} </Text>
-          <TouchableOpacity onPress={settingsPress}>
+        <View style={[styles.titleContainer, {marginTop: 37}]}>
+          <Text style={[styles.screenTitle, {marginTop: 0}]}>{firstName} {lastName || null}</Text>
+          <TouchableOpacity style={{marginRight: 5}} onPress={settingsPress}>
             <Feather name="settings" size={22} color={color}/>
           </TouchableOpacity>
         </View>
 
-        <View style={styles.iconText}>
+        <View style={[styles.iconText, {marginTop: 5, marginBottom: 15}]}>
           <FontAwesome5 name="clock" size={size} color={color} style={styles.icon}/>
           <Text style={styles.iconText__text}> {time} &nbsp; | &nbsp; {date}</Text>
         </View>
@@ -103,13 +103,14 @@ const ProfileScreen = ({route}) => {
           </View>
         </View>
 
-        <View style={styles.list}>
+        <View style={[styles.list, {marginTop: 25}]}>
           <View style={[styles.iconText, styles.listTitle]}>
               <FontAwesome5 name="notes-medical" size={size} color={color} style={styles.icon}/>
               <Text style={[styles.iconText__text, GlobalStyles.bold]}>Medicatie </Text>
           </View>
+
           {medication && medication.length > 0 ? medication.map(medicationItem =>
-            <Text key={medicationItem.id} style={styles.iconText__text}> {medicationItem.name} </Text>) : <Text> Nog geen medicatie, voeg ze nu snel toe in je instellingen</Text>}
+            <Text key={medicationItem.id} style={[GlobalStyles.text, styles.listItem]}> ⬡ {medicationItem.name} </Text>) : <Text> Nog geen medicatie, voeg ze nu snel toe in je instellingen</Text>}
         </View>
         
 
@@ -119,7 +120,7 @@ const ProfileScreen = ({route}) => {
               <Text style={[styles.iconText__text, GlobalStyles.bold]}>Triggers</Text>
           </View>
           {triggers && triggers.length > 0 ? triggers.map(trigger=>
-          <Text key={trigger.id} style={styles.iconText__text}> {trigger.name} </Text>) : <Text> Nog geen triggers, voeg ze nu snel toe in je instellingen</Text>}
+          <Text key={trigger.id} style={[GlobalStyles.text, styles.listItem]}> ⬡ {trigger.name} </Text>) : <Text> Nog geen triggers, voeg ze nu snel toe in je instellingen</Text>}
         </View>
       </ScrollView>
     </View>
@@ -132,7 +133,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    maxWidth: '95%'
   },
   screenTitle: {
     fontSize: 27,
@@ -157,6 +159,9 @@ const styles = StyleSheet.create({
   list: {
     marginVertical: 10,
   },
+  listItem: {
+    marginVertical: 1
+  },  
   listTitle: {
     alignSelf: "flex-start",
     borderBottomWidth: 2,

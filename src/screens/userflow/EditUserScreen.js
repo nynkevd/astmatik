@@ -50,10 +50,10 @@ const EditUserScreen = ({route}) => {
     console.log(medication);
     await updateProfile(firstName, lastName, email, password, asthmaType, triggers, medication);
     //TODO: Je navigeert ALTIJD, ook als de request niet gelukt is...
-    setIsLoading(false);
-    // setTimeout(() => {
+    setTimeout(() => {
+        setIsLoading(false);
         navigation.navigate('Profiel', {update: !updateState, timestamp: Date.now()});
-    // }, 1000);
+    }, 250);
     
   }
 
@@ -172,7 +172,7 @@ const EditUserScreen = ({route}) => {
 
         {showTriggerSettings ?
         <>
-          <Text style={GlobalStyles.text}>Triggers</Text>
+          {/* <Text style={GlobalStyles.text}>Triggers</Text> */}
           {
             allTriggers.map((trigger, index) =>
             <View key={index} style={styles.checkItem}>
@@ -190,7 +190,7 @@ const EditUserScreen = ({route}) => {
         
         {showMedicationSettings ?
         <>
-          <Text style={GlobalStyles.text}>Medicijnen</Text>
+          {/* <Text style={GlobalStyles.text}>Medicijnen</Text> */}
           {
             allMedication.map((medication, index) =>
               <View key={index} style={styles.checkItem}>
@@ -198,7 +198,7 @@ const EditUserScreen = ({route}) => {
                       tintColors={{true: COLORS.darkBlue}}
                       value={currentMedication.some(e => e.id === medication.db_id) ? true : false}
                       onValueChange={() => {checkMedication(medication.db_id, medication.key)}}  />
-                <Text style={styles.iconText__text}> {medication.key} </Text>
+                <Text style={GlobalStyles.text}> {medication.key} </Text>
               </View>
             )
           }

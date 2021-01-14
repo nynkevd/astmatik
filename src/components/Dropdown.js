@@ -25,7 +25,8 @@ const Dropdown = (props) =>{
            })
           }
         }
-         await AsyncStorage.setItem('userTriggers', JSON.stringify(myTriggers));
+        //  await AsyncStorage.setItem('userTriggers', JSON.stringify(myTriggers));
+        handleTriggers(JSON.stringify(myTriggers));
        } else if(props.list === OPTIONS.medicationOptions){
          for(let i = 0; i < state.length; i++){
            if(state[i]['checked'] === true){
@@ -35,7 +36,8 @@ const Dropdown = (props) =>{
            })
            }
          }
-         await AsyncStorage.setItem('userMedication', JSON.stringify(myMedications));
+        //  await AsyncStorage.setItem('userMedication', JSON.stringify(myMedications));
+        handleMedication(JSON.stringify(myMedications));
        }
      } catch(error){
        console.log(error);
@@ -43,6 +45,16 @@ const Dropdown = (props) =>{
         setModalVisible(false);
      }
    }
+
+   const handleTriggers = async (data) => {
+     props.setTriggersVisible(false);
+     await AsyncStorage.setItem('userTriggers', data);
+   }
+
+   const handleMedication = async (data) => {
+    props.setMedicationVisible(false);
+    await AsyncStorage.setItem('userMedication', data);
+  }
 
    const onChecked = (id) =>{
      let data = state;
@@ -64,10 +76,11 @@ const Dropdown = (props) =>{
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-          <Text style={styles.title}>{props.title}</Text>
+          <Text style={[styles.title, {alignSelf: 'flex-start'}]}>{props.title}</Text>
+          <View style={{justifyContent: 'flex-start', flexDirection: 'column', alignSelf: 'flex-start'}}>
             {
               state.map((item, index) =>
-                <View style={{flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start',}}
+                <View style={{flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start'}}
                 key={index}>
                   <CheckBox
                     tintColors={{true: COLORS.darkBlue}}
@@ -77,7 +90,9 @@ const Dropdown = (props) =>{
                 </View>
               )
             }
+            </View>
             <AppButton
+            
               text="klaar"
               onPress={() => {
                 handeListValues();
@@ -129,7 +144,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
+    // marginTop: 22,
+    backgroundColor: 'rgba(0,0,0,0.2)'
   },
   modalView: {
     margin: 20,
@@ -138,7 +154,7 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     paddingHorizontal: 15,
     width: '80%',
-    height: '80%',
+    minHeight: '50%',
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
