@@ -132,7 +132,9 @@ const ProfileScreen = ({route}) => {
           <Text key={trigger.id} style={styles.iconText__text}> {trigger.name} </Text>) : null}
         </View>
         
-        <ContactForm />
+        <ContactForm 
+          naam={firstName + ' ' +lastName}
+        />
 
       </ScrollView>
     </View>
