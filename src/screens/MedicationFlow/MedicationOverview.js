@@ -39,7 +39,7 @@ const MedicationOverview = () => {
     //         setIsLoading(false);
     //     })();
     //   }, [update]);
-      
+
       useEffect(() => {
         console.log("Active Filter changed");
         if (activeFilter == 0) {
@@ -52,7 +52,7 @@ const MedicationOverview = () => {
             setActiveData(thisMonthsData);
             console.log(thisMonthsData);
         }
-      }, [activeFilter]); 
+      }, [activeFilter]);
 
     return (
         <SafeAreaView style={GlobalStyles.container}>
@@ -87,12 +87,12 @@ const MedicationOverview = () => {
                 </View>
 
                 <View>
-                    <View style={{flexDirection: "row"}}> 
-                        <Feather name="sun" size={24} color={COLORS.darkBlue} />                        
+                    <View style={{flexDirection: "row"}}>
+                        <Feather name="sun" size={24} color={COLORS.darkBlue} />
                         <Text> salbutamol | budesonide </Text>
                     </View>
                     <View style={{flexDirection: "row"}}>
-                        <Feather name="moon" size={24} color={COLORS.darkBlue} />                        
+                        <Feather name="moon" size={24} color={COLORS.darkBlue} />
                         <Text> vilanterol </Text>
                     </View>
                 </View>
