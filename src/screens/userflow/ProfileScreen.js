@@ -7,9 +7,11 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  Image
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
+import localization from 'moment/locale/nl';
 import {FontAwesome5, Entypo, Feather, MaterialCommunityIcons} from '@expo/vector-icons';
 import {AuthContext} from '../../context/context';
 
@@ -19,13 +21,12 @@ import MainLayout from '../../components/MainLayout';
 
 const ProfileScreen = ({route}) => {
   const {retrieveToken} = React.useContext(AuthContext);
-
+  moment.updateLocale('nl', localization);
   const size = 18;
   const color = COLORS.darkBlue;
 
-// TODO: MAKE DYNAMIC
   let time = moment().format("HH:mm");
-  let date = moment().format("DD-MM-YYYY");
+  let date = moment().format('D MMMM YYYY');
 
   const [isLoading, setIsLoading] = useState('');
 
@@ -91,14 +92,14 @@ const ProfileScreen = ({route}) => {
           <FontAwesome5 name="clock" size={size} color={color} style={styles.icon}/>
           <Text style={styles.iconText__text}> {time} &nbsp; | &nbsp; {date}</Text>
         </View>
-        
+
         <View>
           <View style={styles.iconText}>
             <Entypo name="mail" size={size} color={color} style={styles.icon}/>
             <Text style={styles.iconText__text}> {email} </Text>
           </View>
           <View style={styles.iconText}>
-            <Feather name="type" size={size} color={color} style={styles.icon}/>
+            <Image style={{ width:20, height: 16, marginRight: 10, alignSelf: 'center' }} source={require('../../../assets/lungs-solid.png')} />
             <Text style={styles.iconText__text}> {asthmaType} </Text>
           </View>
         </View>
@@ -112,7 +113,7 @@ const ProfileScreen = ({route}) => {
           {medication && medication.length > 0 ? medication.map(medicationItem =>
             <Text key={medicationItem.id} style={[GlobalStyles.text, styles.listItem]}> ⬡ {medicationItem.name} </Text>) : <Text> Nog geen medicatie, voeg ze nu snel toe in je instellingen</Text>}
         </View>
-        
+
 
         <View style={styles.list}>
           <View style={[styles.iconText, styles.listTitle]}>
@@ -155,13 +156,14 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 10,
+    alignSelf: 'center'
   },
   list: {
     marginVertical: 10,
   },
   listItem: {
     marginVertical: 1
-  },  
+  },
   listTitle: {
     alignSelf: "flex-start",
     borderBottomWidth: 2,

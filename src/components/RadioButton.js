@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         width: 14,
         height: 14,
         borderRadius: 7,
-        backgroundColor: '#131313'
+        backgroundColor: COLORS.darkBlue
     }
 
     });

@@ -96,27 +96,27 @@ const MedicationOverview = () => {
                         <Text> vilanterol </Text>
                     </View>
                 </View>
-                
-                <Text style={styles.subTitle}>Ochtend</Text> 
+
+                <Text style={styles.subTitle}>Ochtend</Text>
                 <View style={styles.addMedication}>
                     <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Ochtend medicatie </Text>
-                    <TouchableOpacity onPress={() => {navigation.navigate("MedicatieLogger")}} style={[styles.actionButton, GlobalStyles.shadowed]}>
+                    <TouchableOpacity onPress={() => {navigation.navigate("Medicatie invullen")}} style={[styles.actionButton, GlobalStyles.shadowed]}>
                         <Feather name="plus" size={26} color="white"/>
                     </TouchableOpacity>
                 </View>
 
-                <Text style={styles.subTitle}>Middag</Text> 
+                <Text style={styles.subTitle}>Middag</Text>
                 <View style={styles.addMedication}>
                     <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Middag medicatie </Text>
-                    <TouchableOpacity onPress={() => {navigation.navigate("MedicatieLogger")}} style={[styles.actionButton, GlobalStyles.shadowed]}>
+                    <TouchableOpacity onPress={() => {navigation.navigate("Medicatie invullen")}} style={[styles.actionButton, GlobalStyles.shadowed]}>
                         <Feather name="plus" size={26} color="white"/>
                     </TouchableOpacity>
                 </View>
 
-                <Text style={styles.subTitle}>Avond</Text> 
+                <Text style={styles.subTitle}>Avond</Text>
                 <View style={styles.addMedication}>
                     <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Avond medicatie </Text>
-                    <TouchableOpacity onPress={() => {navigation.navigate("MedicatieLogger")}} style={[styles.actionButton, GlobalStyles.shadowed]}>
+                    <TouchableOpacity onPress={() => {navigation.navigate("Medicatie invullen")}} style={[styles.actionButton, GlobalStyles.shadowed]}>
                         <Feather name="plus" size={26} color="white"/>
                     </TouchableOpacity>
                 </View>
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     actionButton: {
-        marginTop: 20, 
+        marginTop: 20,
         backgroundColor: COLORS.darkBlue,
         borderRadius: 100,
         height: 40,
