@@ -40,22 +40,9 @@ const HomeScreen = ({route}) => {
   const [warnText, setWarnText] = useState();
   const [firstname, setFirstname] = useState();
 
-  const getLocation = async () => {
-    const {status} = await Permissions.askAsync(Permissions.LOCATION);
-
-    if(status !== 'granted'){
-      console.log('PERMISSION DENIED');
-    } else {
-      const userLocation = await Location.getCurrentPositionAsync();
-      setLat(userLocation.coords.latitude);
-      setLon(userLocation.coords.longitude);
-    }
-  }
-
   const [description, setDescription] = useState();
   const [temp, setTemp] = useState();
   let key = "f4bce834d5ac18e52842463a75b22837";
-  let city = "Amsterdam,nl";
   let url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,daily&lang=nl&appid=${key}`
   const currentHour = moment().format('HH');
   const morning = 12;
@@ -93,7 +80,6 @@ const HomeScreen = ({route}) => {
       console.log(error);
     } finally {
       setFirstname(fname);
-      getLocation();
       await axios({
           method: 'GET',
           url: `${Constants.manifest.extra.API_URL}/peakflow/overview`,
@@ -108,8 +94,8 @@ const HomeScreen = ({route}) => {
       await axios({
         method: 'GET',
         url:url
-      }).then(async (res) => {
-          await AsyncStorage.setItem('currentWeatherData', JSON.stringify(res.data.current));
+      }).then((res) => {
+        loadWeather(res.data.current);
       }).catch((error) => {
           console.log(error);
        });
@@ -139,36 +125,47 @@ useFocusEffect(
    }
  }
 
- const loadWeather = async () =>{
-     const c = await AsyncStorage.getItem('currentWeatherData')
-     const current = JSON.parse(c);
-     let des = current.weather[0].description.split(' ');
-     setTemp( Math.round(current.temp - 273) );
-     setDescription(des[des.length - 1]);
-     setTriggerText(current);
-     if(current.weather[0].main == 'clear'){
-       setIcon('sun');
-     } else if (current.weather[0].main == 'Clouds'){
-       setIcon('cloud');
-     } else if (current.weather[0].main == 'Snow'){
-       setIcon('snowFlake');
-     } else if(current.weather[0].main == 'Rain'){
-       setIcon('cloud-rain');
-     } else if(current.weather[0].main == 'Thunderstorm'){
-       setIcon('bolt');
-     } else if(current.weather[0].main == 'Drizzle'){
-       setIcon('cloud-rain');
-     } else if(current.weather[0].description == 'onbewolkt'){
-       setIcon('circle');
-     } else {
-       setIcon('question');
-     }
+ const loadWeather = (data) =>{
+   const current = data;
+   let des = current.weather[0].description.split(' ');
+   setTemp( Math.round(current.temp - 273) );
+   setDescription(des[des.length - 1]);
+   setTriggerText(current);
+   if(current.weather[0].main == 'clear'){
+     setIcon('sun');
+   } else if (current.weather[0].main == 'Clouds'){
+     setIcon('cloud');
+   } else if (current.weather[0].main == 'Snow'){
+     setIcon('snowFlake');
+   } else if(current.weather[0].main == 'Rain'){
+     setIcon('cloud-rain');
+   } else if(current.weather[0].main == 'Thunderstorm'){
+     setIcon('bolt');
+   } else if(current.weather[0].main == 'Drizzle'){
+     setIcon('cloud-rain');
+   } else if(current.weather[0].description == 'onbewolkt'){
+     setIcon('circle');
+   } else {
+     setIcon('question');
    }
+ }
 
   useEffect(() => {
-    loadData();
-    loadWeather();
+    (async () => {
+       let { status } = await Location.requestPermissionsAsync();
+       if (status !== 'granted') {
+         console.log('Permission denied!');
+       }
+
+       let location = await Location.getCurrentPositionAsync({});
+       setLon(location.coords.longitude);
+       setLat(location.coords.latitude);
+     })();
   }, [update]);
+
+  useEffect(() =>{
+    loadData();
+  }, [lon]);
 
   return(
     <View style={GlobalStyles.container}>
