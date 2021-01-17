@@ -174,6 +174,8 @@ export default function App() {
           userName: action.id,
           password: action.password,
           asthmaType: action.asthmaType,
+          triggers: action.triggers,
+          medication: action.medication
         };
       default:
         return prevState;
@@ -268,9 +270,9 @@ export default function App() {
           lastname: lastname || null,
           email,
           password,
-          asthmaType,
-          medication,
-          triggers,
+          asthmaType: asthmaType || "--",
+          medication: medication || [],
+          triggers: triggers || [],
       };
 
       // TODO: save medications and triggers to DB
@@ -292,18 +294,21 @@ export default function App() {
             dispatch({type: 'LOGIN', id: email, token: userToken});
           }, 200);
       }).catch((error) => {
+        console.log(error);
           ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT);
           console.log(error);
       });
 
     },
-    updateProfile: async (firstname, lastname, email, password, asthmaType) => {
+    updateProfile: async (firstname, lastname, email, password, asthmaType, triggers, medication) => {
       let body = {
         firstname: firstname,
         lastname: lastname || '',
         email: email,
         password: password || '',
-        asthmaType: asthmaType
+        asthmaType: asthmaType,
+        triggers: triggers || [],
+        medication: medication || []
       }
       await axios({
         method: 'PATCH',
@@ -318,7 +323,7 @@ export default function App() {
       }).catch((error) => {
         console.log(error);
       });
-      dispatch({type: 'UPDATE_PROFILE', firstname: firstname, lastname: lastname, id: email, asthmaType: asthmaType });
+      dispatch({type: 'UPDATE_PROFILE', firstname: firstname, lastname: lastname, id: email, asthmaType: asthmaType, triggers: triggers, medication: medication });
     },
     retrieveToken: () => {
       return userObject;
