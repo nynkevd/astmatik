@@ -81,7 +81,7 @@ const StatisticsScreen = ({route}) => {
             <MainLayout/>
             <ScrollView contentContainerStyle={GlobalStyles.contentContainer}>
                 <ScreenTitle
-                    title="Mijn week in cijfers"
+                    title="Weekoverzicht" //aangepast aan de hand van feedback Basalt
                     subTitle="Bekijk hier jouw gegevens van vandaag, deze week, of deze maand."
                 />
 

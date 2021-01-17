@@ -1,23 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {
-    SafeAreaView,
-    ScrollView,
-    Text,
-    StyleSheet,
-    TouchableOpacity,
-    View,
-    ActivityIndicator,
-} from 'react-native';
+import { SafeAreaView, ScrollView, Text, StyleSheet, TouchableOpacity, View, ActivityIndicator,} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Constants from 'expo-constants';
-import axios from 'axios';
 import {FontAwesome5, Entypo, Feather, MaterialCommunityIcons} from '@expo/vector-icons';
-
 
 import MainLayout from '../../components/MainLayout';
 import ScreenTitle from '../../components/ScreenTitle';
-import PeakflowSchema from "../../components/PeakflowSchema";
-import FloatingActionButton from "../../components/FloatingActionButton";
 
 import {COLORS} from '../../constants/Colors';
 import GlobalStyles from '../../constants/GlobalStyles';
@@ -72,7 +59,7 @@ const MedicationOverview = () => {
             <MainLayout/>
             <ScrollView contentContainerStyle={GlobalStyles.contentContainer}>
                 <ScreenTitle
-                    title="Mijn week in cijfers"
+                    title="Weekoverzicht"
                     subTitle="Bekijk hier jouw gegevens van vandaag, deze week, of deze maand."
                 />
 
@@ -109,26 +96,56 @@ const MedicationOverview = () => {
                         <Text> vilanterol </Text>
                     </View>
                 </View>
+                
+                <Text style={styles.subTitle}>Ochtend</Text> 
+                <View style={styles.addMedication}>
+                    <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Ochtend medicatie </Text>
+                    <TouchableOpacity onPress={() => {navigation.navigate("MedicatieLogger")}} style={[styles.actionButton, GlobalStyles.shadowed]}>
+                        <Feather name="plus" size={26} color="white"/>
+                    </TouchableOpacity>
+                </View>
 
-                {/* <PeakflowSchema
-                    title={"Medicatie"}
-                    subTitle={"Ochtend"}
-                    data={activeData}
-                />
+                <Text style={styles.subTitle}>Middag</Text> 
+                <View style={styles.addMedication}>
+                    <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Middag medicatie </Text>
+                    <TouchableOpacity onPress={() => {navigation.navigate("MedicatieLogger")}} style={[styles.actionButton, GlobalStyles.shadowed]}>
+                        <Feather name="plus" size={26} color="white"/>
+                    </TouchableOpacity>
+                </View>
 
-                <PeakflowSchema
-                    title={"Medicatie"}
-                    subTitle={"Middag"}
-                    data={activeData}
-                /> */}
-
+                <Text style={styles.subTitle}>Avond</Text> 
+                <View style={styles.addMedication}>
+                    <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Avond medicatie </Text>
+                    <TouchableOpacity onPress={() => {navigation.navigate("MedicatieLogger")}} style={[styles.actionButton, GlobalStyles.shadowed]}>
+                        <Feather name="plus" size={26} color="white"/>
+                    </TouchableOpacity>
+                </View>
             </ScrollView>
-            <FloatingActionButton onPress={() => {navigation.navigate("Medicatie invullen")}}/>
         </SafeAreaView>
     )
 };
 
 const styles = StyleSheet.create({
+    addMedication: {
+        borderColor: COLORS.darkBlue,
+        borderRadius: 15,
+        borderWidth: 1,
+        backgroundColor: COLORS.white,
+        marginVertical: 15,
+        alignItems: 'center',
+        padding: 15,
+    },
+    MedicationCard: {
+        backgroundColor: COLORS.white,
+        borderRadius: 15,
+        marginVertical: 5,
+        padding: 15,
+        borderWidth: 1,
+        borderColor: COLORS.darkBlue,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
     filterButtons: {
         flexDirection: "row",
         justifyContent: "space-between",
@@ -181,6 +198,21 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.darkBlue,
         alignItems: "center",
         borderRadius: 5,
+    },
+    actionButton: {
+        marginTop: 20, 
+        backgroundColor: COLORS.darkBlue,
+        borderRadius: 100,
+        height: 40,
+        width: 40,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    subTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: COLORS.darkBlue,
+        marginTop: 15,
     },
 });
 

@@ -1,12 +1,11 @@
 import React, {useState} from 'react';
 import {
-  CheckBox,
   View,
   Text,
   StyleSheet,
   ScrollView,
 } from 'react-native';
-
+import CheckBox from '@react-native-community/checkbox';
 import AppButton from '../../components/AppButton';
 import MainLayout from '../../components/MainLayout';
 import ActionCard from '../../components/ActionCard';

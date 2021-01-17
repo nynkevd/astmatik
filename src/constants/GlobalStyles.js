@@ -14,7 +14,8 @@ export default StyleSheet.create({
     },
     text: {
       color: COLORS.darkBlue,
-      fontFamily: 'Roboto'
+      fontFamily: 'Roboto',
+      fontSize: 16
     },
     container:{
         flex: 1,
