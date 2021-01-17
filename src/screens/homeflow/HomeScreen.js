@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {
   View,
-  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -26,51 +25,54 @@ const HomeScreen = ({route}) => {
   const {retrieveToken} = React.useContext(AuthContext);
   const {userToken} = retrieveToken();
   const navigation = useNavigation();
-  const [location, setLocation] = useState();
+
   const [lat, setLat] = useState('52.379189');
   const [lon, setLon] = useState('4.899431');
   const [time, setTime] = useState(moment().format("HH:mm"));
-  let date = moment().format('D MMMM YYYY');
+  const date = moment().format('D MMMM YYYY');
   const [todaysData, setTodaysData] = useState({morning: {}, evening: {}});
+
   const [update, forceUpdate] = useState(false);
   const [lastUpdate, setLastUpdate] = useState('');
   const [hasUpdated, setHasUpdated] = useState(false);
+
   const [icon, setIcon] = useState('cloud');
+  const [warnText, setWarnText] = useState();
+  const [firstname, setFirstname] = useState();
 
   const getLocation = async () => {
     const {status} = await Permissions.askAsync(Permissions.LOCATION);
 
     if(status !== 'granted'){
       console.log('PERMISSION DENIED');
+    } else {
+      const userLocation = await Location.getCurrentPositionAsync();
+      setLat(userLocation.coords.latitude);
+      setLon(userLocation.coords.longitude);
     }
-    const userLocation = await Location.getCurrentPositionAsync();
-    setLocation(userLocation);
-    setLat(userLocation.coords.latitude);
-    setLon(userLocation.coords.longitude);
   }
 
-  // const [date, setDate] = useState(moment().format('D MMMM YYYY'));
-  let greeting = 'Hi!';
   const [description, setDescription] = useState();
   const [temp, setTemp] = useState();
   let key = "f4bce834d5ac18e52842463a75b22837";
   let city = "Amsterdam,nl";
-  let url2 = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,daily&lang=nl&appid=${key}`
+  let url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,daily&lang=nl&appid=${key}`
   const currentHour = moment().format('HH');
   const morning = 12;
   const evening = 18;
 
-  if(currentHour < 12 ){
-    greeting="Goedemorgen";
-  }
-  if(currentHour >= 12 && currentHour < 18){
-    greeting="Goedemiddag";
-  }
-  if(currentHour >= 18 && currentHour < 24 ){
-    greeting="Goedenavond";
-  }
-  if(currentHour >= 0 && currentHour < 6 ){
-    greeting="Goedennacht";
+  const greeting = () => {
+    let greet = 'Hi';
+    if(currentHour < 12 ){
+      greet="Goedemorgen";
+    } else if(currentHour >= 12 && currentHour < 18){
+      greet="Goedemiddag";
+    } else if(currentHour >= 18 && currentHour < 24 ){
+      greet="Goedenavond";
+    } else if(currentHour >= 0 && currentHour < 6 ){
+      greet="Goedenacht";
+    }
+    return greet;
   }
 
   if (!!route.params && route.params.update == true && lastUpdate !== route.params.timestamp) {
@@ -84,43 +86,66 @@ const HomeScreen = ({route}) => {
   }
 
   const loadData = async () => {
-    getLocation();
-    await axios({
+    let fname;
+    try{
+      fname = await AsyncStorage.getItem('userFirstName');
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setFirstname(fname);
+      getLocation();
+      await axios({
+          method: 'GET',
+          url: `${Constants.manifest.extra.API_URL}/peakflow/overview`,
+          headers: {
+              'X-Auth-Token': userToken
+          }
+      }).then((res) => {
+          setTodaysData(res.data.today);
+      }).catch((error) => {
+          console.log(error);
+      });
+      await axios({
         method: 'GET',
-        url: `${Constants.manifest.extra.API_URL}/peakflow/overview`,
-        headers: {
-            'X-Auth-Token': userToken
-        }
-    }).then((res) => {
-        setTodaysData(res.data.today);
-    }).catch((error) => {
-        console.log(error);
-    });
-    await axios({
-      method: 'GET',
-      url:url2
-    }).then(async (res) => {
-        await AsyncStorage.setItem('currentWeatherData', JSON.stringify(res.data.current));
-    }).catch((error) => {
-        console.log(error);
-     });
+        url:url
+      }).then(async (res) => {
+          await AsyncStorage.setItem('currentWeatherData', JSON.stringify(res.data.current));
+      }).catch((error) => {
+          console.log(error);
+       });
+    }
 }
 
 useFocusEffect(
    React.useCallback(() => {
-     loadWeather();
+     setTime(moment().format("HH:mm"));
      loadData();
-     setTime(moment().format("HH:mm"))
    }, [update])
  );
 
-//thunderstorm, drizzle, rain, snow, clear, clouds
+ const setTriggerText = (data) =>{
+   if(data.humidity < 75 ){
+      setWarnText('droge lucht');
+   } else if (data.humidity > 90) {
+     setWarnText('vochtige lucht');
+   } else if (data.weather[0].main == 'Mist') {
+     setWarnText('mist');
+   } else if ((data.temp - 273) < 5) {
+     setWarnText('koude lucht');
+   } else if ((data.temp-273) > 30){
+     setWarnText('warme lucht');
+   } else {
+     setWarnText('geen trigger');
+   }
+ }
 
  const loadWeather = async () =>{
-     const current = JSON.parse(await AsyncStorage.getItem('currentWeatherData'));
+     const c = await AsyncStorage.getItem('currentWeatherData')
+     const current = JSON.parse(c);
      let des = current.weather[0].description.split(' ');
-     setTemp( Math.round(current.temp - 273));
+     setTemp( Math.round(current.temp - 273) );
      setDescription(des[des.length - 1]);
+     setTriggerText(current);
      if(current.weather[0].main == 'clear'){
        setIcon('sun');
      } else if (current.weather[0].main == 'Clouds'){
@@ -133,18 +158,17 @@ useFocusEffect(
        setIcon('bolt');
      } else if(current.weather[0].main == 'Drizzle'){
        setIcon('cloud-rain');
+     } else if(current.weather[0].description == 'onbewolkt'){
+       setIcon('circle');
      } else {
        setIcon('question');
      }
- }
+   }
 
   useEffect(() => {
-    //TODO: determine wether we want to update time automatically
-    // setInterval(() => {
-    //   setTime(moment().format("HH:mm"));
-    // }, 2000)
-      loadData();
-    },[update]);
+    loadData();
+    loadWeather();
+  }, [update]);
 
   return(
     <View style={GlobalStyles.container}>
@@ -153,7 +177,7 @@ useFocusEffect(
         contentContainerStyle={GlobalStyles.contentContainer}
       >
       <View style={styles.greeting}>
-        <Text style={styles.greetingText}>{greeting}, Dayella</Text>
+        <Text style={styles.greetingText}>{greeting()}, {firstname}</Text>
       </View>
 
       <View style={styles.iconText}>
@@ -165,8 +189,8 @@ useFocusEffect(
         <FontAwesome5 name={icon} size={24} color={COLORS.gray} style={styles.icon}/>
         <Text style={styles.weatherText}>{description}</Text>
         <Text style={styles.weatherText}>&nbsp; {temp}&#176;C </Text>
-        <FontAwesome5 name="exclamation-triangle" size={20} color='#ffa366' style={{marginLeft:45}}/>
-        <Text style={styles.weatherText}>Pollen</Text>
+        <FontAwesome5 name="exclamation-triangle" size={20} color='#ffa366' style={{marginLeft:10, alignSelf: 'center', }}/>
+        <Text style={styles.weatherText}>{warnText}</Text>
       </View>
 
       <TouchableOpacity activeOpacity={0.7} onPress={(() => navigation.navigate('Grafieken', {screen: 'Overzicht'}))} style={styles.peakflowCard}>
@@ -177,13 +201,19 @@ useFocusEffect(
         </View>
         <View style={styles.PeakflowTime}>
             <FontAwesome5 name="sun" size={20} color={COLORS.darkBlue} style={styles.icon}/>
-            <Text style={styles.iconText__text}>
-            {todaysData.morning.beforeMedication} &nbsp; | &nbsp; {todaysData.morning.afterMedication}
-            </Text>
+            {Object.keys(todaysData.morning).length !== 0
+              ?<Text style={styles.iconText__text}>
+              {todaysData.morning.beforeMedication? todaysData.morning.beforeMedication : ' .... '} &nbsp; | &nbsp; {todaysData.morning.afterMedication ?todaysData.morning.afterMedication : ' .... '}
+              </Text>
+              :<Text style={styles.iconText__text}>vul in </Text>
+            }
         </View>
         <View style={styles.PeakflowTime}>
             <FontAwesome5 name="moon" size={20} color={COLORS.darkBlue} style={styles.icon}/>
-            <Text style={styles.iconText__text}>{todaysData.evening.beforeMedication} &nbsp; | &nbsp; {todaysData.evening.afterMedication}</Text>
+            {Object.keys(todaysData.evening).length !== 0
+            ?<Text style={styles.iconText__text}>{todaysData.evening.beforeMedication ? todaysData.evening.beforeMedication : ' .... '} &nbsp; | &nbsp; { todaysData.evening.afterMedication ?todaysData.evening.afterMedication : ' .... '}</Text>
+            :<Text style={styles.iconText__text}>vul in</Text>
+          }
         </View>
       </TouchableOpacity>
 
@@ -290,7 +320,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
-    marginVertical: 25
+    marginVertical: 25,
+    elevation: 3
   },
   subCardsTitle:{
     fontSize: 18,
