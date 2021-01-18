@@ -12,7 +12,7 @@ const InputField = (props) => {
     return (
         <View style={styles.inputWrapper}>
             {props.label ? <Text style={styles.label}> {props.label} </Text> : null}
-            {props.multiline ? 
+            {props.multiline ?
                 <TextInput
                     style={[styles.input, styles.multiline]}
                     onChangeText={text => props.onChange(text)}
@@ -25,6 +25,7 @@ const InputField = (props) => {
                     autoCapitalize={props.noCap && "none"}
                 /> :
                 <TextInput
+                    keyboardType={props.keyboardType}
                     style={styles.input}
                     onChangeText={text => props.onChange(text)}
                     value={props.value}

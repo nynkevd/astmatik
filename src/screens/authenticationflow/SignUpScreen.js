@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
     AsyncStorage,
     View,
@@ -21,29 +21,24 @@ import AppButton from "../../components/AppButton";
 import {AuthContext} from '../../context/context';
 
 const SignUpScreen = () => {
-    const [firstname, onChangeFirstname] = React.useState('');
-    const [lastname, onChangeLastname] = React.useState('');
-    const [email, onChangeEmail] = React.useState('');
-    const [password, onChangePassword] = React.useState('');
-    const [repeatPassword, onChangeRepeatPassword] = React.useState('');
-    const [error, setError] = React.useState('');
+    const [firstname, onChangeFirstname] = useState('');
+    const [lastname, onChangeLastname] = useState('');
+    const [email, onChangeEmail] = useState('');
+    const [password, onChangePassword] = useState('');
+    const [repeatPassword, onChangeRepeatPassword] = useState('');
+    const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
     const navigation = useNavigation();
-    const {signUp} = React.useContext(AuthContext);
+    const {signUp} = useContext(AuthContext);
 
-    const signupHandler = async (firstname, lastname, email, password) => {
-      try{
+    const signupHandler = async () => {
         await AsyncStorage.setItem('userFirstName', firstname);
         await AsyncStorage.setItem('userLastName', lastname);
         await AsyncStorage.setItem('userEmail', email);
-      } catch(error){
-        console.log(error);
-      } finally {
         setTimeout(() => {
             navigation.navigate('Astma gegevens', {email, password});
-        }, 200);
-      }
+        }, 500);
     };
 
     return (
@@ -91,7 +86,7 @@ const SignUpScreen = () => {
             {/* {error ? <Text style={GlobalStyles.errorText}> {error} </Text> : null} */}
 
             <AppButton
-                onPress={() => signupHandler(firstname,lastname,email,password)}
+                onPress={() => signupHandler()}
                 text="registreren"
                 accessibilityLabel="Registreren"
             />
