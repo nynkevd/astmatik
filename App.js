@@ -258,6 +258,7 @@ export default function App() {
         await AsyncStorage.removeItem('userEmail');
         await AsyncStorage.removeItem('userMedication');
         await AsyncStorage.removeItem('userTriggers');
+        await AsyncStorage.removeItem('loggedMeds');
       } catch(error){
         console.log(error);
       }
