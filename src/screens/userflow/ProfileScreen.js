@@ -14,6 +14,8 @@ import moment from 'moment';
 import localization from 'moment/locale/nl';
 import {FontAwesome5, Entypo, Feather, MaterialCommunityIcons} from '@expo/vector-icons';
 import {AuthContext} from '../../context/context';
+import AppButton from '../../components/AppButton';
+import ContactForm from '../../components/ContactForm';
 
 import { COLORS } from '../../constants/Colors';
 import GlobalStyles from '../../constants/GlobalStyles';
@@ -34,6 +36,7 @@ const ProfileScreen = ({route}) => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [asthmaType, setAsthmaType] = useState('');
+  const [medicalEmail, setMedicalEmail] = useState('');
 
   const [medication, setMedication] = useState([]);
   const [excersises, setExcersises] = useState([]);
@@ -123,6 +126,11 @@ const ProfileScreen = ({route}) => {
           {triggers && triggers.length > 0 ? triggers.map(trigger=>
           <Text key={trigger.id} style={[GlobalStyles.text, styles.listItem]}> ⬡ {trigger.name} </Text>) : <Text> Nog geen triggers, voeg ze nu snel toe in je instellingen</Text>}
         </View>
+        
+        <ContactForm 
+          naam={firstName + ' ' +lastName}
+        />
+
       </ScrollView>
     </View>
   )
