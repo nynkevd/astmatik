@@ -1,23 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {
-    SafeAreaView,
-    ScrollView,
-    Text,
-    StyleSheet,
-    TouchableOpacity,
-    View,
-    ActivityIndicator,
-} from 'react-native';
+import { SafeAreaView, ScrollView, Text, StyleSheet, TouchableOpacity, View, ActivityIndicator,} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Constants from 'expo-constants';
-import axios from 'axios';
 import {FontAwesome5, Entypo, Feather, MaterialCommunityIcons} from '@expo/vector-icons';
-
 
 import MainLayout from '../../components/MainLayout';
 import ScreenTitle from '../../components/ScreenTitle';
-import PeakflowSchema from "../../components/PeakflowSchema";
-import FloatingActionButton from "../../components/FloatingActionButton";
 
 import {COLORS} from '../../constants/Colors';
 import GlobalStyles from '../../constants/GlobalStyles';
@@ -52,7 +39,7 @@ const MedicationOverview = () => {
     //         setIsLoading(false);
     //     })();
     //   }, [update]);
-      
+
       useEffect(() => {
         console.log("Active Filter changed");
         if (activeFilter == 0) {
@@ -65,14 +52,14 @@ const MedicationOverview = () => {
             setActiveData(thisMonthsData);
             console.log(thisMonthsData);
         }
-      }, [activeFilter]); 
+      }, [activeFilter]);
 
     return (
         <SafeAreaView style={GlobalStyles.container}>
             <MainLayout/>
             <ScrollView contentContainerStyle={GlobalStyles.contentContainer}>
                 <ScreenTitle
-                    title="Mijn week in cijfers"
+                    title="Weekoverzicht"
                     subTitle="Bekijk hier jouw gegevens van vandaag, deze week, of deze maand."
                 />
 
@@ -100,35 +87,65 @@ const MedicationOverview = () => {
                 </View>
 
                 <View>
-                    <View style={{flexDirection: "row"}}> 
-                        <Feather name="sun" size={24} color={COLORS.darkBlue} />                        
+                    <View style={{flexDirection: "row"}}>
+                        <Feather name="sun" size={24} color={COLORS.darkBlue} />
                         <Text> salbutamol | budesonide </Text>
                     </View>
                     <View style={{flexDirection: "row"}}>
-                        <Feather name="moon" size={24} color={COLORS.darkBlue} />                        
+                        <Feather name="moon" size={24} color={COLORS.darkBlue} />
                         <Text> vilanterol </Text>
                     </View>
                 </View>
 
-                {/* <PeakflowSchema
-                    title={"Medicatie"}
-                    subTitle={"Ochtend"}
-                    data={activeData}
-                />
+                <Text style={styles.subTitle}>Ochtend</Text>
+                <View style={styles.addMedication}>
+                    <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Ochtend medicatie </Text>
+                    <TouchableOpacity onPress={() => {navigation.navigate("Medicatie invullen")}} style={[styles.actionButton, GlobalStyles.shadowed]}>
+                        <Feather name="plus" size={26} color="white"/>
+                    </TouchableOpacity>
+                </View>
 
-                <PeakflowSchema
-                    title={"Medicatie"}
-                    subTitle={"Middag"}
-                    data={activeData}
-                /> */}
+                <Text style={styles.subTitle}>Middag</Text>
+                <View style={styles.addMedication}>
+                    <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Middag medicatie </Text>
+                    <TouchableOpacity onPress={() => {navigation.navigate("Medicatie invullen")}} style={[styles.actionButton, GlobalStyles.shadowed]}>
+                        <Feather name="plus" size={26} color="white"/>
+                    </TouchableOpacity>
+                </View>
 
+                <Text style={styles.subTitle}>Avond</Text>
+                <View style={styles.addMedication}>
+                    <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Avond medicatie </Text>
+                    <TouchableOpacity onPress={() => {navigation.navigate("Medicatie invullen")}} style={[styles.actionButton, GlobalStyles.shadowed]}>
+                        <Feather name="plus" size={26} color="white"/>
+                    </TouchableOpacity>
+                </View>
             </ScrollView>
-            <FloatingActionButton onPress={() => {navigation.navigate("MedicatieLogger")}}/>
         </SafeAreaView>
     )
 };
 
 const styles = StyleSheet.create({
+    addMedication: {
+        borderColor: COLORS.darkBlue,
+        borderRadius: 15,
+        borderWidth: 1,
+        backgroundColor: COLORS.white,
+        marginVertical: 15,
+        alignItems: 'center',
+        padding: 15,
+    },
+    MedicationCard: {
+        backgroundColor: COLORS.white,
+        borderRadius: 15,
+        marginVertical: 5,
+        padding: 15,
+        borderWidth: 1,
+        borderColor: COLORS.darkBlue,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
     filterButtons: {
         flexDirection: "row",
         justifyContent: "space-between",
@@ -181,6 +198,21 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.darkBlue,
         alignItems: "center",
         borderRadius: 5,
+    },
+    actionButton: {
+        marginTop: 20,
+        backgroundColor: COLORS.darkBlue,
+        borderRadius: 100,
+        height: 40,
+        width: 40,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    subTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: COLORS.darkBlue,
+        marginTop: 15,
     },
 });
 

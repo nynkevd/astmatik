@@ -53,7 +53,25 @@ export const OPTIONS = {
       db_id: "5fd72caf159ec224dcf5bbac",
       key: 'Stuifmeel',
       checked:false,
-    }
+    },
+    {
+      id: 8,
+      db_id: "6000a181928b7a18041b5657",
+      key: 'Vocht',
+      checked:false,
+    },
+    {
+      id: 9,
+      db_id: "6000a181928b7a18041b5658",
+      key: 'Regen',
+      checked:false,
+    },
+    {
+      id: 10,
+      db_id: "6000a181928b7a18041b5659",
+      key: 'Warmte',
+      checked:false,
+    },
   ],
   medicationOptions: [
     {
@@ -68,6 +86,55 @@ export const OPTIONS = {
       key: 'Salbutamol',
       checked:false,
     },
+    {
+      id: 2,
+      db_id: "5ffecbc315e9e4415c9d2f28",
+      key: 'Vilanterol',
+      checked:false,
+    },
+    {
+      id: 3,
+      db_id: "5ffecbc415e9e4415c9d2f29",
+      key: 'Fenoterol',
+      checked:false,
+    },
+    {
+      id: 4,
+      db_id: "5ffecbc415e9e4415c9d2f2a",
+      key: 'Beclomethason',
+      checked:false,
+    },
+    {
+      id: 5,
+      db_id: "5ffecbc415e9e4415c9d2f2b",
+      key: 'Cidesonide',
+      checked:false,
+    },
+    {
+      id: 6,
+      db_id: "5ffecbc415e9e4415c9d2f2c",
+      key: 'Terbutaline',
+      checked:false,
+    },
+    {
+      id: 7,
+      db_id: "5ffecbc415e9e4415c9d2f2d",
+      key: 'Tioropium',
+      checked:false,
+    },
+    {
+      id: 8,
+      db_id: "5ffecbc415e9e4415c9d2f2e",
+      key: 'Olodaterol',
+      checked:false,
+    },
+    {
+      id: 9,
+      db_id: "5ffecbc415e9e4415c9d2f2f",
+      key: 'Salmeterol',
+      checked:false,
+    },
+
   ],
   ademrem: {
     title: 'Ademrem',

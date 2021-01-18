@@ -22,66 +22,31 @@ const MedicationLogger = () => {
     const [quantity, setQuantity] = useState('');
     const [timestamp, setTimestamp] = useState('');
     const [complaints, setComplaints] = useState('');
-    
 
     const durationOptions = ["budesonide", "vilanterol", "salbutamol"];
     const quantityOptions = ["1 puf", "2 pufs", "3 pufs", "4 pufs", "5 pufs"];
-    const timestampOptions = ["01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", 
+    const timestampOptions = ["01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00",
     "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00"];
-    const complainOptions = ["Benauwdheid", "Piepen", "Hoesten", "Kortademig"];
+    const complainOptions = ["Benauwdheid", "Piepen", "Hoesten", "Kortademig", "Slijm"];
 
     const navigation = useNavigation();
 
-    const onConfirm = async () => {
-        console.log("confirm");
+    const onConfirm = () => {
+        let body = {
+          duration,
+          quantity,
+          timestamp,
+          complaints,
+        }
+        console.log(body);
         // navigation.navigate("Grafieken");
     };
 
-    const [key, setKey] = useState('defaultValue'); 
-    const [option1, setOption1] = useState(false) 
+    const [key, setKey] = useState('defaultValue');
+    const [option1, setOption1] = useState(false)
     const [option2, setOption2] = useState(false);
     const [option3, setOption3] = useState(false);
     const [option4, setOption4] = useState(false);
-
-    const radioHandler = () => {
-        if(option1){
-            setKey(option1);
-            setOption1(false);
-        } else {
-            setOption1(true);
-            setKey(option1);
-        }
-    }
-
-    const radioHandler2 = () => {
-        if(option2){
-            setKey(option2);
-            setOption2(false);
-        } else {
-            setKey(option2);
-            setOption2(true);
-        }
-    }
-
-    const radioHandler3 = () => {
-        if(option3){
-            setKey(option3);
-            setOption4(false);
-        } else {
-            setKey(option3);
-            setOption3(true);
-        }
-    }
-
-    const radioHandler4 = () => {
-        if(option4){
-            setKey(option4);
-            setOption4(false);
-        } else {
-            setKey(option4);
-            setOption4(true);
-        }
-    }
 
     return (
         <SafeAreaView style={GlobalStyles.container}>
@@ -91,54 +56,54 @@ const MedicationLogger = () => {
                     title="Medicatie"
                     subTitle="Voer de medicatie in die je hebt genomen"
                 />
-                
-                <Text>Medicatie</Text>
+
+                <Text style={GlobalStyles.label}>Medicatie</Text>
                 <Dropdown
                     value={duration}
                     changeValue={setDuration}
                     list={durationOptions}
                 />
 
-                <Text>Hoeveelheid</Text>
+                <Text style={GlobalStyles.label}>Hoeveelheid</Text>
                 <Dropdown
                     value={quantity}
                     changeValue={setQuantity}
                     list={quantityOptions}
                 />
 
-                <Text>Tijdstip</Text>
+                <Text style={GlobalStyles.label}>Tijdstip</Text>
                 <Dropdown
                     value={timestamp}
                     changeValue={setTimestamp}
                     list={timestampOptions}
                 />
 
-                <Text>Klachten</Text>
+                <Text style={GlobalStyles.label}>Klachten</Text>
                 <View style={styles.klachten}>
                     <View style={styles.subKlachten}>
-                        <RadioButton checked={option1} onPress={radioHandler}/>
-                        <Text>Benauwdheid</Text>
+                        <RadioButton checked={option1} onPress={() => setOption1(!option1)}/>
+                        <Text style={GlobalStyles.text}>Benauwdheid</Text>
                     </View>
 
                     <View style={styles.subKlachten}>
-                        <RadioButton checked={option2} onPress={radioHandler2}/>
-                        <Text>Piepen</Text>
+                        <RadioButton checked={option2} onPress={() => setOption2(!option2)}/>
+                        <Text style={GlobalStyles.text}>Piepen</Text>
                     </View>
 
                     <View style={styles.subKlachten}>
-                        <RadioButton checked={option3} onPress={radioHandler3}/>
-                        <Text>Hoesten</Text>
+                        <RadioButton checked={option3} onPress={() => setOption3(!option3)}/>
+                        <Text style={GlobalStyles.text}>Hoesten</Text>
                     </View>
 
                     <View style={styles.subKlachten}>
-                        <RadioButton checked={option4} onPress={radioHandler4}/>
-                        <Text>Kortademig</Text>
+                        <RadioButton checked={option4} onPress={() => setOption4(!option4)}/>
+                        <Text style={GlobalStyles.text}>Kortademig</Text>
                     </View>
                 </View>
 
                 <AppButton
                     text={"opslaan"}
-                    onPress={() => onConfirm}
+                    onPress={() => onConfirm()}
                 />
             </ScrollView>
         </SafeAreaView>
@@ -151,7 +116,7 @@ const styles = StyleSheet.create({
         borderColor: COLORS.gray,
         backgroundColor: COLORS.white,
         borderRadius: 10,
-        height: 125,
+        paddingVertical: 10,
         justifyContent: 'center',
         elevation: 3,
         paddingHorizontal: 15,
@@ -159,45 +124,7 @@ const styles = StyleSheet.create({
     },
     subKlachten: {
         flexDirection: "row",
-        paddingBottom: 5,
-        paddingTop: 5,
-    },
-    filterButtons: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        borderWidth: 1,
-        borderColor: COLORS.gray,
-        borderRadius: 25,
-        padding: 0,
-    },
-    activeFilter: {
-        flex: 1,
-        backgroundColor: COLORS.darkBlue,
-        alignItems: 'center',
-        padding: 5,
-        height: '100%'
-    },
-    inActiveFilter: {
-        flex: 1,
-        backgroundColor: COLORS.white,
-        alignItems: 'center',
-        padding: 5,
-        height: '100%'
-    },
-    activeFilterText: {
-        fontFamily: "Roboto",
-        color: COLORS.white,
-        fontSize: 16,
-    },
-    inActiveFilterText: {
-        fontFamily: "Roboto",
-        color: COLORS.darkBlue,
-        fontSize: 16,
-    },
-    bodyText: {
-        fontSize: 16,
-        color: COLORS.darkBlue
+        paddingVertical: 5
     },
 });
 

@@ -81,7 +81,7 @@ const StatisticsScreen = ({route}) => {
             <MainLayout/>
             <ScrollView contentContainerStyle={GlobalStyles.contentContainer}>
                 <ScreenTitle
-                    title="Mijn week in cijfers"
+                    title="Weekoverzicht" //aangepast aan de hand van feedback Basalt
                     subTitle="Bekijk hier jouw gegevens van vandaag, deze week, of deze maand."
                 />
 
@@ -103,16 +103,16 @@ const StatisticsScreen = ({route}) => {
                     <TouchableOpacity style={styles.peakflowButon}>
                         <Text style={styles.activeFilterText}>peakflow</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress = {() => navigation.navigate("MedicatieOverview")} style={styles.medicationButton}>
+                    <TouchableOpacity onPress = {() => navigation.navigate("Medicatie")} style={styles.medicationButton}>
                         <Text style={styles.activeFilterText}>medicatie</Text>
                     </TouchableOpacity>
                 </View>
-                
+
                 {
                     activeFilter == 0 ?
                     <>
                     <Text style={styles.subTitle}>Ochtend</Text>
-                    {!!todaysData.morning && !!Object.keys(todaysData.morning).length > 0 ? 
+                    {!!todaysData.morning && !!Object.keys(todaysData.morning).length > 0 ?
                     <PeakflowCard
                         morning={true}
                         data={todaysData.morning}
@@ -124,9 +124,9 @@ const StatisticsScreen = ({route}) => {
                         </TouchableOpacity>
                     </View>
                     }
-                   
-                    <Text style={styles.subTitle}>Middag/Avond</Text> 
-                    {!!todaysData.evening && !!Object.keys(todaysData.evening).length > 0 ? 
+
+                    <Text style={styles.subTitle}>Middag/Avond</Text>
+                    {!!todaysData.evening && !!Object.keys(todaysData.evening).length > 0 ?
                     <PeakflowCard
                         morning={false}
                         data={todaysData.evening}
@@ -137,7 +137,7 @@ const StatisticsScreen = ({route}) => {
                             <Feather name="plus" size={26} color="white"/>
                         </TouchableOpacity>
                     </View>
-                    
+
                     }
                     </>
                    :
@@ -162,7 +162,7 @@ const StatisticsScreen = ({route}) => {
                     onPress={() => {forceUpdate(!update)}}
                     text={"opnieuw"}
                 />  */}
-                
+
             </ScrollView>
         </SafeAreaView>
     )
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
         padding: 15,
     },
     actionButton: {
-        marginTop: 20, 
+        marginTop: 20,
         backgroundColor: COLORS.darkBlue,
         borderRadius: 100,
         height: 40,

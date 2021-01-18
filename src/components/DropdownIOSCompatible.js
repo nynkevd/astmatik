@@ -1,13 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import { AsyncStorage, Alert, TouchableHighlight, TouchableOpacity, Text, View, StyleSheet, ScrollView, Modal } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
+import { AsyncStorage, Alert, CheckBox, TouchableHighlight, TouchableOpacity, Text, View, StyleSheet, ScrollView, Modal } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
+import DropDownPicker from 'react-native-dropdown-picker';
 import { COLORS } from '../constants/Colors';
 import { OPTIONS } from '../constants/Options';
 import GlobalStyles from '../constants/GlobalStyles';
 import AppButton from '../components/AppButton';
 
-const Dropdown = (props) =>{
+const DropdownIOSCompatable = (props) =>{
    const [modalVisible, setModalVisible] = useState(props.modalVisible);
    const [state, setState] = useState(props.list);
    const [checked, setChecked] = useState(false);
@@ -25,8 +25,7 @@ const Dropdown = (props) =>{
            })
           }
         }
-        //  await AsyncStorage.setItem('userTriggers', JSON.stringify(myTriggers));
-        handleTriggers(JSON.stringify(myTriggers));
+         await AsyncStorage.setItem('userTriggers', JSON.stringify(myTriggers));
        } else if(props.list === OPTIONS.medicationOptions){
          for(let i = 0; i < state.length; i++){
            if(state[i]['checked'] === true){
@@ -36,8 +35,7 @@ const Dropdown = (props) =>{
            })
            }
          }
-        //  await AsyncStorage.setItem('userMedication', JSON.stringify(myMedications));
-        handleMedication(JSON.stringify(myMedications));
+         await AsyncStorage.setItem('userMedication', JSON.stringify(myMedications));
        }
      } catch(error){
        console.log(error);
@@ -45,16 +43,6 @@ const Dropdown = (props) =>{
         setModalVisible(false);
      }
    }
-
-   const handleTriggers = async (data) => {
-     props.setTriggersVisible(false);
-     await AsyncStorage.setItem('userTriggers', data);
-   }
-
-   const handleMedication = async (data) => {
-    props.setMedicationVisible(false);
-    await AsyncStorage.setItem('userMedication', data);
-  }
 
    const onChecked = (id) =>{
      let data = state;
@@ -76,44 +64,42 @@ const Dropdown = (props) =>{
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-          <Text style={[styles.title, {alignSelf: 'flex-start'}]}>{props.title}</Text>
-          <View style={{justifyContent: 'flex-start', flexDirection: 'column', alignSelf: 'flex-start'}}>
+          <Text style={styles.title}>{props.title}</Text>
             {
               state.map((item, index) =>
-                <View style={{flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start'}}
+                <View style={{flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start',}}
                 key={index}>
                   <CheckBox
                     tintColors={{true: COLORS.darkBlue}}
                     value={item.checked}
-                    onValueChange={() => {onChecked(item.id)}} />
+                    onValueChange={() => {onChecked(item.id)}}  />
                   <Text>{item.key}</Text>
                 </View>
               )
             }
-            </View>
             <AppButton
-            
               text="klaar"
               onPress={() => {
                 handeListValues();
+
               }} />
           </View>
         </View>
       </Modal>
     </ScrollView>
       :<View style={styles.picker}>
-      <Picker
+      <DropDownPicker
         mode="dropdown"
         selectedValue={props.value}
         onValueChange={value => props.changeValue(value)}
         >
-          <Picker.Item label="--" value="0" />
+          <DropDownPicker.Item label="--" value="0" />
             {
               props.list.map((item, index) =>
-                <Picker.Item label={item} value={item} key={index} />
+                <DropDownPicker.Item label={item} value={item} key={index} />
               )
             }
-      </Picker>
+      </DropDownPicker>
     </View>
   }
   </View>
@@ -144,8 +130,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // marginTop: 22,
-    backgroundColor: 'rgba(0,0,0,0.2)'
+    marginTop: 22,
   },
   modalView: {
     margin: 20,
@@ -154,7 +139,7 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     paddingHorizontal: 15,
     width: '80%',
-    minHeight: '50%',
+    height: '80%',
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -192,4 +177,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Dropdown;
+export default DropdownIOSCompatable;

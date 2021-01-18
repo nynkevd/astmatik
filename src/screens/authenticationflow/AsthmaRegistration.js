@@ -18,20 +18,26 @@ import GlobalStyles from "../../constants/GlobalStyles";
 import AppButton from '../../components/AppButton';
 import Dropdown from '../../components/Dropdown';
 import {AuthContext} from '../../context/context';
+import { FontAwesome } from '@expo/vector-icons';
 
 const AsthmaRegistration= ({route}) => {
   const navigation = useNavigation();
   const [asthmaType, setAsthmaType] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [showTriggerList, setShowTriggerList] = useState(false);
+  const [beenOnTriggers, setBeenOnTriggers] = useState(false);
+  const [showTriggerCheck, setShowTriggerCheck] = useState(false);
   const [showMedicationList, setShowMedicationList] = useState(false);
+  const [beenOnMedications, setBeenOnMedications] = useState(false);
+  const [showMedicationCheck, setShowMedicationCheck] = useState(false);
   const {signUp} = React.useContext(AuthContext);
-  let myMedication;
-  let myTriggers;
+  let myMedication = [];
+  let myTriggers = [];
 
   let password = route.params && route.params.password;
 
   const signupHandler = async () => {
+    // TODO: Loadingspinner toevoegen!
     let firstname = await AsyncStorage.getItem('userFirstName');
     let lastname = await AsyncStorage.getItem('userLastName');
     let email = await AsyncStorage.getItem('userEmail');
@@ -40,6 +46,27 @@ const AsthmaRegistration= ({route}) => {
     console.log(asthmaType);
     signUp(firstname, lastname, email, password, asthmaType, myMedication, myTriggers);
   };
+
+  useEffect(() => {
+    console.log("hiero");
+    console.log(beenOnTriggers);
+    beenOnTriggers && !showTriggerList ? setShowTriggerCheck(true) : null;
+    //TODO: veranderen naar beenOnTriggers zodra de dubbele tap niet meer nodig is.
+  }, [showTriggerList]);
+
+  useEffect(() => {
+    console.log("hiero");
+    console.log(beenOnMedications);
+    beenOnMedications && !showMedicationList ? setShowMedicationCheck(true) : null;
+    //TODO: veranderen naar beenOnTriggers zodra de dubbele tap niet meer nodig is.
+  }, [showMedicationList]);
+
+  const setTriggersVisible = (value) => {
+    setShowTriggerList(value);
+  }
+  const setMedicationVisible = (value) => {
+    setShowMedicationList(value);
+  }
 
     return (
         <SafeAreaView style={GlobalStyles.container}>
@@ -55,17 +82,34 @@ const AsthmaRegistration= ({route}) => {
                   list={OPTIONS.asthmaTypeOptions}
                 />
                 <Text style={GlobalStyles.label}>Triggers</Text>
-                <TouchableOpacity
-                  style={styles.pickerStyle}
-                  onPress={() => {setShowTriggerList(!showTriggerList); setModalVisible(true);}}>
-                  <Text style={[GlobalStyles.text , {textAlign: 'center', fontWeight: 'bold'}]}>Toon trigger lijst</Text>
-                </TouchableOpacity>
+                <View style={styles.selectorWrapper}>
+                  <TouchableOpacity
+                    style={[styles.pickerStyle, showTriggerCheck && styles.withCheck]}
+                    onPress={() => {setShowTriggerList(true); setBeenOnTriggers(true)}}>
+                    <Text style={[GlobalStyles.text , {textAlign: 'center', fontWeight: 'bold'}]}>Toon trigger lijst</Text>
+                  </TouchableOpacity>
+                  <View style={showTriggerCheck ? styles.checkMarkWrapper : {width: 0}}>
+                  {
+                     showTriggerCheck ? <FontAwesome style={styles.checkMark} name="check" size={24} color={COLORS.darkBlue} /> : <Text> Hi </Text>
+                  }
+                  </View>
+                  
+                </View>
+                
                 <Text style={GlobalStyles.label}>Medicatie</Text>
-                <TouchableOpacity
-                  style={styles.pickerStyle}
-                  onPress={() => {setShowMedicationList(!showMedicationList); setModalVisible(true)}}>
-                  <Text style={[GlobalStyles.text , {textAlign: 'center', fontWeight: 'bold'}]}>Toon medicatie lijst</Text>
-                </TouchableOpacity>
+                <View style={styles.selectorWrapper}>
+                  <TouchableOpacity
+                    style={[styles.pickerStyle, showMedicationCheck && styles.withCheck]}
+                    onPress={() => {setShowMedicationList(true); setBeenOnMedications(true)}}>
+                    <Text style={[GlobalStyles.text , {textAlign: 'center', fontWeight: 'bold'}]}>Toon medicatie lijst</Text>
+                  </TouchableOpacity>
+                  <View style={showMedicationCheck ? styles.checkMarkWrapper : {width: 0}}>
+                    {
+                      showMedicationCheck ? <FontAwesome style={styles.checkMark} name="check" size={24} color={COLORS.darkBlue} /> : <Text> Hi </Text>
+                    }
+                  </View>
+                </View>
+                
 
                 <AppButton
                   text="opslaan"
@@ -79,6 +123,7 @@ const AsthmaRegistration= ({route}) => {
                     listOverview
                     changeValue={() => setShowTriggerList(!showTriggerList)}
                     list={OPTIONS.triggerOptions}
+                    setTriggersVisible={setTriggersVisible}
                   />
                   :<></>
                 }
@@ -89,6 +134,7 @@ const AsthmaRegistration= ({route}) => {
                     listOverview
                     changeValue={() => setShowMedicationList(!showMedicationList)}
                     list={OPTIONS.medicationOptions}
+                    setMedicationVisible={setMedicationVisible}
                   />
                 :<></>}
             </ScrollView>
@@ -107,8 +153,23 @@ const styles = StyleSheet.create({
     elevation: 3,
     paddingHorizontal: 15,
     marginBottom: 10,
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+    width: '100%'
+  },
+  withCheck: {
+    width: '90%'
+  },
+  selectorWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    maxWidth: '100%'
+  },
+  checkMarkWrapper: {
+    width: '10%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
 });
 
 export default AsthmaRegistration;

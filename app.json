@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "Astmatik_exercises",
-    "slug": "Astmatik_exercises",
+    "name": "Astmatik_homepage",
+    "slug": "Astmatik_homepage",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/applogo.png",
     "splash": {
       "image": "./assets/splashscreen.png",
       "resizeMode": "cover",
@@ -21,7 +21,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/applogo.png",
         "backgroundColor": "#FFFFFF"
       }
     },

@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@paraboly/react-native-report-modal": "0.0.12",
+    "@react-native-community/checkbox": "^0.5.7",
     "@react-native-community/datetimepicker": "3.0.0",
     "@react-native-community/masked-view": "0.1.10",
     "@react-native-picker/picker": "^1.9.4",
@@ -19,6 +20,8 @@
     "emailjs-com": "^2.6.4",
     "expo": "~39.0.2",
     "expo-constants": "^9.2.0",
+    "expo-location": "~9.0.0",
+    "expo-permissions": "~9.3.0",
     "expo-status-bar": "~1.0.2",
     "moment": "^2.29.1",
     "react": "16.13.1",

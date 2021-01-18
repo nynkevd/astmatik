@@ -41,8 +41,8 @@ const MeasurePeakflowScreen = ({route}) => {
 
     useEffect(() => {
         if (route.params.edit) {
-            setPeakflowBeforeMed(route.params.pf_beforeMed.toString());
-            setPeakflowAfterMed(route.params.pf_afterMed.toString());
+            setPeakflowBeforeMed(route.params.pf_beforeMed && route.params.pf_beforeMed.toString() || "");
+            setPeakflowAfterMed(route.params.pf_afterMed && route.params.pf_afterMed.toString() || "");
             setNotes(route.params.pf_notes.toString());
             setMorning(route.params.morning);
         } 
