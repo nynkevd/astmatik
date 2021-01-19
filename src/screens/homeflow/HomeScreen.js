@@ -7,7 +7,7 @@ import {
   AsyncStorage,
   TouchableOpacity
 } from 'react-native';
-import {FontAwesome5} from '@expo/vector-icons';
+import {FontAwesome5, Feather} from '@expo/vector-icons';
 import axios from 'axios';
 import Constants from 'expo-constants';
 import GlobalStyles from '../../constants/GlobalStyles';
@@ -30,6 +30,8 @@ const HomeScreen = ({route}) => {
   const [lon, setLon] = useState('4.899431');
   const [time, setTime] = useState(moment().format("HH:mm"));
   const date = moment().format('D MMMM YYYY');
+  const todaysDate = moment().format('DD-MM-yyyy').toString();
+  const [takenMedications, setTakenMedications] = useState({morning: {medication: "nog niet genomen"}, midday: {medication: "nog niet genomen"}, evening: {medication: "nog niet genomen"}});
   const [todaysData, setTodaysData] = useState({morning: {}, evening: {}});
 
   const [update, forceUpdate] = useState(false);
@@ -91,6 +93,12 @@ const HomeScreen = ({route}) => {
       }).catch((error) => {
           console.log(error);
       });
+      let loggedMeds = JSON.parse(await AsyncStorage.getItem('loggedMeds'));
+      if (loggedMeds && !!loggedMeds[todaysDate]) {
+        setTakenMedications(loggedMeds[todaysDate]);
+      } else {
+        setTakenMedications({morning: {medication: "nog niet genomen"}, midday: {medication: "nog niet genomen"}, evening: {medication: "nog niet genomen"}});
+      }
       await axios({
         method: 'GET',
         url:url
@@ -222,11 +230,15 @@ useFocusEffect(
         </View>
         <View style={styles.PeakflowTime}>
             <FontAwesome5 name="sun" size={20} color={COLORS.white} style={styles.icon}/>
-            <Text style={[styles.iconText__text, {color: COLORS.white}]}> salbutamol &nbsp; | &nbsp; budesonide</Text>
+            <Text style={[styles.iconText__text, {color: COLORS.white}]}> {!!takenMedications.morning ? takenMedications.morning.medication : "nog niet genomen"}</Text>
+        </View>
+        <View style={styles.PeakflowTime}>
+            <Feather name="sunset" size={20} color={COLORS.white} style={styles.icon}/>
+            <Text style={[styles.iconText__text, {color: COLORS.white}]}> {!!takenMedications.midday ? takenMedications.midday.medication : "nog niet genomen"} </Text>
         </View>
         <View style={styles.PeakflowTime}>
             <FontAwesome5 name="moon" size={20} color={COLORS.white} style={styles.icon}/>
-            <Text style={[styles.iconText__text, {color: COLORS.white}]}> vilanterol</Text>
+            <Text style={[styles.iconText__text, {color: COLORS.white}]}> {!!takenMedications.evening ? takenMedications.evening.medication : "nog niet genomen"} </Text>
         </View>
       </TouchableOpacity>
 

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Astmatik_homepage",
-    "slug": "Astmatik_homepage",
+    "name": "Astmatik_medication",
+    "slug": "Astmatik_medication",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/applogo.png",

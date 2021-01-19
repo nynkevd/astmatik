@@ -176,34 +176,7 @@ const MedicationOverview = ({route}) => {
                 </>}
 
                 {activeFilter === 1 &&
-                        <BarChart
-                        data={data}
-                        width={400}
-                        height={220}
-                        yAxisLabel="$"
-                        chartConfig={{
-                            backgroundColor: '#1cc910',
-                            backgroundGradientFrom: '#eff3ff',
-                            backgroundGradientTo: '#efefef',
-                            decimalPlaces: 2,
-                            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                            style: {
-                              borderRadius: 16,
-                            },
-                          }}
-                        verticalLabelRotation={30}
-                    />
-                    // <BarChart
-                    // data={}
-                    // width={400}
-                    // height={220}
-                    // yAxisLabel={'Rs'}
-                    // chartConfig={}
-                    // style={{
-                    //   marginVertical: 8,
-                    //   borderRadius: 16,
-                    // }}
-                //   />
+                    <Text> Zie hier het weekoverzicht</Text>
                 }
 
                 {activeFilter === 2 &&
