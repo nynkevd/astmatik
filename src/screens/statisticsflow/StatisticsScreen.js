@@ -103,7 +103,7 @@ const StatisticsScreen = ({route}) => {
                     <TouchableOpacity style={styles.peakflowButon}>
                         <Text style={styles.activeFilterText}>peakflow</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress = {() => navigation.navigate("Medicatie")} style={styles.medicationButton}>
+                    <TouchableOpacity onPress = {() => navigation.navigate("Medicatie", {update: false})} style={styles.medicationButton}>
                         <Text style={styles.activeFilterText}>medicatie</Text>
                     </TouchableOpacity>
                 </View>

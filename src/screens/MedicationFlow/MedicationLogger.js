@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
     SafeAreaView,
     ScrollView,
@@ -6,40 +6,73 @@ import {
     StyleSheet,
     TouchableOpacity,
     View,
+    AsyncStorage
 } from 'react-native';
 import RadioButton from '../../components/RadioButton';
 import Dropdown from '../../components/Dropdown';
 import { useNavigation } from '@react-navigation/native';
+import moment from 'moment';
 
 import MainLayout from '../../components/MainLayout';
 import ScreenTitle from '../../components/ScreenTitle';
 import {COLORS} from '../../constants/Colors';
 import GlobalStyles from "../../constants/GlobalStyles";
 import AppButton from "../../components/AppButton";
+import { useSafeArea } from 'react-native-safe-area-context';
+import { duration } from 'moment';
 
-const MedicationLogger = () => {
-    const [duration, setDuration] = useState('');
+const MedicationLogger = ({route}) => {
+    const [update, forceUpdate] = useState(false);
+    const [medication, setMedication] = useState('');
+    const [medicationList, setMedicationList] = useState([]);
     const [quantity, setQuantity] = useState('');
     const [timestamp, setTimestamp] = useState('');
     const [complaints, setComplaints] = useState('');
+    
+    useEffect(() => {
+        (async function loadData() {
+        let meds = JSON.parse(await AsyncStorage.getItem('userMedication'));
+        console.log(meds);
+        let medArray = [];
+        meds.forEach(med => {
+            medArray.push(med.name);
+        });
+        console.log(medArray);
+        setMedicationList(medArray);
+      })();
+    }, [update]);
 
-    const durationOptions = ["budesonide", "vilanterol", "salbutamol"];
+    // const durationOptions = ["budesonide", "vilanterol", "salbutamol"];
     const quantityOptions = ["1 puf", "2 pufs", "3 pufs", "4 pufs", "5 pufs"];
-    const timestampOptions = ["01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00",
-    "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00"];
+    const morningOptions = ["06:00", "07:00", "08:00", "09:00", "10:00", "11:00"];
+    const middayOptions = ["12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
+    const eveningOptions = ["20:00", "21:00", "22:00", "23:00", "24:00", "01:00", "02:00", "03:00", "04:00", "05:00"];
     const complainOptions = ["Benauwdheid", "Piepen", "Hoesten", "Kortademig", "Slijm"];
 
     const navigation = useNavigation();
 
-    const onConfirm = () => {
+    const onConfirm = async () => {
+        console.log("confirming");
+        let complaintsArr = [];
+        option1 && complaintsArr.push("Benauwdheid");
+        option2 && complaintsArr.push("Piepen");
+        option3 && complaintsArr.push("Hoesten");
+        option4 && complaintsArr.push("Kortademig");
         let body = {
-          duration,
+          medication,
           quantity,
           timestamp,
-          complaints,
+          complaints: complaintsArr
         }
-        console.log(body);
-        // navigation.navigate("Grafieken");
+        let loggedMeds = JSON.parse(await AsyncStorage.getItem('loggedMeds'));
+        console.log();
+        let date = moment().format("DD-MM-yyyy").toString();
+        if (!loggedMeds) {loggedMeds = { }; }
+        if (!loggedMeds[date]) { loggedMeds[date] = {} };
+        loggedMeds[date][route.params.tod === 0 && "morning" || route.params.tod === 1 && "midday" || route.params.tod === 2 && "evening"] = body;
+        console.log(loggedMeds);
+        await AsyncStorage.setItem('loggedMeds', JSON.stringify(loggedMeds));
+        navigation.navigate("Medicatie", {update: true});
     };
 
     const [key, setKey] = useState('defaultValue');
@@ -59,9 +92,9 @@ const MedicationLogger = () => {
 
                 <Text style={GlobalStyles.label}>Medicatie</Text>
                 <Dropdown
-                    value={duration}
-                    changeValue={setDuration}
-                    list={durationOptions}
+                    value={medication}
+                    changeValue={setMedication}
+                    list={medicationList}
                 />
 
                 <Text style={GlobalStyles.label}>Hoeveelheid</Text>
@@ -75,7 +108,8 @@ const MedicationLogger = () => {
                 <Dropdown
                     value={timestamp}
                     changeValue={setTimestamp}
-                    list={timestampOptions}
+                    list={route.params.tod === 0 && morningOptions || route.params.tod === 1 && middayOptions || route.params.tod === 2 && eveningOptions}
+                    // list={morningOptions}
                 />
 
                 <Text style={GlobalStyles.label}>Klachten</Text>

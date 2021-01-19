@@ -266,6 +266,7 @@ export default function App() {
         await AsyncStorage.removeItem('actionPlanScratchNote');
         await AsyncStorage.removeItem('userAsthmaType');
         await AsyncStorage.removeItem('actionPlanScratchNoteLess');
+        await AsyncStorage.removeItem('loggedMeds');
       } catch(error){
         console.log(error);
       }
