@@ -80,7 +80,7 @@ const ActionPlanFeelingGood = ({route}) => {
     return (
         <View style={styles.container}>
             <MainLayout/>
-            <ScrollView contentContainerStyle={styles.contentContainer}>
+            <ScrollView keyboardShouldPersistTaps="always" contentContainerStyle={styles.contentContainer}>
                 <ScreenTitle
                     title="Ik voel me goed"
                     subTitle="Mijn astma is onder controle, ik heb geen klachten"

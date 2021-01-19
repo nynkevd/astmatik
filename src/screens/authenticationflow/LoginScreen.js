@@ -30,14 +30,16 @@ const LoginScreen = () => {
 
     const loginHandler = async (email, password) => {
       setIsLoading(true)
-      //TODO: Blijft laden ook na een error
-      signIn(email, password);
+      setTimeout(()=>{
+        setIsLoading(false);
+      },500);
+      signIn(email.trim(''), password);
     };
 
     return (
         <View style={styles.container}>
             <MainLayout />
-            <ScrollView contentContainerStyle={[GlobalStyles.contentContainer, {alignItems: 'center', justifyContent: 'center'}]}>
+            <ScrollView keyboardShouldPersistTaps="always" contentContainerStyle={[GlobalStyles.contentContainer, {alignItems: 'center', justifyContent: 'center'}]}>
                 <Text style={GlobalStyles.titleText}>Welkom bij</Text>
                 <Text style={GlobalStyles.appName}> Astmatik</Text>
 

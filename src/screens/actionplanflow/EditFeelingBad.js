@@ -60,7 +60,7 @@ const EditFeelingBad = ({route}) => {
   return(
     <View style={styles.container}>
     <MainLayout />
-    <ScrollView contentContainerStyle={styles.contentContainer}>
+    <ScrollView keyboardShouldPersistTaps="always" contentContainerStyle={styles.contentContainer}>
       <ScreenTitle
         title="Wijzig contactgegevens"
         subTitle="Wijzig hier de contactgegevens van uw artsen en contactpersoon. "

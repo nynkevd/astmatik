@@ -37,7 +37,6 @@ const ActionPlanAsthmaAttack = () => {
 
   useEffect( () => {
     (async () =>{
-      let allKeys = await AsyncStorage.getAllKeys();
       let data = await AsyncStorage.getItem('ActionPlanBad');
       let scratchNote = await AsyncStorage.getItem('actionPlanScratchNote');
       if(data !== null){
@@ -45,20 +44,20 @@ const ActionPlanAsthmaAttack = () => {
         setNrLungMedic(data.nrLungMedic);
         setNrDoc(data.nrDoc);
         setUpdate(true);
-        console.log(data);
       }
-    if(scratchNote !== null){
-      console.log(scratchNote);
+    if(scratchNote !== null && scratchNote !== ' '){
+      console.log('a' + scratchNote);
       setNote(scratchNote);
       setedit(true);
     }
-    console.log(allKeys);
     })();
   }, [update]);
 
   const handleNote = async () =>{
     await AsyncStorage.setItem('actionPlanScratchNote', note);
-    setedit(true);
+    if(note !== null && note !== ''){
+      setedit(true);
+    }
   }
 
   return(
@@ -97,7 +96,7 @@ const ActionPlanAsthmaAttack = () => {
             </View>
           </View>
 
-          <Text style={[GlobalStyles.label, {fontSize: 16, fontWeight: 'bold', paddingLeft: 3, marginTop: 10}]}>Notitie</Text>
+          <Text style={[GlobalStyles.label, {fontSize: 16, fontWeight: 'bold', paddingLeft: 3, marginTop: 10}]}>Notitie overleg arts</Text>
           { edit
             ?<TouchableOpacity style={{paddingVertical: 15, paddingHorizontal: 10,  marginVertical: 10, borderColor: COLORS.darkBlue, borderWidth: 1, borderRadius: 10}} onPress={() => setedit(false)}>
               <Text style={GlobalStyles.text}>{note}</Text>
@@ -106,6 +105,7 @@ const ActionPlanAsthmaAttack = () => {
              <InputField
                 value={note}
                 onChange={value => setNote(value)}
+                placeholder="Bespreek met jouw arts extra stappen die je kunt ondernemen en zet deze hier neer als geheugensteun"
                 multiline
               />
               <View>

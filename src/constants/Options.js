@@ -158,6 +158,6 @@ export const OPTIONS = {
     title: 'Huffen',
     explanation: 'Bespreek deze techniek altijd eerst met uw arts. Bij huffen wordt het vastzittende slijm in de longen los gemaakt.',
     stepOne: 'Adem normaal of diep in via de neus. Bij de inademing dient de neus goed doorgankelijk te zijn.',
-    stepTwo: 'Open de mond en stoot de ingeademde lucht in een keer krachtig of rustig uit.',
+    stepTwo: 'Open de mond en stoot de ingeademde lucht in een keer krachtig uit.',
   }
 }

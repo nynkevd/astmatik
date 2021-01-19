@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -7,7 +7,9 @@ import {
   ScrollView,
   TouchableOpacity,
   Button,
-  ActivityIndicator
+  ActivityIndicator,
+  ToastAndroid,
+  AsyncStorage,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -33,6 +35,7 @@ const LogAsthmaAttack = () =>{
 
   const [timestamp, setTimestamp] = useState(moment());
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
+  const [update, setUpdate] = useState(false);
 
   const [duration, setDuration] = useState('5 minuten');
   const [trigger, setTrigger] = useState('Geen');
@@ -47,8 +50,8 @@ const LogAsthmaAttack = () =>{
   const [isLoading, setIsLoading] = useState(false);
 
   //should be changed to user info
-  const triggers = ['Geen', 'Mist', 'Koude lucht', 'Pollen'];
-  const medication = ['Salbutamol', 'Budesonide'];
+  const [triggers, setTriggers] = useState([]);
+  const [medicationList, setMedicationList] = useState([]);
 
   const asthmaAttackHandler = async () => {
       let body = {
@@ -73,7 +76,7 @@ const LogAsthmaAttack = () =>{
         },
         data: body
       }).then((res) => {
-        // alert('De informatie is opgeslagen');
+        ToastAndroid.show("De informatie is opgeslagen", ToastAndroid.SHORT);
         navigation.navigate('Actieplan');
       }).catch((error) => {
         console.log(error);
@@ -81,8 +84,25 @@ const LogAsthmaAttack = () =>{
       })
 
       setIsLoading(false);
-      
+
   };
+
+  useEffect(() => {
+      (async function loadData() {
+      let meds = JSON.parse(await AsyncStorage.getItem('userMedication'));
+      let trigs = JSON.parse(await AsyncStorage.getItem('userTriggers'));
+      let medArray = [];
+      let trigArray = [];
+      meds.forEach(med => {
+          medArray.push(med.name);
+      });
+      trigs.forEach((trig) => {
+        trigArray.push(trig.name);
+      });
+      setMedicationList(medArray);
+      setTriggers(trigArray);
+    })();
+  }, [update]);
 
 //set time and date
   const handleConfirm = (date) => {
@@ -147,7 +167,7 @@ const LogAsthmaAttack = () =>{
           <Dropdown
             value={usedMedication}
             changeValue={setUsedMedication}
-            list={medication}
+            list={medicationList}
             />
 
         </View>
@@ -157,7 +177,7 @@ const LogAsthmaAttack = () =>{
         <AppButton
           onPress={asthmaAttackHandler}
           text="opslaan"/>
-        
+
         {isLoading ? <ActivityIndicator color={COLORS.darkBlue}/> : null}
       </ScrollView>
     </View>

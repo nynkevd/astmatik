@@ -7,6 +7,7 @@ import {
     TouchableOpacity,
     View,
     ActivityIndicator,
+    ToastAndroid,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
@@ -45,7 +46,7 @@ const MeasurePeakflowScreen = ({route}) => {
             setPeakflowAfterMed(route.params.pf_afterMed && route.params.pf_afterMed.toString() || "");
             setNotes(route.params.pf_notes.toString());
             setMorning(route.params.morning);
-        } 
+        }
     }, [route.params.edit])
 
     const handleSave = async () => {
@@ -74,6 +75,7 @@ const MeasurePeakflowScreen = ({route}) => {
             console.log("gelukt");
         }).catch((error) => {
             console.log(error);
+            ToastAndroid.show("ongeldige invoer", ToastAndroid.SHORT);
         });
 
         setIsLoading(false);
@@ -103,6 +105,7 @@ const MeasurePeakflowScreen = ({route}) => {
             navigation.navigate('Overzicht',  {update: true, timestamp: Date.now()});
         }).catch((error) => {
             console.log(error);
+            ToastAndroid.show("ongeldige invoer", ToastAndroid.SHORT);
         });
 
         setIsLoading(false);
@@ -111,20 +114,21 @@ const MeasurePeakflowScreen = ({route}) => {
     return (
         <SafeAreaView style={GlobalStyles.container}>
             <MainLayout/>
-            <ScrollView contentContainerStyle={GlobalStyles.contentContainer}>
+            <ScrollView keyboardShouldPersistTaps="always" contentContainerStyle={GlobalStyles.contentContainer}>
                 <ScreenTitle
                     title="Peakflow"
                     subTitle={`Voer jouw ${morning ? "ochtend" : "middag/avond"} peakflow-meting in`}
                 />
 
                 <Text style={styles.bodyText}>Blaas drie keer en noteer daarvan de hoogste waarde</Text>
-                
+
 
                 <InputField
-                    label={"Waarde vóór medicatie"}
+                    label={"Waarde vóór medicatie *"}
                     value={peakflowBeforeMed}
                     onChange={setPeakflowBeforeMed}
                     placeholder={"540"}
+                    keyboardType="numeric"
                 />
 
                 <InputField
@@ -132,6 +136,7 @@ const MeasurePeakflowScreen = ({route}) => {
                     value={peakflowAfterMed}
                     onChange={setPeakflowAfterMed}
                     placeholder={"580"}
+                    keyboardType="numeric"
                 />
 
                 <InputField
@@ -146,9 +151,11 @@ const MeasurePeakflowScreen = ({route}) => {
                     text={"opslaan"}
                     onPress={route.params.edit ? () => handleEdit() : () => handleSave()}
                 />
-                
+
+                  <Text style={{color: COLORS.darkBlue, marginTop: 10}}>* verplichte velden</Text>
+
                 {isLoading ? <ActivityIndicator color={COLORS.darkBlue}/> : null}
-                
+
             </ScrollView>
         </SafeAreaView>
     )
