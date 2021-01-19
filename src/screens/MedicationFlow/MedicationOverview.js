@@ -1,44 +1,51 @@
 import React, {useState, useEffect} from 'react';
-import { SafeAreaView, ScrollView, Text, StyleSheet, TouchableOpacity, View, ActivityIndicator,} from 'react-native';
+import { SafeAreaView, ScrollView, Text, StyleSheet, TouchableOpacity, View, ActivityIndicator, AsyncStorage, Dimensions} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { BarChart } from 'react-native-chart-kit';
 import {FontAwesome5, Entypo, Feather, MaterialCommunityIcons} from '@expo/vector-icons';
+import moment from 'moment';
 
 import MainLayout from '../../components/MainLayout';
 import ScreenTitle from '../../components/ScreenTitle';
 
 import {COLORS} from '../../constants/Colors';
 import GlobalStyles from '../../constants/GlobalStyles';
+import AppButton from '../../components/AppButton';
 
-const MedicationOverview = () => {
+const MedicationOverview = ({route}) => {
     const navigation = useNavigation();
 
+    const data = {
+        labels: ["January", "February", "March", "April", "May", "June"],
+        datasets: [
+          {
+            data: [20, 45, 28, 80, 99, 43]
+          }
+        ]
+      };
+
     const [activeFilter, setActiveFilter] = useState(0); // 0 = Vandaag, 1 = deze week, 2 = deze maand
+    const todaysDate = moment().format("DD-MM-yyyy").toString();
     const [todaysData, setTodaysData] = useState();
     const [thisWeeksData, setThisWeeksData] = useState();
     const [thisMonthsData, setThisMonthsData] = useState();
     const [activeData, setActiveData] = useState([700, 800]);
 
-    const [isLoading, setIsLoading] = useState(false);
-    const [update, forceUpdate] = useState(false);
+    const [loggedMedication, setLoggedMedication] = useState();
 
-    // useEffect(() => {
-    //     (async function loadData() {
-    //         console.log("loading");
-    //         setIsLoading(true);
-    //         await axios({
-    //             method: 'GET',
-    //             url: `${Constants.manifest.extra.API_URL}/peakflow/overview/${userId}`,
-    //         }).then((res) => {
-    //             setTodaysData(res.data.today);
-    //             setThisWeeksData(res.data.thisWeek);
-    //             setThisMonthsData(res.data.thisMonth);
-    //             console.log("finished");
-    //         }).catch((error) => {
-    //             console.log(error);
-    //         });
-    //         setIsLoading(false);
-    //     })();
-    //   }, [update]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [update, forceUpdate] = useState(!!route.params ? route.params.update : false);
+
+    useEffect(() => {
+        (async function loadData() {
+            console.log("loading");
+            setIsLoading(true);
+            let loggedMeds = JSON.parse(await AsyncStorage.getItem('loggedMeds'));
+            setLoggedMedication(loggedMeds);
+            console.log(loggedMeds);
+            setIsLoading(false);
+        })();
+      }, [update]);
 
       useEffect(() => {
         console.log("Active Filter changed");
@@ -63,6 +70,8 @@ const MedicationOverview = () => {
                     subTitle="Bekijk hier jouw gegevens van vandaag, deze week, of deze maand."
                 />
 
+                <AppButton text="load" onPress={() => {forceUpdate(!update)}}/>
+
                 {isLoading ? <ActivityIndicator color={COLORS.darkBlue}/> : null}
 
                 <View style={[styles.filterButtons]}>
@@ -86,7 +95,7 @@ const MedicationOverview = () => {
                     </TouchableOpacity>
                 </View>
 
-                <View>
+                {/* <View>
                     <View style={{flexDirection: "row"}}>
                         <Feather name="sun" size={24} color={COLORS.darkBlue} />
                         <Text> salbutamol | budesonide </Text>
@@ -95,31 +104,85 @@ const MedicationOverview = () => {
                         <Feather name="moon" size={24} color={COLORS.darkBlue} />
                         <Text> vilanterol </Text>
                     </View>
-                </View>
+                </View> */}
 
+                {activeFilter === 0 && <>
                 <Text style={styles.subTitle}>Ochtend</Text>
-                <View style={styles.addMedication}>
-                    <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Ochtend medicatie </Text>
-                    <TouchableOpacity onPress={() => {navigation.navigate("Medicatie invullen")}} style={[styles.actionButton, GlobalStyles.shadowed]}>
-                        <Feather name="plus" size={26} color="white"/>
-                    </TouchableOpacity>
-                </View>
-
+                {
+                    !!loggedMedication && !!loggedMedication[todaysDate].morning ?
+                    // !!loggedMedication !== {} ?
+                    <View style={styles.medicationCard}>
+                        <View style={styles.mcCardText}>
+                        <Text style={{color: COLORS.darkBlue, fontWeight: 'bold', fontSize: 15, marginBottom: 5}}> {loggedMedication[todaysDate].morning.timestamp}  -  {loggedMedication[todaysDate].morning.medication} genomen, {loggedMedication[todaysDate].morning.quantity}</Text>
+                        <Text style={{color: COLORS.black, fontWeight: 'bold'}}> Klacht(en):</Text>
+                        { loggedMedication[todaysDate].morning.complaints.length > 0 ? loggedMedication[todaysDate].morning.complaints.map((item, index) => 
+                            <Text key={index}> - {item} </Text>
+                        ) :  <Text> geen klachten genoteerd</Text>}
+                        </View>
+                    </View>
+                    : 
+                    <View style={styles.addMedication}>
+                        <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Ochtend medicatie </Text>
+                        <TouchableOpacity onPress={() => {navigation.navigate("Medicatie invullen", {tod: 0})}} style={[styles.actionButton, GlobalStyles.shadowed]}>
+                            <Feather name="plus" size={26} color="white"/>
+                        </TouchableOpacity>
+                    </View>
+                }
+                
+                
                 <Text style={styles.subTitle}>Middag</Text>
-                <View style={styles.addMedication}>
-                    <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Middag medicatie </Text>
-                    <TouchableOpacity onPress={() => {navigation.navigate("Medicatie invullen")}} style={[styles.actionButton, GlobalStyles.shadowed]}>
-                        <Feather name="plus" size={26} color="white"/>
-                    </TouchableOpacity>
-                </View>
+                {
+                    !!loggedMedication && !!loggedMedication[todaysDate].midday ?
+                    // !!loggedMedication !== {} ?
+                    <View style={styles.medicationCard}>
+                        <View style={styles.mcCardText}>
+                        <Text style={{color: COLORS.darkBlue, fontWeight: 'bold', fontSize: 15, marginBottom: 5}}> {loggedMedication[todaysDate].midday.timestamp}  -  {loggedMedication[todaysDate].midday.medication} genomen, {loggedMedication[todaysDate].midday.quantity}</Text>
+                        <Text style={{color: COLORS.black, fontWeight: 'bold'}}> Klacht(en):</Text>
+                        { loggedMedication[todaysDate].midday.complaints.length > 0 ? loggedMedication[todaysDate].midday.complaints.map((item, index) => 
+                            <Text key={index}> - {item} </Text>
+                        ) :  <Text> geen klachten genoteerd</Text>}
+                        </View>
+                    </View>
+                    : 
+                    <View style={styles.addMedication}>
+                        <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Middag medicatie </Text>
+                        <TouchableOpacity onPress={() => {navigation.navigate("Medicatie invullen", {tod: 1})}} style={[styles.actionButton, GlobalStyles.shadowed]}>
+                            <Feather name="plus" size={26} color="white"/>
+                        </TouchableOpacity>
+                    </View>
+                }
 
                 <Text style={styles.subTitle}>Avond</Text>
-                <View style={styles.addMedication}>
-                    <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Avond medicatie </Text>
-                    <TouchableOpacity onPress={() => {navigation.navigate("Medicatie invullen")}} style={[styles.actionButton, GlobalStyles.shadowed]}>
-                        <Feather name="plus" size={26} color="white"/>
-                    </TouchableOpacity>
-                </View>
+                {
+                    !!loggedMedication && !!loggedMedication[todaysDate].evening ?
+                    // !!loggedMedication !== {} ?
+                    <View style={styles.medicationCard}>
+                        <View style={styles.mcCardText}>
+                        <Text style={{color: COLORS.darkBlue, fontWeight: 'bold', fontSize: 15, marginBottom: 5}}> {loggedMedication[todaysDate].evening.timestamp}  -  {loggedMedication[todaysDate].evening.medication} genomen, {loggedMedication[todaysDate].evening.quantity}</Text>
+                        <Text style={{color: COLORS.black, fontWeight: 'bold'}}> Klacht(en):</Text>
+                        { loggedMedication[todaysDate].evening.complaints.length > 0 ? loggedMedication[todaysDate].evening.complaints.map((item, index) => 
+                            <Text key={index}> - {item} </Text>
+                        ) :  <Text> geen klachten genoteerd</Text>}
+                        </View>
+                    </View>
+                    : 
+                    <View style={styles.addMedication}>
+                        <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Avond medicatie </Text>
+                        <TouchableOpacity onPress={() => {navigation.navigate("Medicatie invullen", {tod: 2})}} style={[styles.actionButton, GlobalStyles.shadowed]}>
+                            <Feather name="plus" size={26} color="white"/>
+                        </TouchableOpacity>
+                    </View>
+                }           
+                </>}
+
+                {activeFilter === 1 &&
+                    <Text> Zie hier het weekoverzicht</Text>
+                }
+
+                {activeFilter === 2 &&
+                    <Text> filter 2 </Text>
+                }
+                
             </ScrollView>
         </SafeAreaView>
     )
@@ -135,7 +198,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 15,
     },
-    MedicationCard: {
+    medicationCard: {
         backgroundColor: COLORS.white,
         borderRadius: 15,
         marginVertical: 5,
@@ -145,6 +208,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
+    },
+    mcCardText: {
+        flexDirection: 'column',
     },
     filterButtons: {
         flexDirection: "row",

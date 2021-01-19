@@ -26,18 +26,11 @@ const MedicationCard = (props) => {
                 </View>
 
                 <View style={styles.card_value}>
-                    <Text> Genomen medicatie: </Text>
-                    <Text> {data.afterMedication} </Text>
+                    <Text> Aantal: </Text>
+                    <Text> {data.amount} </Text>
                 </View>
             </View>
-            <TouchableOpacity onPress={() => {navigation.navigate("MedicationLogger", {
-                morning: props.morning,
-                edit: true, 
-                pf_id: data.id, 
-                pf_beforeMed: data.beforeMedication, 
-                pf_afterMed: data.afterMedication,
-                pf_notes: data.notes
-                })}} style={[styles.actionButton, GlobalStyles.shadowed]}>
+            <TouchableOpacity onPress={() => {console.log("aanpassen")}}>
                 <Entypo name="pencil" size={24} color={COLORS.darkBlue} />
             </TouchableOpacity>
         </View>
