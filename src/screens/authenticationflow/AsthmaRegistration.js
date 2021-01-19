@@ -38,24 +38,23 @@ const AsthmaRegistration= ({route}) => {
 
   const signupHandler = async () => {
     // TODO: Loadingspinner toevoegen!
+    console.log('signed up!');
     let firstname = await AsyncStorage.getItem('userFirstName');
     let lastname = await AsyncStorage.getItem('userLastName');
     let email = await AsyncStorage.getItem('userEmail');
     myMedication = JSON.parse(await AsyncStorage.getItem('userMedication'));
     myTriggers = JSON.parse(await AsyncStorage.getItem('userTriggers'));
-    console.log(asthmaType);
+    await AsyncStorage.setItem('userAsthmaType', asthmaType);
     signUp(firstname, lastname, email, password, asthmaType, myMedication, myTriggers);
   };
 
   useEffect(() => {
-    console.log("hiero");
     console.log(beenOnTriggers);
     beenOnTriggers && !showTriggerList ? setShowTriggerCheck(true) : null;
     //TODO: veranderen naar beenOnTriggers zodra de dubbele tap niet meer nodig is.
   }, [showTriggerList]);
 
   useEffect(() => {
-    console.log("hiero");
     console.log(beenOnMedications);
     beenOnMedications && !showMedicationList ? setShowMedicationCheck(true) : null;
     //TODO: veranderen naar beenOnTriggers zodra de dubbele tap niet meer nodig is.
@@ -93,9 +92,9 @@ const AsthmaRegistration= ({route}) => {
                      showTriggerCheck ? <FontAwesome style={styles.checkMark} name="check" size={24} color={COLORS.darkBlue} /> : <Text> Hi </Text>
                   }
                   </View>
-                  
+
                 </View>
-                
+
                 <Text style={GlobalStyles.label}>Medicatie</Text>
                 <View style={styles.selectorWrapper}>
                   <TouchableOpacity
@@ -109,7 +108,7 @@ const AsthmaRegistration= ({route}) => {
                     }
                   </View>
                 </View>
-                
+
 
                 <AppButton
                   text="opslaan"

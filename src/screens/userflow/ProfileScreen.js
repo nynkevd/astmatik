@@ -76,7 +76,7 @@ const ProfileScreen = ({route}) => {
 
   const navigation = useNavigation();
   const settingsPress = () => {
-    navigation.navigate("Instellingen", {update, firstName, lastName, email, asthmaType, triggers, medication});
+    navigation.navigate("Instellingen", {update: false, firstName, lastName, email, asthmaType, triggers, medication});
   }
 
   return(

@@ -25,6 +25,7 @@ import ActionPlanFeelingLess from './src/screens/actionplanflow/ActionPlanFeelin
 import ActionPlanFeelingBad from './src/screens/actionplanflow/ActionPlanFeelingBad';
 import ActionPlanAsthmaAttack from './src/screens/actionplanflow/ActionPlanAsthmaAttack';
 import LogAsthmaAttack from './src/screens/actionplanflow/LogAsthmaAttack';
+import EditFeelingBad from './src/screens/actionplanflow/EditFeelingBad';
 //exercises
 import ExercisesScreen from './src/screens/exercisesflow/ExercisesScreen';
 import SpecificExercise from './src/screens/exercisesflow/SpecificExercise';
@@ -72,6 +73,7 @@ function ActionPlanStackScreen() {
       <ActionPlanStack.Screen name="Goed" component={ActionPlanFeelingGood}/>
       <ActionPlanStack.Screen name="Minder" component={ActionPlanFeelingLess}/>
       <ActionPlanStack.Screen name="Geen verbetering" component={ActionPlanFeelingBad}/>
+      <ActionPlanStack.Screen name="Wijzig gegevens" component={EditFeelingBad} />
       <ActionPlanStack.Screen name="Aanval" component={ActionPlanAsthmaAttack}/>
       <ActionPlanStack.Screen name="Aanval logboek" component={LogAsthmaAttack}/>
     </ActionPlanStack.Navigator>
@@ -258,6 +260,12 @@ export default function App() {
         await AsyncStorage.removeItem('userEmail');
         await AsyncStorage.removeItem('userMedication');
         await AsyncStorage.removeItem('userTriggers');
+        await AsyncStorage.removeItem('actionPlanGood');
+        await AsyncStorage.removeItem('actionPlanLess');
+        await AsyncStorage.removeItem('ActionPlanBad');
+        await AsyncStorage.removeItem('actionPlanScratchNote');
+        await AsyncStorage.removeItem('userAsthmaType');
+        await AsyncStorage.removeItem('actionPlanScratchNoteLess');
         await AsyncStorage.removeItem('loggedMeds');
       } catch(error){
         console.log(error);

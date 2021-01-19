@@ -1,11 +1,12 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
-    SafeAreaView,
+  AsyncStorage,
     ScrollView,
     View,
     Text,
     StyleSheet,
     TextInput,
+    ActivityIndicator,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import MainLayout from '../../components/MainLayout';
@@ -15,9 +16,12 @@ import {COLORS} from '../../constants/Colors';
 import InputField from "../../components/InputField";
 import GlobalStyles from "../../constants/GlobalStyles";
 import AppButton from '../../components/AppButton';
+import { useNavigation } from '@react-navigation/native';
 
+// TODO: save info to asyncstorage en retrieve in useEffect
 
-const ActionPlanFeelingGood = () => {
+const ActionPlanFeelingGood = ({route}) => {
+    const navigation = useNavigation();
     const [medicationSelected, setMedicationSelection] = useState(false);
     const [techniqueSelected, setTechniqueSelection] = useState(false);
     const [chamberSelected, setChamberSelection] = useState(false);
@@ -25,9 +29,56 @@ const ActionPlanFeelingGood = () => {
     const [airwayRemover, setAirwayRemover] = useState("");
     const [noseSpray, setNoseSpray] = useState("");
 
-    console.log(airwayProtector);
+    const [actionplanData, setActionplanData] = useState();
+
+    const [update, forceUpdate] = useState(false);
+    const [lastUpdate, setLastUpdate] = useState('');
+    const [hasUpdated, setHasUpdated] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    if (!!route.params && route.params.update == true && lastUpdate !== route.params.timestamp) {
+        setLastUpdate(route.params.timestamp);
+        setHasUpdated(false);
+    }
+
+    if (!!route.params && route.params.update == true && hasUpdated == false) {
+        forceUpdate(!update);
+        setHasUpdated(true);
+    }
+
+    const handleConfirm = async () => {
+      let body = {
+        airwayProtector,
+        airwayRemover,
+        noseSpray,
+        medicationSelected,
+        techniqueSelected,
+        chamberSelected,
+      };
+      await AsyncStorage.setItem('actionPlanGood', JSON.stringify(body));
+      setIsLoading(true);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
+    }
+
+    useEffect( () => {
+      (async () =>{
+        let data = await AsyncStorage.getItem('actionPlanGood');
+        if(data !== null){
+          data = JSON.parse(data);
+          setAirwayProtector(data.airwayProtector);
+          setAirwayRemover(data.airwayRemover);
+          setNoseSpray(data.noseSpray);
+          setMedicationSelection(data.medicationSelected);
+          setTechniqueSelection(data.techniqueSelected);
+          setChamberSelection(data.chamberSelected);
+        }
+      })();
+    }, [update]);
+
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <MainLayout/>
             <ScrollView contentContainerStyle={styles.contentContainer}>
                 <ScreenTitle
@@ -89,10 +140,11 @@ const ActionPlanFeelingGood = () => {
                 <View style={{marginVertical: 10}}></View>
                 <AppButton
                   text="opslaan"
+                  onPress={() => handleConfirm()}
                 />
-
+                {isLoading ? <ActivityIndicator color={COLORS.darkBlue}/> : null}
             </ScrollView>
-        </SafeAreaView>
+        </View>
     )
 };
 
