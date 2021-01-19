@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {
-  CheckBox,
   View,
   Text,
   SafeAreaView,
@@ -10,12 +9,14 @@ import {
   Button,
   ActivityIndicator
 } from 'react-native';
+import CheckBox from '@react-native-community/checkbox';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import axios from 'axios';
 import Constants from "expo-constants";
+import {AuthContext} from '../../context/context';
 
 import Dropdown from '../../components/Dropdown';
 import ScreenTitle from '../../components/ScreenTitle';
@@ -25,6 +26,9 @@ import GlobalStyles from '../../constants/GlobalStyles';
 import MainLayout from '../../components/MainLayout';
 
 const LogAsthmaAttack = () =>{
+  const {retrieveToken} = React.useContext(AuthContext);
+  const {userToken} = retrieveToken();
+
   const navigation = useNavigation();
 
   const [timestamp, setTimestamp] = useState(moment());
@@ -46,8 +50,6 @@ const LogAsthmaAttack = () =>{
   const triggers = ['Geen', 'Mist', 'Koude lucht', 'Pollen'];
   const medication = ['Salbutamol', 'Budesonide'];
 
-
-  //TODO: Change userId to loggedIn user
   const asthmaAttackHandler = async () => {
       let body = {
         timestamp,
@@ -56,22 +58,25 @@ const LogAsthmaAttack = () =>{
         takenMedication: medsUsed,
         medicationTaken: usedMedication,
         medicationHelped: medsHelped,
-        userId: Constants.manifest.extra.USER_ID,
       };
 
       setIsLoading(true);
 
+      //TODO: FIx!
+
       await axios({
         method: 'POST',
         url: `${Constants.manifest.extra.API_URL}/attack/add`,
-        header: {
-          'content-type': 'application/json'
+        headers: {
+          'content-type': 'application/json',
+          'x-auth-token': userToken
         },
         data: body
       }).then((res) => {
         // alert('De informatie is opgeslagen');
         navigation.navigate('Actieplan');
       }).catch((error) => {
+        console.log(error);
         console.log(error.response.data);
       })
 

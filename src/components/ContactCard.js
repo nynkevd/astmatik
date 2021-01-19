@@ -19,9 +19,12 @@ const ContactCard = (props) => {
         <Text style={styles.text}>{props.phoneNumber}</Text>
         <Text style={styles.text}>{props.location}</Text>
       </View>
-      <TouchableOpacity  style={styles.phone}  onPress={() => Linking.openURL(`tel:${props.phoneNumber}`)}>
-        <FontAwesome color={COLORS.orange} size={32} name="phone" />
-      </TouchableOpacity>
+        {props.phoneNumber !== ""
+          ?<TouchableOpacity  style={styles.phone}  onPress={() => Linking.openURL(`tel:${props.phoneNumber}`)}>
+            <FontAwesome color={COLORS.orange} size={32} name="phone" />
+          </TouchableOpacity>
+          :<></>
+      }
     </View>
     </View>
   )

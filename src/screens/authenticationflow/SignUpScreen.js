@@ -1,61 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
+    AsyncStorage,
     View,
     Text,
+    ScrollView,
+    StyleSheet,
+    ActivityIndicator,
     TextInput,
-    StyleSheet, 
     Button,
 } from 'react-native';
 import Constants from "expo-constants";
 import axios from "axios";
+import { useNavigation } from '@react-navigation/native';
 
+import {COLORS} from '../../constants/Colors';
+import MainLayout from '../../components/MainLayout';
 import GlobalStyles from '../../constants/GlobalStyles';
 import InputField from "../../components/InputField";
 import AppButton from "../../components/AppButton";
-
+import {AuthContext} from '../../context/context';
 
 const SignUpScreen = () => {
-    const [firstname, onChangeFirstname] = React.useState('');
-    const [lastname, onChangeLastname] = React.useState('');
-    const [email, onChangeEmail] = React.useState('');
-    const [password, onChangePassword] = React.useState('');
-    const [repeatPassword, onChangeRepeatPassword] = React.useState('');
-    const [asthmaType, onChangeAsthmaType] = React.useState('');
-    const [error, setError] = React.useState('');
+    const [firstname, onChangeFirstname] = useState('');
+    const [lastname, onChangeLastname] = useState('');
+    const [email, onChangeEmail] = useState('');
+    const [password, onChangePassword] = useState('');
+    const [repeatPassword, onChangeRepeatPassword] = useState('');
+    const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
+    const navigation = useNavigation();
+    const {signUp} = useContext(AuthContext);
+
     const signupHandler = async () => {
-        
-        let body = {
-            firstname,
-            lastname: lastname || null,
-            email,
-            password,
-            asthmaType
-        };
-
-        setIsLoading(true);
-
-        await axios({
-            method: 'POST',
-            url: `${Constants.manifest.extra.API_URL}/user/signup`,
-            header: {
-                'content-type': 'application/json'
-            },
-            data: body
-        }).then((res) => {
-            // TODO: Koppelen aan context/reducer of iets dergelijks van storage
-            console.log(res.data.userId);
-        }).catch((error) => {
-            console.log(error.response.data);
-            setError(error.response.data.message);
-        })
-
-        setIsLoading(false);
+        await AsyncStorage.setItem('userFirstName', firstname);
+        await AsyncStorage.setItem('userLastName', lastname);
+        await AsyncStorage.setItem('userEmail', email);
+        setTimeout(() => {
+            navigation.navigate('Astma gegevens', {email, password});
+        }, 500);
     };
 
     return (
-        <View style={styles.container}>
+        <View style={GlobalStyles.container}>
+          <MainLayout />
+            <ScrollView contentContainerStyle={GlobalStyles.contentContainer} >
             <Text style={GlobalStyles.titleText}>Welkom bij</Text>
             <Text style={GlobalStyles.appName}>Astmatik</Text>
 
@@ -75,37 +64,35 @@ const SignUpScreen = () => {
                 label="Email *"
                 value={email}
                 onChange={onChangeEmail}
+                noCap
             />
 
             <InputField
                 label="Wachtwoord *"
                 value={password}
                 onChange={onChangePassword}
+                secure
+                noCap
             />
 
             <InputField
                 label="Wachtwoord herhalen *"
                 value={repeatPassword}
                 onChange={onChangeRepeatPassword}
+                secure
+                noCap
             />
 
-            {/*TODO: Willen we hier een dropdown van maken?*/}
-            <InputField
-                label="Type astma *"
-                value={asthmaType}
-                onChange={onChangeAsthmaType}
-            />
-
-            {error ? <Text style={GlobalStyles.errorText}> {error} </Text> : null}
+            {/* {error ? <Text style={GlobalStyles.errorText}> {error} </Text> : null} */}
 
             <AppButton
-                onPress={signupHandler}
+                onPress={() => signupHandler()}
                 text="registreren"
                 accessibilityLabel="Registreren"
             />
 
             {isLoading ? <ActivityIndicator color={COLORS.darkBlue}/> : null}
-
+          </ScrollView>
         </View>
     )
 };

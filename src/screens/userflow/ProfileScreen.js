@@ -1,27 +1,34 @@
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
+  AsyncStorage,
   View,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
+  Image
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
-import Constants from 'expo-constants';
+import moment from 'moment';
+import localization from 'moment/locale/nl';
 import {FontAwesome5, Entypo, Feather, MaterialCommunityIcons} from '@expo/vector-icons';
+import {AuthContext} from '../../context/context';
+import AppButton from '../../components/AppButton';
+import ContactForm from '../../components/ContactForm';
 
-import ProfileLayout from '../../components/ProfileLayout';
 import { COLORS } from '../../constants/Colors';
-import GlobalStyles from '../../constants/GlobalStyles'
+import GlobalStyles from '../../constants/GlobalStyles';
+import MainLayout from '../../components/MainLayout';
 
 const ProfileScreen = ({route}) => {
+  const {retrieveToken} = React.useContext(AuthContext);
+  moment.updateLocale('nl', localization);
   const size = 18;
   const color = COLORS.darkBlue;
 
-  let time = "10:10";
-  let date = "26 november 2020";
+  let time = moment().format("HH:mm");
+  let date = moment().format('D MMMM YYYY');
 
   const [isLoading, setIsLoading] = useState('');
 
@@ -29,9 +36,11 @@ const ProfileScreen = ({route}) => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [asthmaType, setAsthmaType] = useState('');
+  const [medicalEmail, setMedicalEmail] = useState('');
 
   const [medication, setMedication] = useState([]);
   const [excersises, setExcersises] = useState([]);
+  const [triggers, setTriggers] = useState([]);
 
   const [update, forceUpdate] = useState(false);
   const [lastUpdate, setLastUpdate] = useState('');
@@ -48,83 +57,80 @@ const ProfileScreen = ({route}) => {
   }
 
   useEffect(() => {
-    (async function loadData() {
-        setIsLoading(true);
-        await axios({
-            method: 'GET',
-            url: `${Constants.manifest.extra.API_URL}/user/profile/${Constants.manifest.extra.USER_ID}`,
-        }).then((res) => {
-            setFirstName(res.data.firstname);
-            setLastName(res.data.lastname);
-            setEmail(res.data.email);
-            setAsthmaType(res.data.asthmaType);
-            // TODO : Change to user info
-            setMedication(["budesonide", "salbutamol", "vilanterol"]);
-            setExcersises(["huffen", "diep inademen"]);
-        }).catch((error) => {
-            console.log(error);
-        });
-        setIsLoading(false);
+      console.log("updating");
+      (async function loadData() {
+      let firstN = await AsyncStorage.getItem('userFirstName');
+      let lastN = await AsyncStorage.getItem('userLastName');
+      let mail = await AsyncStorage.getItem('userEmail');
+      let type = await AsyncStorage.getItem('userAsthmaType');
+      let trigs = JSON.parse(await AsyncStorage.getItem('userTriggers'));
+      let meds = JSON.parse(await AsyncStorage.getItem('userMedication'));
+      setFirstName(firstN);
+      setLastName(lastN);
+      setEmail(mail);
+      setAsthmaType(type);
+      setMedication(meds);
+      setTriggers(trigs);
     })();
-  }, [update]); 
-
+  }, [update]);
 
   const navigation = useNavigation();
   const settingsPress = () => {
-    navigation.navigate("Instellingen", {firstName, lastName, email, asthmaType});
-    // navigation.navigate("Instellingen", {firstName, lastName, email, asthmaType, update, forceUpdate: forceUpdate});
+    navigation.navigate("Instellingen", {update: false, firstName, lastName, email, asthmaType, triggers, medication});
   }
 
   return(
     <View style={GlobalStyles.container}>
-      <ProfileLayout />
+      <MainLayout />
       <ScrollView contentContainerStyle={GlobalStyles.contentContainer}>
         {isLoading ? <ActivityIndicator color={COLORS.darkBlue}/> : null}
-        <View style={styles.titleContainer}>
-          <Text style={styles.screenTitle}>{firstName} {lastName || null} </Text>
-          <TouchableOpacity onPress={settingsPress}>
+        <View style={[styles.titleContainer, {marginTop: 37}]}>
+          <Text style={[styles.screenTitle, {marginTop: 0}]}>{firstName} {lastName || null}</Text>
+          <TouchableOpacity style={{marginRight: 5}} onPress={settingsPress}>
             <Feather name="settings" size={22} color={color}/>
           </TouchableOpacity>
         </View>
 
-        <View style={styles.iconText}> 
+        <View style={[styles.iconText, {marginTop: 5, marginBottom: 15}]}>
           <FontAwesome5 name="clock" size={size} color={color} style={styles.icon}/>
-          <Text style={styles.iconText__text}> {time} &nbsp; | &nbsp; {date}</Text> 
+          <Text style={styles.iconText__text}> {time} &nbsp; | &nbsp; {date}</Text>
         </View>
 
         <View>
-          <View style={styles.iconText}> 
+          <View style={styles.iconText}>
             <Entypo name="mail" size={size} color={color} style={styles.icon}/>
             <Text style={styles.iconText__text}> {email} </Text>
           </View>
           <View style={styles.iconText}>
-            <Feather name="type" size={size} color={color} style={styles.icon}/>
+            <Image style={{ width:20, height: 16, marginRight: 10, alignSelf: 'center' }} source={require('../../../assets/lungs-solid.png')} />
             <Text style={styles.iconText__text}> {asthmaType} </Text>
           </View>
-          {/* <View style={styles.iconText}>
-            <MaterialCommunityIcons name="doctor" size={size} color={color} style={styles.icon}/>
-            <Text style={styles.iconText__text}> Dr. N. van Dijk </Text>
-          </View> */}
         </View>
 
-        <View style={styles.list}>
+        <View style={[styles.list, {marginTop: 25}]}>
           <View style={[styles.iconText, styles.listTitle]}>
               <FontAwesome5 name="notes-medical" size={size} color={color} style={styles.icon}/>
               <Text style={[styles.iconText__text, GlobalStyles.bold]}>Medicatie </Text>
           </View>
-          {medication && medication.length > 0 ? medication.map(medicationItem => 
-            <Text key={medicationItem} style={styles.iconText__text}> {medicationItem} </Text>) : null}
+
+          {medication && medication.length > 0 ? medication.map(medicationItem =>
+            <Text key={medicationItem.id} style={[GlobalStyles.text, styles.listItem]}> ⬡ {medicationItem.name} </Text>) : <Text> Nog geen medicatie, voeg ze nu snel toe in je instellingen</Text>}
         </View>
+
 
         <View style={styles.list}>
           <View style={[styles.iconText, styles.listTitle]}>
               <MaterialCommunityIcons name="doctor" size={size} color={color} style={styles.icon}/>
-              <Text style={[styles.iconText__text, GlobalStyles.bold]}>Oefeningen</Text>
+              <Text style={[styles.iconText__text, GlobalStyles.bold]}>Triggers</Text>
           </View>
-          {excersises && excersises.length > 0 ? excersises.map(excersise=> 
-          <Text key={excersise} style={styles.iconText__text}> {excersise} </Text>) : null}
+          {triggers && triggers.length > 0 ? triggers.map(trigger=>
+          <Text key={trigger.id} style={[GlobalStyles.text, styles.listItem]}> ⬡ {trigger.name} </Text>) : <Text> Nog geen triggers, voeg ze nu snel toe in je instellingen</Text>}
         </View>
-      
+        
+        <ContactForm 
+          naam={firstName + ' ' +lastName}
+        />
+
       </ScrollView>
     </View>
   )
@@ -136,7 +142,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    maxWidth: '95%'
   },
   screenTitle: {
     fontSize: 27,
@@ -157,9 +164,13 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 10,
+    alignSelf: 'center'
   },
   list: {
     marginVertical: 10,
+  },
+  listItem: {
+    marginVertical: 1
   },
   listTitle: {
     alignSelf: "flex-start",

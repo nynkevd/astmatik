@@ -1,51 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
     View,
     Text,
     StyleSheet,
     ActivityIndicator,
+    TouchableOpacity,
+    ScrollView,
+    AsyncStorage
 } from 'react-native';
 import Constants from 'expo-constants';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 
+import MainLayout from "../../components/MainLayout";
 import AppButton from "../../components/AppButton";
 import InputField from "../../components/InputField";
 import {COLORS} from '../../constants/Colors';
 import GlobalStyles from '../../constants/GlobalStyles';
 
+import {AuthContext} from '../../context/context';
+
 const LoginScreen = () => {
-    const [isLoading, setIsLoading] = useState('false');
+    const [isLoading, setIsLoading] = useState(false);
     const [email, onChangeEmail] = React.useState('');
     const [password, onChangePassword] = React.useState('');
     const [error, setError] = React.useState('');
+    const navigation = useNavigation();
+    const {signIn} = React.useContext(AuthContext);
 
-    const loginHandler = async () => {
-        let body = {
-            email,
-            password,
-        };
-        setIsLoading(true);
-        await axios({
-            method: 'POST',
-            url: `${Constants.manifest.extra.API_URL}/user/login`,
-            header: {
-                'content-type': 'application/json'
-            },
-            data: body
-        }).then((res) => {
-            // TODO: Koppelen aan context/reducer of iets dergelijks van storage
-            console.log(res.data.userId);
-        }).catch((error) => {
-            console.log(error.response.data);
-            setError(error.response.data.message);
-        })
-        setIsLoading(false);
+    const loginHandler = async (email, password) => {
+      setIsLoading(true)
+      //TODO: Blijft laden ook na een error
+      signIn(email, password);
     };
 
     return (
         <View style={styles.container}>
             <MainLayout />
-            <ScrollView contentContainerStyle={styles.contentContainer}>
+            <ScrollView contentContainerStyle={[GlobalStyles.contentContainer, {alignItems: 'center', justifyContent: 'center'}]}>
                 <Text style={GlobalStyles.titleText}>Welkom bij</Text>
                 <Text style={GlobalStyles.appName}> Astmatik</Text>
 
@@ -53,23 +45,29 @@ const LoginScreen = () => {
                     label="Email"
                     value={email}
                     onChange={onChangeEmail}
+                    noCap
                 />
 
                 <InputField
                     label="Wachtwoord"
                     value={password}
                     onChange={onChangePassword}
+                    secure
+                    noCap
                 />
 
-                {error ? <Text style={GlobalStyles.errorText}> {error} </Text> : null}
+                {/* {error ? <Text style={GlobalStyles.errorText}> {error} </Text> : null} */}
 
                 <AppButton
-                    onPress={loginHandler}
+                    onPress={() => loginHandler(email, password)}
                     text="inloggen"
-                    accessibilityLabel="Login"
                 />
 
-                {isLoading ? <ActivityIndicator color={COLORS.darkBlue}/> : null}
+              {isLoading ? <ActivityIndicator color={COLORS.darkBlue}/> : null}
+
+              <TouchableOpacity onPress={() => navigation.navigate('Registreren') } >
+                <Text style={GlobalStyles.text}>Nog geen account? Registreer</Text>
+              </TouchableOpacity>
             </ScrollView>
         </View>
     )

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     SafeAreaView,
     ScrollView,
@@ -7,14 +7,13 @@ import {
     TouchableOpacity,
     View,
     ActivityIndicator,
-    LogBox
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
-import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Constants from 'expo-constants';
 import axios from 'axios';
 import moment from 'moment';
+import {AuthContext} from '../../context/context';
 
 import MainLayout from '../../components/MainLayout';
 import ScreenTitle from '../../components/ScreenTitle';
@@ -23,10 +22,11 @@ import InputField from "../../components/InputField";
 import GlobalStyles from "../../constants/GlobalStyles";
 import AppButton from "../../components/AppButton";
 
-const MeasurePeakflowScreen = () => {
-    const [timestamp, setTimestamp] = useState(moment());
-    const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
+const MeasurePeakflowScreen = ({route}) => {
+    const {retrieveToken} = React.useContext(AuthContext);
+    const {userToken} = retrieveToken();
 
+    const [morning, setMorning] = useState(true);
     const [peakflowBeforeMed, setPeakflowBeforeMed] = useState("");
     const [peakflowAfterMed, setPeakflowAfterMed] = useState("");
     const [notes, setNotes] = useState("");
@@ -34,40 +34,78 @@ const MeasurePeakflowScreen = () => {
 
     const navigation = useNavigation();
 
-    const handleConfirm = (date) => {
-        setTimestamp(date);
-        setIsDatePickerVisible(false)
-      };
+    useEffect(() => {
+        console.log("setting morning");
+        setMorning(route.params.morning);
+    }, [route.params.morning])
+
+    useEffect(() => {
+        if (route.params.edit) {
+            setPeakflowBeforeMed(route.params.pf_beforeMed && route.params.pf_beforeMed.toString() || "");
+            setPeakflowAfterMed(route.params.pf_afterMed && route.params.pf_afterMed.toString() || "");
+            setNotes(route.params.pf_notes.toString());
+            setMorning(route.params.morning);
+        } 
+    }, [route.params.edit])
 
     const handleSave = async () => {
+        console.log("saving");
         let body = {
-            timestamp,
+            morning,
+            timestamp: moment(),
             beforeMedication: peakflowBeforeMed,
             afterMedication: peakflowAfterMed,
             notes,
-            userId: Constants.manifest.extra.USER_ID
         };
+        console.log(body);
 
         setIsLoading(true);
 
-      await axios({
-        method: 'POST',
-        url: `${Constants.manifest.extra.API_URL}/peakflow/add`,
-        header: {
-          'content-type': 'application/json'
-        },
-        data: body
-      }).then((res) => {
-        // alert('De informatie is opgeslagen');
-        navigation.navigate('Overzicht',  {update: true, timestamp: Date.now()});
-        console.log("gelukt");
-      }).catch((error) => {
-        console.log(error);
-      })
+        await axios({
+            method: 'POST',
+            url: `${Constants.manifest.extra.API_URL}/peakflow/add`,
+            headers: {
+            'X-Auth-Token': userToken
+            },
+            data: body
+        }).then((res) => {
+            // alert('De informatie is opgeslagen');
+            navigation.navigate('Overzicht',  {update: true, timestamp: Date.now()});
+            console.log("gelukt");
+        }).catch((error) => {
+            console.log(error);
+        });
 
-      console.log("klaar");
+        setIsLoading(false);
+    };
 
-      setIsLoading(false);
+    const handleEdit = async () => {
+        let body = {
+            id: route.params.pf_id,
+            morning,
+            timestamp: moment(),
+            beforeMedication: peakflowBeforeMed,
+            afterMedication: peakflowAfterMed,
+            notes,
+        };
+        console.log(body);
+
+        setIsLoading(true);
+
+        await axios({
+            method: 'PATCH',
+            url: `${Constants.manifest.extra.API_URL}/peakflow/edit`,
+            headers: {
+            'X-Auth-Token': userToken
+            },
+            data: body
+        }).then((res) => {
+            navigation.navigate('Overzicht',  {update: true, timestamp: Date.now()});
+        }).catch((error) => {
+            console.log(error);
+        });
+
+        setIsLoading(false);
     };
 
     return (
@@ -76,21 +114,7 @@ const MeasurePeakflowScreen = () => {
             <ScrollView contentContainerStyle={GlobalStyles.contentContainer}>
                 <ScreenTitle
                     title="Peakflow"
-                    subTitle="Voer jouw peakflow-meting in"
-                />
-
-                <Text style={GlobalStyles.label}>Datum en Tijd</Text>
-                <TouchableOpacity style={styles.dropdown} onPress={() => {setIsDatePickerVisible(true)}}>
-                <View style={{flexDirection: 'row'}}>
-                    <Text style={{fontSize: 16, paddingLeft: 8}}>{moment(timestamp).format("YYYY-MM-DD") + "  " + moment(timestamp).format("HH:mm")}</Text>
-                    <FontAwesome style={{position: 'absolute', right: 10}} name="caret-down" size={16} color="#808080" />
-                </View>
-                </TouchableOpacity>
-                <DateTimePickerModal
-                isVisible={isDatePickerVisible}
-                mode="datetime"
-                onConfirm={handleConfirm}
-                onCancel={() => {setIsDatePickerVisible(false)}}
+                    subTitle={`Voer jouw ${morning ? "ochtend" : "middag/avond"} peakflow-meting in`}
                 />
 
                 <Text style={styles.bodyText}>Blaas drie keer en noteer daarvan de hoogste waarde</Text>
@@ -120,7 +144,7 @@ const MeasurePeakflowScreen = () => {
 
                 <AppButton
                     text={"opslaan"}
-                    onPress={() => handleSave()}
+                    onPress={route.params.edit ? () => handleEdit() : () => handleSave()}
                 />
                 
                 {isLoading ? <ActivityIndicator color={COLORS.darkBlue}/> : null}

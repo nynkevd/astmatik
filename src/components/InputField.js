@@ -12,7 +12,7 @@ const InputField = (props) => {
     return (
         <View style={styles.inputWrapper}>
             {props.label ? <Text style={styles.label}> {props.label} </Text> : null}
-            {props.multiline ? 
+            {props.multiline ?
                 <TextInput
                     style={[styles.input, styles.multiline]}
                     onChangeText={text => props.onChange(text)}
@@ -21,13 +21,18 @@ const InputField = (props) => {
                     numberOfLines={8}
                     placeholder={props.placeholder || null}
                     placeholderTextColor={COLORS.gray}
+                    secureTextEntry={props.secure && true}
+                    autoCapitalize={props.noCap && "none"}
                 /> :
                 <TextInput
+                    keyboardType={props.keyboardType}
                     style={styles.input}
                     onChangeText={text => props.onChange(text)}
                     value={props.value}
                     placeholder={props.placeholder || null}
                     placeholderTextColor={COLORS.gray}
+                    secureTextEntry={props.secure && true}
+                    autoCapitalize={props.noCap && "none"}
                 />
             }
         </View>

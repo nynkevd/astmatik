@@ -13,7 +13,7 @@ import moment from 'moment';
 import { COLORS } from '../constants/Colors';
 import GlobalStyles from '../constants/GlobalStyles';
 
-const PeakflowSchema = (props) => {
+const MedicationSchema = (props) => {
     const [week, setWeek] = useState(true);
     const [labels, setLabels] = useState();
 
@@ -109,4 +109,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PeakflowSchema;
+export default MedicationSchema;

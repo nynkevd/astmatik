@@ -1,0 +1,9 @@
+{
+    "env": {
+      "DB_USER": "astmatikadmin",
+      "DB_PASSWORD": "gUkaz9Q35muMY8ZgqG2a",
+      "DB_DATABASE": "astmatik_dev",
+      "PORT": 5050,
+      "JWT_KEY": "WsEuT7gmvYS%XqtP8!64"
+    }
+  }
