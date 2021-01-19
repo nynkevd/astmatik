@@ -23,12 +23,13 @@ import { duration } from 'moment';
 
 const MedicationLogger = ({route}) => {
     const [update, forceUpdate] = useState(false);
+    const [updateState, setUpdateState] = useState(route.params.update);
     const [medication, setMedication] = useState('');
     const [medicationList, setMedicationList] = useState([]);
     const [quantity, setQuantity] = useState('');
     const [timestamp, setTimestamp] = useState('');
     const [complaints, setComplaints] = useState('');
-    
+
     useEffect(() => {
         (async function loadData() {
         let meds = JSON.parse(await AsyncStorage.getItem('userMedication'));
@@ -72,7 +73,7 @@ const MedicationLogger = ({route}) => {
         loggedMeds[date][route.params.tod === 0 && "morning" || route.params.tod === 1 && "midday" || route.params.tod === 2 && "evening"] = body;
         console.log(loggedMeds);
         await AsyncStorage.setItem('loggedMeds', JSON.stringify(loggedMeds));
-        navigation.navigate("Medicatie", {update: true});
+        navigation.navigate("Medicatie", {update: !updateState, timestamp: Date.now()});
     };
 
     const [key, setKey] = useState('defaultValue');

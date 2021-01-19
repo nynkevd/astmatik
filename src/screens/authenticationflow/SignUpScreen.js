@@ -44,7 +44,7 @@ const SignUpScreen = () => {
     return (
         <View style={GlobalStyles.container}>
           <MainLayout />
-            <ScrollView contentContainerStyle={GlobalStyles.contentContainer} >
+            <ScrollView keyboardShouldPersistTaps="always" contentContainerStyle={GlobalStyles.contentContainer} >
             <Text style={GlobalStyles.titleText}>Welkom bij</Text>
             <Text style={GlobalStyles.appName}>Astmatik</Text>
 
@@ -90,6 +90,8 @@ const SignUpScreen = () => {
                 text="registreren"
                 accessibilityLabel="Registreren"
             />
+
+            <Text style={{color: COLORS.darkBlue, marginTop: 10}}>* verplichte velden</Text>
 
             {isLoading ? <ActivityIndicator color={COLORS.darkBlue}/> : null}
           </ScrollView>

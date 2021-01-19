@@ -82,7 +82,7 @@ const ActionPlanFeelingLess = ({route}) => {
   return(
     <View style={styles.container}>
       <MainLayout />
-      <ScrollView contentContainerStyle={styles.contentContainer}>
+      <ScrollView keyboardShouldPersistTaps="always" contentContainerStyle={styles.contentContainer}>
         <ScreenTitle
           title="Het gaat minder"
           subTitle="Mijn astma wordt erger, mijn klachten nemen toe"

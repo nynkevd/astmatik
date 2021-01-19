@@ -20,7 +20,7 @@ const InputField = (props) => {
                     multiline={true}
                     numberOfLines={8}
                     placeholder={props.placeholder || null}
-                    placeholderTextColor={COLORS.gray}
+                    placeholderTextColor={COLORS.darkerGray}
                     secureTextEntry={props.secure && true}
                     autoCapitalize={props.noCap && "none"}
                 /> :
@@ -30,7 +30,7 @@ const InputField = (props) => {
                     onChangeText={text => props.onChange(text)}
                     value={props.value}
                     placeholder={props.placeholder || null}
-                    placeholderTextColor={COLORS.gray}
+                    placeholderTextColor={COLORS.darkerGray}
                     secureTextEntry={props.secure && true}
                     autoCapitalize={props.noCap && "none"}
                 />

@@ -7,9 +7,10 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  Image
+  Image,
+  Alert
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import moment from 'moment';
 import localization from 'moment/locale/nl';
 import {FontAwesome5, Entypo, Feather, MaterialCommunityIcons} from '@expo/vector-icons';
@@ -27,7 +28,7 @@ const ProfileScreen = ({route}) => {
   const size = 18;
   const color = COLORS.darkBlue;
 
-  let time = moment().format("HH:mm");
+  const [time, setTime] = useState(moment().format("HH:mm"));
   let date = moment().format('D MMMM YYYY');
 
   const [isLoading, setIsLoading] = useState('');
@@ -55,6 +56,12 @@ const ProfileScreen = ({route}) => {
     forceUpdate(!update);
     setHasUpdated(true);
   }
+
+  useFocusEffect(
+     React.useCallback(() => {
+       setTime(moment().format("HH:mm"));
+     }, [update])
+   );
 
   useEffect(() => {
       console.log("updating");
@@ -126,8 +133,8 @@ const ProfileScreen = ({route}) => {
           {triggers && triggers.length > 0 ? triggers.map(trigger=>
           <Text key={trigger.id} style={[GlobalStyles.text, styles.listItem]}> ⬡ {trigger.name} </Text>) : <Text> Nog geen triggers, voeg ze nu snel toe in je instellingen</Text>}
         </View>
-        
-        <ContactForm 
+
+        <ContactForm
           naam={firstName + ' ' +lastName}
         />
 

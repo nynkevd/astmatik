@@ -80,10 +80,16 @@ const StatisticsScreen = ({route}) => {
         <SafeAreaView style={GlobalStyles.container}>
             <MainLayout/>
             <ScrollView contentContainerStyle={GlobalStyles.contentContainer}>
-                <ScreenTitle
-                    title="Weekoverzicht" //aangepast aan de hand van feedback Basalt
-                    subTitle="Bekijk hier jouw gegevens van vandaag, deze week, of deze maand."
+            {activeFilter !== 2
+                ?<ScreenTitle
+                    title={activeFilter == 0  ?"Dagoverzicht" : "Weekoverzicht"}
+                    subTitle={activeFilter == 0  ?"Bekijk hier jouw peakflow gegevens van vandaag" : "Bekijk hier jouw peakflow gegevens van deze week."}
                 />
+                :<ScreenTitle
+                    title="Maandoverzicht"
+                    subTitle="Bekijk hier jouw peakflow gegevens van deze maand."
+                />
+              }
 
                 {isLoading ? <ActivityIndicator color={COLORS.darkBlue}/> : null}
 

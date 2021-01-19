@@ -24,7 +24,7 @@ const MedicationOverview = ({route}) => {
         ]
       };
 
-    const [activeFilter, setActiveFilter] = useState(0); // 0 = Vandaag, 1 = deze week, 2 = deze maand
+    const [activeFilter, setActiveFilter] = useState(0);
     const todaysDate = moment().format("DD-MM-yyyy").toString();
     const [todaysData, setTodaysData] = useState();
     const [thisWeeksData, setThisWeeksData] = useState();
@@ -34,7 +34,19 @@ const MedicationOverview = ({route}) => {
     const [loggedMedication, setLoggedMedication] = useState();
 
     const [isLoading, setIsLoading] = useState(false);
-    const [update, forceUpdate] = useState(!!route.params ? route.params.update : false);
+    const [update, forceUpdate] = useState(false);
+    const [lastUpdate, setLastUpdate] = useState('');
+    const [hasUpdated, setHasUpdated] = useState(false);
+
+    if (!!route.params && route.params.update == true && lastUpdate !== route.params.timestamp) {
+        setLastUpdate(route.params.timestamp);
+        setHasUpdated(false);
+    }
+
+    if (!!route.params && route.params.update == true && hasUpdated == false) {
+        forceUpdate(!update);
+        setHasUpdated(true);
+    }
 
     useEffect(() => {
         (async function loadData() {
@@ -66,15 +78,16 @@ const MedicationOverview = ({route}) => {
             <MainLayout/>
             <ScrollView contentContainerStyle={GlobalStyles.contentContainer}>
                 <ScreenTitle
-                    title="Weekoverzicht"
-                    subTitle="Bekijk hier jouw gegevens van vandaag, deze week, of deze maand."
+                    title="Dagoverzicht"
+                    subTitle="Bekijk hier jouw medicatie gegevens van vandaag"
                 />
-
-                <AppButton text="load" onPress={() => {forceUpdate(!update)}}/>
 
                 {isLoading ? <ActivityIndicator color={COLORS.darkBlue}/> : null}
 
-                <View style={[styles.filterButtons]}>
+                {/*
+                  ===== removed because not functional =====
+
+                }<View style={[styles.filterButtons]}>
                     <TouchableOpacity onPress = {() => {setActiveFilter(0)}} style={[activeFilter == 0 ? styles.activeFilter : styles.inActiveFilter, {borderTopLeftRadius: 25, borderBottomLeftRadius: 25}]}>
                         <Text style={activeFilter == 0 ? styles.activeFilterText : styles.inActiveFilterText}>vandaag</Text>
                     </TouchableOpacity>
@@ -84,7 +97,7 @@ const MedicationOverview = ({route}) => {
                     <TouchableOpacity onPress = {() => {setActiveFilter(2)}} style={[activeFilter == 2 ? styles.activeFilter : styles.inActiveFilter, {borderTopRightRadius: 25, borderBottomRightRadius: 25}]}>
                         <Text style={activeFilter == 2 ? styles.activeFilterText : styles.inActiveFilterText}>deze maand</Text>
                     </TouchableOpacity>
-                </View>
+                </View> */}
 
                 <View style={{ flexDirection:"row", alignSelf: "center", paddingTop: 20, paddingBottom: 20 }}>
                     <TouchableOpacity onPress = {() => {navigation.navigate("Overzicht")}} style={styles.nonActiveButton}>
@@ -115,12 +128,12 @@ const MedicationOverview = ({route}) => {
                         <View style={styles.mcCardText}>
                         <Text style={{color: COLORS.darkBlue, fontWeight: 'bold', fontSize: 15, marginBottom: 5}}> {loggedMedication[todaysDate].morning.timestamp}  -  {loggedMedication[todaysDate].morning.medication} genomen, {loggedMedication[todaysDate].morning.quantity}</Text>
                         <Text style={{color: COLORS.black, fontWeight: 'bold'}}> Klacht(en):</Text>
-                        { loggedMedication[todaysDate].morning.complaints.length > 0 ? loggedMedication[todaysDate].morning.complaints.map((item, index) => 
+                        { loggedMedication[todaysDate].morning.complaints.length > 0 ? loggedMedication[todaysDate].morning.complaints.map((item, index) =>
                             <Text key={index}> - {item} </Text>
                         ) :  <Text> geen klachten genoteerd</Text>}
                         </View>
                     </View>
-                    : 
+                    :
                     <View style={styles.addMedication}>
                         <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Ochtend medicatie </Text>
                         <TouchableOpacity onPress={() => {navigation.navigate("Medicatie invullen", {tod: 0})}} style={[styles.actionButton, GlobalStyles.shadowed]}>
@@ -128,8 +141,8 @@ const MedicationOverview = ({route}) => {
                         </TouchableOpacity>
                     </View>
                 }
-                
-                
+
+
                 <Text style={styles.subTitle}>Middag</Text>
                 {
                     !!loggedMedication && !!loggedMedication[todaysDate].midday ?
@@ -138,12 +151,12 @@ const MedicationOverview = ({route}) => {
                         <View style={styles.mcCardText}>
                         <Text style={{color: COLORS.darkBlue, fontWeight: 'bold', fontSize: 15, marginBottom: 5}}> {loggedMedication[todaysDate].midday.timestamp}  -  {loggedMedication[todaysDate].midday.medication} genomen, {loggedMedication[todaysDate].midday.quantity}</Text>
                         <Text style={{color: COLORS.black, fontWeight: 'bold'}}> Klacht(en):</Text>
-                        { loggedMedication[todaysDate].midday.complaints.length > 0 ? loggedMedication[todaysDate].midday.complaints.map((item, index) => 
+                        { loggedMedication[todaysDate].midday.complaints.length > 0 ? loggedMedication[todaysDate].midday.complaints.map((item, index) =>
                             <Text key={index}> - {item} </Text>
                         ) :  <Text> geen klachten genoteerd</Text>}
                         </View>
                     </View>
-                    : 
+                    :
                     <View style={styles.addMedication}>
                         <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Middag medicatie </Text>
                         <TouchableOpacity onPress={() => {navigation.navigate("Medicatie invullen", {tod: 1})}} style={[styles.actionButton, GlobalStyles.shadowed]}>
@@ -160,19 +173,19 @@ const MedicationOverview = ({route}) => {
                         <View style={styles.mcCardText}>
                         <Text style={{color: COLORS.darkBlue, fontWeight: 'bold', fontSize: 15, marginBottom: 5}}> {loggedMedication[todaysDate].evening.timestamp}  -  {loggedMedication[todaysDate].evening.medication} genomen, {loggedMedication[todaysDate].evening.quantity}</Text>
                         <Text style={{color: COLORS.black, fontWeight: 'bold'}}> Klacht(en):</Text>
-                        { loggedMedication[todaysDate].evening.complaints.length > 0 ? loggedMedication[todaysDate].evening.complaints.map((item, index) => 
+                        { loggedMedication[todaysDate].evening.complaints.length > 0 ? loggedMedication[todaysDate].evening.complaints.map((item, index) =>
                             <Text key={index}> - {item} </Text>
                         ) :  <Text> geen klachten genoteerd</Text>}
                         </View>
                     </View>
-                    : 
+                    :
                     <View style={styles.addMedication}>
                         <Text style={{color: COLORS.darkBlue, alignContent: "center"}}> Avond medicatie </Text>
                         <TouchableOpacity onPress={() => {navigation.navigate("Medicatie invullen", {tod: 2})}} style={[styles.actionButton, GlobalStyles.shadowed]}>
                             <Feather name="plus" size={26} color="white"/>
                         </TouchableOpacity>
                     </View>
-                }           
+                }
                 </>}
 
                 {activeFilter === 1 &&
@@ -182,7 +195,7 @@ const MedicationOverview = ({route}) => {
                 {activeFilter === 2 &&
                     <Text> filter 2 </Text>
                 }
-                
+
             </ScrollView>
         </SafeAreaView>
     )

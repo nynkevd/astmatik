@@ -54,7 +54,7 @@ const StatisticsStack = createStackNavigator();
 
 function StatisticsStackScreen() {
   return (
-    <StatisticsStack.Navigator>
+    <StatisticsStack.Navigator initialRouteName="Overzicht">
       <StatisticsStack.Screen name="Overzicht" component={StatisticsScreen} />
       <StatisticsStack.Screen name="Peakflow invullen" component={MeasurePeakflowScreen} />
       <StatisticsStack.Screen name="Medicatie invullen" component={MedicationLogger} />

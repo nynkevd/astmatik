@@ -27,7 +27,7 @@ const EditUserScreen = ({route}) => {
   const [showPersonalSettings, setShowPersonalSettings] = useState(true);
   const [showTriggerSettings, setShowTriggerSettings] = useState(false);
   const [showMedicationSettings, setShowMedicationSettings] = useState(false);
-  
+
   const [updateState, setUpdateState] = useState(route.params.update);
   const [isLoading, setIsLoading] = useState(false);
   const [firstName, setFirstName] = useState(route.params.firstName);
@@ -54,7 +54,7 @@ const EditUserScreen = ({route}) => {
         setIsLoading(false);
         navigation.navigate('Profiel', {update: !updateState, timestamp: Date.now()});
     }, 250);
-    
+
   }
 
   const setActiveSettings = (selected) => {
@@ -110,15 +110,17 @@ const EditUserScreen = ({route}) => {
   return(
     <View style={GlobalStyles.container}>
       <MainLayout />
-      <ScrollView contentContainerStyle={[GlobalStyles.contentContainer, styles.contentContainer]}>
+      <ScrollView keyboardShouldPersistTaps="always" contentContainerStyle={[GlobalStyles.contentContainer, styles.contentContainer]}>
 
         <View style={styles.titleContainer}>
           <ScreenTitle
             title="Instellingen"
           />
-          <TouchableOpacity onPress={signOut}>
-            <FontAwesome5 name="sign-out-alt" size={22} color={COLORS.darkBlue}/>
+          <TouchableOpacity style={{flexDirection: 'row'}} onPress={signOut}>
+            <Text style={[GlobalStyles.text, {paddingRight: 10}]}>uitloggen</Text>
+              <FontAwesome5 name="sign-out-alt" size={22} color={COLORS.darkBlue}/>
           </TouchableOpacity>
+
         </View>
 
         <View style={styles.tabNavigator}>
@@ -133,9 +135,9 @@ const EditUserScreen = ({route}) => {
           <TouchableOpacity onPress={() => {setActiveSettings(3)}} style={[styles.tab, showMedicationSettings ? styles.tabSelected : null]}>
               <Text style={[styles.tabText, showMedicationSettings ? styles.tabTextSelected : null]}>medicijnen</Text>
           </TouchableOpacity>
-        </View> 
-        
-        {showPersonalSettings ? 
+        </View>
+
+        {showPersonalSettings ?
         <>
           <InputField
             label="Voornaam"
@@ -187,7 +189,7 @@ const EditUserScreen = ({route}) => {
           }
         </>
         : null}
-        
+
         {showMedicationSettings ?
         <>
           {/* <Text style={GlobalStyles.text}>Medicijnen</Text> */}
